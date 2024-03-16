@@ -22,10 +22,10 @@ Fitnesscoach: Ansprechspartner für die Benutzer. Erstellung vom Trainingsplan u
 
 ## ERKENNTNISSE
 > Physisch: Fitnessbesucher dazu aufzufordern sich selbst zu überwinden. Sie gehen das Risiko ein, ein wenig Geld von ihrem Portmonaire zu verlieren und die Bedeutung von regelmässiger Bewegung für die körperliche Gesundheit zu schätzen.
-Emotional: Bedürfnis nach Belohnung und anerkennung, Angst vor dem Versagen oder mangelnder Motivation.
+Emotional: Bedürfnis nach Belohnung und Anerkennung, Angst vor dem Versagen oder mangelnder Motivation.
 
 ## TOUCHPOINTS
-> Die Benutzer können Ihre Leistungsdaten einsehen, wie Fortschritt und Ihre definierten Ziele. Sie geben einen Geldbetrag mit der Plattform in einem Pot auf. Erfahrungen (Bewertungssystem) ist ebenfalls geplannt.
+> Die Benutzer können Ihre Leistungsdaten einsehen, sowie Fortschritt und Ihre definierten Ziele. Sie geben einen Geldbetrag mit der Plattform in einem Pot auf. Erfahrungen (Bewertungssystem) ist ebenfalls geplannt.
 
 ## WIE KÖNNEN WIR?
 > Wie können wir Fitnessbesucher dazu motivieren, ihre gesetzen Ziele, wirklich zu erreichen?

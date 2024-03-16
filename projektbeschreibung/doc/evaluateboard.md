@@ -1,7 +1,7 @@
 #  EVALUATE BOARD: MyApp
 
 ## KANÄLE
-> Soziale-Medien: Nutzung von Plattformen wie Instagram, Twitter und TikTok, um auf die Plattform aufmekrsam zu machen und Benutzer zu erreichen.
+> Soziale-Medien: Nutzung von Plattformen wie Instagram, Twitter und TikTok, um auf die Plattform aufmerksam zu machen und Benutzer zu erreichen.
 Influencer: Zusammenarbeit mit Fitness-Influencern und Coaches, um dere Reichweite in den Sozialen-Medien zu nutzen.
 Kooperation mit weiteren Fitnessstudios: Partnerschaften mit Fitnessstudios, um deren Mitglieder auf die Plattform aufmerksam zu machen und eventuelle neue Kunden für die Challenges zu gewinnen.
 
