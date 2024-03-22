@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ch.zhaw.youvsyou.model.Challenge;
 import ch.zhaw.youvsyou.model.ChallengeCreateDTO;
+import ch.zhaw.youvsyou.model.ChallengeStateAggregation;
 import ch.zhaw.youvsyou.model.ChallengeType;
 import ch.zhaw.youvsyou.repository.ChallengeRepository;
 
@@ -43,5 +44,10 @@ public class ChallengeController {
             return new ResponseEntity<>(challengeRepository.findByChallengeType(type), HttpStatus.OK);
         }
         return new ResponseEntity<>(challengeRepository.findAll(), HttpStatus.OK);
+    }
+
+    @GetMapping("/challenge/aggregation/state")
+    public List<ChallengeStateAggregation> getChallengeStateAggregation() {
+        return challengeRepository.getChallengeStateAggregation();
     }
 }
