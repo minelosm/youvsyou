@@ -11,4 +11,5 @@ public class ChallengeStateChangeDTO {
     @Id private String challengeId;
     private String fitnessuserEmail1;
     private String fitnessuserEmail2;
+    
 }
