@@ -13,15 +13,15 @@ import ch.zhaw.youvsyou.repository.FitnessuserRepository;
 
 @Service
 public class ChallengeService {
-    
+
     @Autowired
     ChallengeRepository challengeRepository;
 
     @Autowired
     FitnessuserRepository fitnessuserRepository;
 
-
-    public Optional<Challenge> competeChallenge(String challengeId, String fitnessuserEmail1, String fitnessuserEmail2) {
+    public Optional<Challenge> competeChallenge(String challengeId, String fitnessuserEmail1,
+            String fitnessuserEmail2) {
         Optional<Challenge> challengeToCompete = challengeRepository.findById(challengeId);
         if (challengeToCompete.isPresent()) {
             Challenge challenge = challengeToCompete.get();
@@ -39,4 +39,43 @@ public class ChallengeService {
         }
         return Optional.empty();
     }
+
+    public Optional<Challenge> finishChallenge(String challengeId, String fitnessuserEmail1, String fitnessuserEmail2) {
+        Optional<Challenge> challengeToFinish = challengeRepository.findById(challengeId);
+        if (challengeToFinish.isPresent()) {
+            Challenge challenge = challengeToFinish.get();
+            if (challenge.getChallengeState() == ChallengeState.RUNNING) {
+                Fitnessuser fitnessuser1 = fitnessuserRepository.findFirstByEmail(fitnessuserEmail1);
+                Fitnessuser fitnessuser2 = fitnessuserRepository.findFirstByEmail(fitnessuserEmail2);
+                if (fitnessuser1 != null && fitnessuser2 != null
+                        && fitnessuser1.getId().equals(challenge.getFitnessuserId1())
+                        && fitnessuser2.getId().equals(challenge.getFitnessuserId2())) {
+                    challenge.setChallengeState(ChallengeState.FINISHED);
+                    challengeRepository.save(challenge);
+                    return Optional.of(challenge);
+                }
+            }
+        }
+        return Optional.empty();
+    }
+
+    /*
+    // Method to define conditions for competing challenges
+    private boolean meetChallengeConditions(Challenge challenge, Fitnessuser user1, Fitnessuser user2) {
+        // Example condition: Only allow competing if both users have a certain fitness level
+        // Add your specific conditions here
+        // For example:
+        // return user1.getFitnessLevel() >= challenge.getMinFitnessLevel() && user2.getFitnessLevel() >= challenge.getMinFitnessLevel();
+        return true; // For demonstration purposes, always return true
+    }
+
+    // Method to define conditions for finishing challenges
+    private boolean meetFinishConditions(Challenge challenge) {
+        // Example condition: Only allow finishing if challenge duration has passed
+        // Add your specific conditions here
+        // For example:
+        // return challenge.getEndDate().isBeforeNow();
+        return true; // For demonstration purposes, always return true
+    }
+    */
 }

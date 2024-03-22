@@ -35,4 +35,17 @@ public class ServiceController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
     }
+
+    @PutMapping("/finishchallenge")
+    public ResponseEntity<Challenge> finishChallenge(@RequestBody ChallengeStateChangeDTO changeC) {
+        String challengeId = changeC.getChallengeId();
+        String fitnessuserEmail1 = changeC.getFitnessuserEmail1();
+        String fitnessuserEmail2 = changeC.getFitnessuserEmail2();
+        Optional<Challenge> challenge = challengeService.finishChallenge(challengeId, fitnessuserEmail1, fitnessuserEmail2);
+        if (challenge.isPresent()) {
+            return new ResponseEntity<>(challenge.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
 }
