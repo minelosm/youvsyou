@@ -24,7 +24,7 @@
           >
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/jobs">Jobs</a>
+          <a class="nav-link" href="/challenges">Challenges</a>
         </li>
       </ul>
     </div>
