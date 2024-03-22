@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ch.zhaw.youvsyou.model.Challenge;
 import ch.zhaw.youvsyou.model.ChallengeCreateDTO;
+import ch.zhaw.youvsyou.model.ChallengeType;
 import ch.zhaw.youvsyou.repository.ChallengeRepository;
 
 
@@ -31,8 +33,15 @@ public class ChallengeController {
     }
 
     @GetMapping("/challenge")
-    public ResponseEntity<List<Challenge>> getAllChallenges() {
-        List<Challenge> allChallenges = challengeRepository.findAll();
-        return new ResponseEntity<>(allChallenges, HttpStatus.OK);
+    public ResponseEntity<List<Challenge>> getAllChallenges(@RequestParam(required = false) Double min,
+            @RequestParam(required = false) ChallengeType type) {
+        if (min != null && type != null) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        } else if (min != null) {
+            return new ResponseEntity<>(challengeRepository.findByWagerGreaterThan(min), HttpStatus.OK);
+        } else if (type != null) {
+            return new ResponseEntity<>(challengeRepository.findByChallengeType(type), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(challengeRepository.findAll(), HttpStatus.OK);
     }
 }
