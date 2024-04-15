@@ -1,5 +1,4 @@
 <script>
-    import axios from "axios";
     import { isAuthenticated, user } from "../../store";
 </script>
 
@@ -15,6 +14,14 @@
     <p>
         Username: {$user.username}
     </p>
+    {#if $user.user_roles && $user.user_roles-length > 0}
+    <p>
+        <b>
+            Roles:
+        </b>
+        {$user.user_roles}
+    </p>
+{/if}
     <p>
         First Name: {$user.given_name}
     </p>
@@ -26,7 +33,7 @@
     <p>
         Nickname: {$user.nickname}
     </p>
-    {#if $user.user_roles && $user.user_roles-length > 0}
+    {#if $user.user_roles && $user.user_roles.length > 0}
     <p>
         <b>
             Roles:

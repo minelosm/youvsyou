@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +21,7 @@ import ch.zhaw.youvsyou.model.ChallengeCreateDTO;
 import ch.zhaw.youvsyou.model.ChallengeStateAggregation;
 import ch.zhaw.youvsyou.model.ChallengeType;
 import ch.zhaw.youvsyou.repository.ChallengeRepository;
+import ch.zhaw.youvsyou.service.AuthService;
 
 
 @RestController
@@ -28,8 +31,14 @@ public class ChallengeController {
     @Autowired
     ChallengeRepository challengeRepository;
 
+    @Autowired
+    AuthService authService;
+
     @PostMapping("/challenge")
-    public ResponseEntity<Challenge> createChallenge(@RequestBody ChallengeCreateDTO cDTO) {        
+    public ResponseEntity<Challenge> createChallenge(@RequestBody ChallengeCreateDTO cDTO, @AuthenticationPrincipal Jwt jwt) { 
+        if (!authService.isFitnesscoach()) {
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         Challenge cDAO = new Challenge(cDTO.getName(), cDTO.getDescription(), cDTO.getStartDate(), cDTO.getEndDate(), cDTO.getWager(), cDTO.getChallengeType());
         Challenge c = challengeRepository.save(cDAO);
         return new ResponseEntity<>(c, HttpStatus.CREATED);

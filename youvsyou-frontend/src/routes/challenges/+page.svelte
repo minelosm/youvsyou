@@ -3,6 +3,7 @@
     import { onMount } from "svelte";
     import { page } from "$app/stores";
     import { jwt_token } from "../../store";
+    import { isAuthenticated, user } from "../../store";
 
     const api_root = $page.url.origin;
 
@@ -41,9 +42,7 @@
         var config = {
             method: "post",
             url: api_root + "/api/challenge",
-            headers: {
-                "Content-Type": "application/json",
-            },
+            headers: {Authorization: "Bearer "+$jwt_token},
             data: challenge,
         };
 
@@ -59,6 +58,7 @@
     }
 </script>
 
+{#if $isAuthenticated && $user.user_roles && $user.user_roles.includes("fitnesscoach") }
 <h1 class="mt-3">Create Challenge</h1>
 <form class="mb-5">
     <div class="row mb-3">
@@ -115,7 +115,7 @@
             >
                 <option value="SPEED">SPEED</option>
                 <option value="POWER">POWER</option>
-                <option value="WIGTHLOSS">WIGTHLOSS</option>
+                <option value="WIGTHLOSS">WEIGTHLOSS</option>
                 <option value="MUSCLEBUILDING">MUSCLEBUILDING</option>
                 <option value="CARDIO">CARDIO</option>
                 <option value="STAMINA">STAMINA</option>
@@ -137,6 +137,7 @@
         >Submit</button
     >
 </form>
+{/if}
 
 <h1>All Challenges</h1>
 <table class="table">
