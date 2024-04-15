@@ -1,11 +1,13 @@
 package ch.zhaw.youvsyou.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,5 +51,15 @@ public class ChallengeController {
     @GetMapping("/challenge/aggregation/state")
     public List<ChallengeStateAggregation> getChallengeStateAggregation() {
         return challengeRepository.getChallengeStateAggregation();
+    }
+
+    @GetMapping("/challenge/{id}")
+    public ResponseEntity<Challenge> getChallengeById(@PathVariable String id) {
+        Optional<Challenge> optChallenge = challengeRepository.findById(id);
+        if(optChallenge.isPresent()) {
+            return new ResponseEntity<>(optChallenge.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }

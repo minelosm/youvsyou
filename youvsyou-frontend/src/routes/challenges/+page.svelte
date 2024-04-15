@@ -150,6 +150,7 @@
             <th scope="col">End Date</th>
             <th scope="col">Fitnessuser 1</th>
             <th scope="col">Fitnessuser 2</th>
+            <th scope="col">View Challenge</th>
         </tr>
     </thead>
     <tbody>
@@ -164,6 +165,11 @@
                 <td>{challenge.endDate}</td>
                 <td>{challenge.fitnessuserId1}</td>
                 <td>{challenge.fitnessuserId2}</td>
+                <td>
+                    <button>
+                        <a href={`/challenge?id=${challenge.id}`}>View</a>
+                    </button>
+                </td>
             </tr>
         {/each}
     </tbody>
