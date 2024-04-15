@@ -2,6 +2,7 @@
     import axios from "axios";
     import { onMount } from "svelte";
     import { page } from "$app/stores";
+    import { jwt_token } from "../../store";
 
     const api_root = $page.url.origin;
 
@@ -23,7 +24,7 @@
         var config = {
             method: "get",
             url: api_root + "/api/challenge",
-            headers: {},
+            headers: {Authorization: "Bearer "+$jwt_token},
         };
 
         axios(config)

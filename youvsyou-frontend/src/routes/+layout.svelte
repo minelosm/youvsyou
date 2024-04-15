@@ -28,7 +28,7 @@
       </ul>
       <div class="d-flex">
         {#if $isAuthenticated}
-        <span class="navbar-text me-2">{$user.name}</span>
+        <a class="navbar-text me-2" href="/account">{$user.name}</a>
         <button type="button" class="btn btn-primary" on:click={auth.logout}>Log Out</button>
         {/if}
       </div>
