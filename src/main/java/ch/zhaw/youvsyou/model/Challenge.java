@@ -23,6 +23,7 @@ public class Challenge {
     @NonNull private Double wager;
     @NonNull private ChallengeType challengeType;
     private ChallengeState challengeState = ChallengeState.OPEN;
+    private String fitnesscoachId;
     private String fitnessuserId1;
     private String fitnessuserId2;
     

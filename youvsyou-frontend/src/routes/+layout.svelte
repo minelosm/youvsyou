@@ -22,13 +22,6 @@
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         {#if $isAuthenticated}
         <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="/fitnessusers"
-            >Fitnessusers</a
-          >
-        </li>
-        {/if}
-        {#if $isAuthenticated}
-        <li class="nav-item">
           <a class="nav-link" href="/challenges">Challenges</a>
         </li>
         {/if}

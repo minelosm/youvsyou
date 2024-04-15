@@ -141,6 +141,7 @@
 <table class="table">
     <thead>
         <tr>
+            <th scope="col">Challenge ID</th>
             <th scope="col">Name</th>
             <th scope="col">Description</th>
             <th scope="col">Type</th>
@@ -156,6 +157,7 @@
     <tbody>
         {#each challenges as challenge}
             <tr>
+                <td>{challenge.id}</td>
                 <td>{challenge.name}</td>
                 <td>{challenge.description}</td>
                 <td>{challenge.challengeType}</td>
