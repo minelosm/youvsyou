@@ -40,7 +40,12 @@
     }
 </script>
 
-<h1>Freelancer Details</h1>
+<h1>Challenge Details</h1>
 <p>ID: {challenge.id}</p>
 <p>Name: {challenge.name}</p>
 <p>Description: {challenge.description}</p>
+<p>Start Date: {challenge.startDate}</p>
+<p>End Date: {challenge.endDate}</p>
+<p>Wager: {challenge.wager}</p>
+<p>Challenge Type: {challenge.challengeType}</p>
+<p>Challenge State: {challenge.challengeState}</p>

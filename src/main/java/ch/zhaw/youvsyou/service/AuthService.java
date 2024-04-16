@@ -13,4 +13,10 @@ public class AuthService {
         List<String> userRoles = jwt.getClaimAsStringList("user_roles");
         return userRoles.contains("fitnesscoach");
     }
+
+    public boolean isFitnessuser() {
+        Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<String> userRoles = jwt.getClaimAsStringList("user_roles");
+        return userRoles.contains("fitnessuser");
+    }
 }
