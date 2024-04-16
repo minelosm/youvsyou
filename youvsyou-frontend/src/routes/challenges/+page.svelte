@@ -25,7 +25,7 @@
         var config = {
             method: "get",
             url: api_root + "/api/challenge",
-            headers: {Authorization: "Bearer "+$jwt_token},
+            headers: {},
         };
 
         axios(config)

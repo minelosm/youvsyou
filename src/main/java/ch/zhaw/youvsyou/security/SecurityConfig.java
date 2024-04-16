@@ -20,8 +20,9 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/*").permitAll()
+                .requestMatchers("/api/challenge").permitAll()
                 .requestMatchers("/api/**").authenticated()
-                .requestMatchers("/**").permitAll()           
+                .requestMatchers("/**").permitAll()          
             )
             .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()));
 
