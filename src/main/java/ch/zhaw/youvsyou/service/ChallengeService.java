@@ -20,16 +20,21 @@ public class ChallengeService {
     @Autowired
     FitnessuserRepository fitnessuserRepository;
 
-    public Optional<Challenge> competeChallenge(String challengeId, String fitnessuserEmail1,
-            String fitnessuserEmail2) {
+    public Optional<Challenge> competeChallenge(String challengeId, String fitnessuserEmail) {
         Optional<Challenge> challengeToCompete = challengeRepository.findById(challengeId);
         if (challengeToCompete.isPresent()) {
             Challenge challenge = challengeToCompete.get();
             if (challenge.getChallengeState() == ChallengeState.OPEN) {
-                Fitnessuser fitnessuser1 = fitnessuserRepository.findFirstByEmail(fitnessuserEmail1);
-                Fitnessuser fitnessuser2 = fitnessuserRepository.findFirstByEmail(fitnessuserEmail2);
-                if (fitnessuser1 != null && fitnessuser2 != null) {
+                Fitnessuser fitnessuser1 = fitnessuserRepository.findFirstByEmail(fitnessuserEmail);
+                if (fitnessuser1 != null) {
                     challenge.setFitnessuserId1(fitnessuser1.getId());
+                    challenge.setChallengeState(ChallengeState.WAITING);
+                    challengeRepository.save(challenge);
+                    return Optional.of(challenge);
+                }
+            } if (challenge.getChallengeState() == ChallengeState.WAITING) {
+                Fitnessuser fitnessuser2 = fitnessuserRepository.findFirstByEmail(fitnessuserEmail);
+                if (fitnessuser2 != null) {
                     challenge.setFitnessuserId2(fitnessuser2.getId());
                     challenge.setChallengeState(ChallengeState.RUNNING);
                     challengeRepository.save(challenge);
@@ -40,6 +45,7 @@ public class ChallengeService {
         return Optional.empty();
     }
 
+    /*
     public Optional<Challenge> finishChallenge(String challengeId, String fitnessuserEmail1, String fitnessuserEmail2) {
         Optional<Challenge> challengeToFinish = challengeRepository.findById(challengeId);
         if (challengeToFinish.isPresent()) {
@@ -58,6 +64,7 @@ public class ChallengeService {
         }
         return Optional.empty();
     }
+    */
 
     /*
     // Method to define conditions for competing challenges

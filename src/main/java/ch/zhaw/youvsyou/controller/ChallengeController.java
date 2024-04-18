@@ -1,9 +1,10 @@
 package ch.zhaw.youvsyou.controller;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ch.zhaw.youvsyou.model.Challenge;
 import ch.zhaw.youvsyou.model.ChallengeCreateDTO;
-import ch.zhaw.youvsyou.model.ChallengeStateAggregation;
 import ch.zhaw.youvsyou.model.ChallengeType;
 import ch.zhaw.youvsyou.repository.ChallengeRepository;
 import ch.zhaw.youvsyou.service.AuthService;
@@ -45,6 +45,31 @@ public class ChallengeController {
     }
 
     @GetMapping("/challenge")
+    public ResponseEntity<Page<Challenge>> getAllChallenges(
+            @RequestParam(required = false) Double min,
+            @RequestParam(required = false) ChallengeType type,
+            @RequestParam(required = false, defaultValue = "1") Integer pageNumber,
+            @RequestParam(required = false, defaultValue = "2") Integer pageSize) {
+        Page<Challenge> allChallenges;
+        if (min == null && type == null) {
+            allChallenges = challengeRepository.findAll(PageRequest.of(pageNumber - 1, pageSize));
+        } else {
+            if (min != null && type != null) {
+                allChallenges = challengeRepository.findByChallengeTypeAndWagerGreaterThan(type, min,
+                        PageRequest.of(pageNumber - 1, pageSize));
+            } else if (min != null) {
+                allChallenges = challengeRepository.findByWagerGreaterThan(min,
+                        PageRequest.of(pageNumber - 1, pageSize));
+            } else {
+                allChallenges = challengeRepository.findByChallengeType(type, PageRequest.of(pageNumber - 1,
+                        pageSize));
+            }
+        }
+        return new ResponseEntity<>(allChallenges, HttpStatus.OK);
+    }
+
+    /*
+    @GetMapping("/challenge")
     public ResponseEntity<List<Challenge>> getAllChallenges(@RequestParam(required = false) Double min,
             @RequestParam(required = false) ChallengeType type) {
         if (min != null && type != null) {
@@ -56,11 +81,14 @@ public class ChallengeController {
         }
         return new ResponseEntity<>(challengeRepository.findAll(), HttpStatus.OK);
     }
+    */
 
+    /*
     @GetMapping("/challenge/aggregation/state")
     public List<ChallengeStateAggregation> getChallengeStateAggregation() {
         return challengeRepository.getChallengeStateAggregation();
     }
+    */
 
     @GetMapping("/challenge/{id}")
     public ResponseEntity<Challenge> getChallengeById(@PathVariable String id) {

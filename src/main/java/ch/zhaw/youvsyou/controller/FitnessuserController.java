@@ -3,6 +3,7 @@ package ch.zhaw.youvsyou.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import ch.zhaw.youvsyou.model.Fitnessuser;
 import ch.zhaw.youvsyou.model.FitnessuserCreateDTO;
@@ -27,7 +29,7 @@ public class FitnessuserController {
 
     @PostMapping("/fitnessuser")
     public ResponseEntity<Fitnessuser> createFitnessuser(@RequestBody FitnessuserCreateDTO fDTO) {
-        Fitnessuser fDAO = new Fitnessuser(fDTO.getEmail(), fDTO.getName(), fDTO.getBirthDate(), fDTO.getHeight(), fDTO.getWeight());
+        Fitnessuser fDAO = new Fitnessuser(fDTO.getEmail(), fDTO.getName());
         Fitnessuser f = fitnessuserRepository.save(fDAO);
         return new ResponseEntity<>(f, HttpStatus.CREATED);
     }
@@ -46,5 +48,14 @@ public class FitnessuserController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/me/fitnessuser")
+    public ResponseEntity<Fitnessuser> getMyFitnessuserId(
+            @AuthenticationPrincipal Jwt jwt) {
+        String userEmail = jwt.getClaimAsString("email");
+        Optional <Fitnessuser> optFitnessuser = fitnessuserRepository.findByEmail(userEmail);
+        return optFitnessuser.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                        .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }

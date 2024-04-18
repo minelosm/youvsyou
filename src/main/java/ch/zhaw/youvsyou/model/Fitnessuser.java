@@ -19,10 +19,7 @@ public class Fitnessuser {
     private String email;
     @NonNull
     private String name;
-    @NonNull
     private String birthDate;
-    @NonNull
     private String height;
-    @NonNull
     private String weight;
 }

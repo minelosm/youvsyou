@@ -1,4 +1,5 @@
 <script>
+    import { goto } from "$app/navigation";
     import auth from "../../auth.service";
 
     let username = "";
@@ -10,6 +11,7 @@
         if (loginForm.checkValidity()) {
             console.log("login");
             auth.login(username, password);
+            goto("/challenges");
         }
         loginForm.classList.add("was-validated");
     }
