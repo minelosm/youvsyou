@@ -37,14 +37,10 @@
             getChallenges();
         }
     }
-    /*
-    onMount(() => {
-        getChallenges();
-    });
-    */
 
     function getChallenges() {
-        let query = "?pageSize=" + defaultPageSize + "&pageNumber=" + currentPage;
+        let query =
+            "?pageSize=" + defaultPageSize + "&pageNumber=" + currentPage;
 
         if (wagerMin) {
             query += "&min=" + wagerMin;
@@ -94,7 +90,8 @@
             method: "put",
             url:
                 api_root +
-                "/api/service/me/competechallenge?challengeId=" + challengeId,
+                "/api/service/me/competechallenge?challengeId=" +
+                challengeId,
             headers: { Authorization: "Bearer " + $jwt_token },
         };
         axios(config)
@@ -282,15 +279,17 @@
                     {#if challenge.challengeState === "RUNNING"}
                         <span class="badge bg-secondary">Running</span>
                     {:else if challenge.fitnessuserId1 === null || challenge.fitnessuserId2 === null}
-                        <button
-                            type="button"
-                            class="btn btn-primary btn-sm"
-                            on:click={() => {
-                                competeToMe(challenge.id);
-                            }}
-                        >
-                            Compete to me
-                        </button>
+                        {#if $isAuthenticated && $user.user_roles && $user.user_roles.includes("fitnessuser")}
+                            <button
+                                type="button"
+                                class="btn btn-primary btn-sm"
+                                on:click={() => {
+                                    competeToMe(challenge.id);
+                                }}
+                            >
+                                Compete to me
+                            </button>
+                        {/if}
                     {/if}
                 </td>
                 <td>
