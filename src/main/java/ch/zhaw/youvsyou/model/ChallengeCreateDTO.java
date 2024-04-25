@@ -12,4 +12,5 @@ public class ChallengeCreateDTO {
     private String endDate;
     private Double wager;
     private ChallengeType challengeType;
+    private String fitnesscoachId;
 }

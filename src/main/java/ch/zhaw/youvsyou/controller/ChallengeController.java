@@ -1,5 +1,6 @@
 package ch.zhaw.youvsyou.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ public class ChallengeController {
         if (!authService.isFitnesscoach()) {
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-        Challenge cDAO = new Challenge(cDTO.getName(), cDTO.getDescription(), cDTO.getStartDate(), cDTO.getEndDate(), cDTO.getWager(), cDTO.getChallengeType());
+        Challenge cDAO = new Challenge(cDTO.getName(), cDTO.getDescription(), cDTO.getStartDate(), cDTO.getEndDate(), cDTO.getWager(), cDTO.getChallengeType(), cDTO.getFitnesscoachId());
         Challenge c = challengeRepository.save(cDAO);
         return new ResponseEntity<>(c, HttpStatus.CREATED);
     }
@@ -95,6 +96,22 @@ public class ChallengeController {
         Optional<Challenge> optChallenge = challengeRepository.findById(id);
         if(optChallenge.isPresent()) {
             return new ResponseEntity<>(optChallenge.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/challenge/fitness/{id}")
+    public ResponseEntity<List<Challenge>> getChallengeByUserId(@PathVariable String id){
+        List<Challenge> optChallengesCoach = challengeRepository.findByFitnesscoachId(id);
+        List<Challenge> optChallengesUser1 = challengeRepository.findByFitnessuserId1(id);
+        List<Challenge> optChallengesUser2 = challengeRepository.findByFitnessuserId2(id);
+        if(!optChallengesCoach.isEmpty() && optChallengesCoach != null) {
+            return new ResponseEntity<>(optChallengesCoach, HttpStatus.OK);
+        } else if (!optChallengesUser1.isEmpty() && optChallengesUser1 != null) {
+            return new ResponseEntity<>(optChallengesUser1, HttpStatus.OK);
+        } else if (!optChallengesUser2.isEmpty() && optChallengesUser2 != null) {
+            return new ResponseEntity<>(optChallengesUser2, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

@@ -1,7 +1,35 @@
 <script>
+  import axios from "axios";
+  import { page } from "$app/stores";
   import "./styles.css";
-  import { isAuthenticated, user } from "../store";
   import auth from "../auth.service";
+  import { jwt_token } from "../store";
+  import { isAuthenticated, user, myFitnessuserId } from "../store";
+
+  const api_root = $page.url.origin;
+
+  function fetchMyFitnessuserId() {
+        var config = {
+            method: "get",
+            url: api_root + "/api/me/fitnessuser",
+            headers: { Authorization: "Bearer " + $jwt_token },
+        };
+
+        axios(config)
+            .then(function (response) {
+                $myFitnessuserId = response.data.id;
+            })
+            .catch(function (error) {
+                alert("Could not get fitnessuser id");
+                console.log(error);
+            });
+    }
+
+    $: {
+        if ($jwt_token !== "") {
+            fetchMyFitnessuserId();
+        }
+    }
 </script>
 
 <nav class="navbar navbar-expand-lg bg-light">
@@ -22,6 +50,9 @@
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
           <a class="nav-link" href="/challenges">Challenges</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href={"/mychallenges?id=" + $myFitnessuserId}>My Challenges</a>
         </li>
       </ul>
       <div class="d-flex">

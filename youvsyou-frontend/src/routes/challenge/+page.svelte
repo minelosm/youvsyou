@@ -13,7 +13,8 @@
         endDate: null,
         wager: null,
         challengeType: null,
-        challengeState: null
+        challengeState: null,
+        fitnesscoachId: null
 
     };
 
@@ -49,3 +50,4 @@
 <p>Wager: {challenge.wager}</p>
 <p>Challenge Type: {challenge.challengeType}</p>
 <p>Challenge State: {challenge.challengeState}</p>
+<p>Fitnesscoach Id: {challenge.fitnesscoachId}</p>

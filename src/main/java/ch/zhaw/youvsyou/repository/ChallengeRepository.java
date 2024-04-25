@@ -1,5 +1,7 @@
 package ch.zhaw.youvsyou.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -12,6 +14,11 @@ public interface ChallengeRepository extends MongoRepository<Challenge, String> 
     Page<Challenge> findByChallengeType(ChallengeType challengeType, Pageable pageable);
     Page<Challenge> findByChallengeTypeAndWagerGreaterThan(ChallengeType challengeType, Double wager,
             Pageable pageable);
+
+    List<Challenge> findByFitnesscoachId(String fitnesscoachId);
+
+    List<Challenge> findByFitnessuserId1(String fitnessuserId1);
+    List<Challenge> findByFitnessuserId2(String fitnessuserId2);
 
     /*
     List<Challenge> findByWagerGreaterThan(Double wager);

@@ -19,7 +19,7 @@
         endDate: null,
         wager: null,
         challengeType: null,
-        fitnesscoachId: null,
+        fitnesscoachId: $myFitnessuserId,
     };
 
     let wagerMin;
@@ -179,7 +179,7 @@
                 >
                     <option value="SPEED">SPEED</option>
                     <option value="POWER">POWER</option>
-                    <option value="WIGTHLOSS">WEIGTHLOSS</option>
+                    <option value="WEIGTHLOSS">WEIGTHLOSS</option>
                     <option value="MUSCLEBUILDING">MUSCLEBUILDING</option>
                     <option value="CARDIO">CARDIO</option>
                     <option value="STAMINA">STAMINA</option>
@@ -257,6 +257,7 @@
             <th scope="col">Description</th>
             <th scope="col">Type</th>
             <th scope="col">Wager</th>
+            <th scope="col">Fitnesscoach Id</th>
             <th scope="col">State</th>
             <th scope="col">Fitnessuser Id1</th>
             <th scope="col">Fitnessuser Id2</th>
@@ -272,6 +273,7 @@
                 <td>{challenge.description}</td>
                 <td>{challenge.challengeType}</td>
                 <td>{challenge.wager}</td>
+                <td>{challenge.fitnesscoachId}</td>
                 <td>{challenge.challengeState}</td>
                 <td>{challenge.fitnessuserId1}</td>
                 <td>{challenge.fitnessuserId2}</td>

@@ -3,6 +3,7 @@ package ch.zhaw.youvsyou.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
 
 import ch.zhaw.youvsyou.model.Fitnesscoach;
 import ch.zhaw.youvsyou.model.FitnesscoachCreateDTO;
@@ -46,5 +49,14 @@ public class FitnesscoachController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/me/fitnesscoach")
+    public ResponseEntity<Fitnesscoach> getMyFitnesscoachId(
+            @AuthenticationPrincipal Jwt jwt) {
+        String userEmail = jwt.getClaimAsString("email");
+        Optional <Fitnesscoach> optFitnesscoach = fitnesscoachRepository.findByEmail(userEmail);
+        return optFitnesscoach.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                        .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }
