@@ -30,6 +30,7 @@ public class ServiceController {
     @Autowired
     AuthService authService;
 
+    /*
     @PutMapping("/competechallenge")
     public ResponseEntity<Challenge> competeChallenge
     (@RequestBody ChallengeStateChangeDTO changeC,
@@ -46,6 +47,7 @@ public class ServiceController {
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+    */
 
     @PutMapping("/me/competechallenge")
     public ResponseEntity<Challenge> assignToMe(@RequestParam String challengeId,
@@ -58,7 +60,7 @@ public class ServiceController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    /*
+
     @PutMapping("/finishchallenge")
     public ResponseEntity<Challenge> finishChallenge(@RequestBody ChallengeStateChangeDTO changeC) {
         String challengeId = changeC.getChallengeId();
@@ -71,5 +73,4 @@ public class ServiceController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
-    */
 }

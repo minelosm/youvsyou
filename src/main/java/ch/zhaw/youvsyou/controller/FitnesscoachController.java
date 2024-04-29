@@ -21,6 +21,7 @@ import ch.zhaw.youvsyou.model.FitnesscoachCreateDTO;
 import ch.zhaw.youvsyou.repository.FitnesscoachRepository;
 
 
+
 @RestController
 @RequestMapping("/api")
 public class FitnesscoachController {

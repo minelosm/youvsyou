@@ -45,7 +45,7 @@ public class ChallengeService {
         return Optional.empty();
     }
 
-    /*
+
     public Optional<Challenge> finishChallenge(String challengeId, String fitnessuserEmail1, String fitnessuserEmail2) {
         Optional<Challenge> challengeToFinish = challengeRepository.findById(challengeId);
         if (challengeToFinish.isPresent()) {
@@ -64,7 +64,7 @@ public class ChallengeService {
         }
         return Optional.empty();
     }
-    */
+
 
     /*
     // Method to define conditions for competing challenges

@@ -9,5 +9,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public class ChallengeStateChangeDTO {
     @Id private String challengeId;
-    private String fitnessuserEmail;    
+    private String fitnessuserEmail1;    
+    private String fitnessuserEmail2;
 }

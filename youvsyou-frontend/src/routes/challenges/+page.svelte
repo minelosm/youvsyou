@@ -281,7 +281,7 @@
                     {#if challenge.challengeState === "RUNNING"}
                         <span class="badge bg-secondary">Running</span>
                     {:else if challenge.fitnessuserId1 === null || challenge.fitnessuserId2 === null}
-                        {#if $isAuthenticated && $user.user_roles && $user.user_roles.includes("fitnessuser")}
+                        {#if $isAuthenticated && $user.user_roles && $user.user_roles.includes("fitnessuser") && challenge.fitnessuserId1 !== $myFitnessuserId && challenge.fitnessuserId2 !== $myFitnessuserId}
                             <button
                                 type="button"
                                 class="btn btn-primary btn-sm"

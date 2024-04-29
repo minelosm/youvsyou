@@ -40,6 +40,10 @@
         </b>
         {$user.user_roles}
     </p>
+
+    <button type="button" class="btn btn-warning">
+        <a href="/accountedit">Edit Account</a>
+    </button>
 {/if}
 </div>
 {:else}
