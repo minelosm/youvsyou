@@ -52,6 +52,7 @@ public class FitnessuserController {
         }
     }
 
+    /*
     @GetMapping("/me/fitnessuser")
     public ResponseEntity<Fitnessuser> getMyFitnessuserId(
             @AuthenticationPrincipal Jwt jwt) {
@@ -60,6 +61,7 @@ public class FitnessuserController {
         return optFitnessuser.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                         .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+    */
 
     @PutMapping("/fitnessuser/edit/{email}")
 public ResponseEntity<Fitnessuser> putAccountDetails(

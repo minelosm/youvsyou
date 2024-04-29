@@ -10,7 +10,7 @@ if (sessionUser) {
     user.set(JSON.parse(sessionUser));
 } else {
     // create the key "user" in the session storage if it doesn't exist yet
-    sessionStorage.setItem("user", {});
+    sessionStorage.setItem("user", JSON.stringify({ user_roles: [] }));
 }
 // update the user in the sessionStorage on changes
 user.subscribe(user => sessionStorage.setItem("user", JSON.stringify(user)));
@@ -26,11 +26,11 @@ export const isAuthenticated = derived(
 jwt_token.subscribe(jwt_token => {
     sessionStorage.setItem("jwt_token", jwt_token);
     if (jwt_token === "") {
-        myFitnessuserId.set(null)
+        myFitnessuserId.set(null);
     } else {
         var config = {
             method: "get",
-            url: window.location.origin + "/api/me/fitnessuser",
+            url: window.location.origin + "/api/me/myinfo",
             headers: { Authorization: "Bearer " + jwt_token },
         };
         axios(config)

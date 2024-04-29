@@ -3,7 +3,6 @@
     import { page } from "$app/stores";
     import { jwt_token } from "../../store";
     import { isAuthenticated, user, myFitnessuserId } from "../../store";
-    import { onMount } from "svelte";
 
     const api_root = $page.url.origin;
 
@@ -126,7 +125,7 @@
     function fetchMyFitnessuserId() {
         var config = {
             method: "get",
-            url: api_root + "/api/me/fitnessuser",
+            url: api_root + "/api/me/myinfo",
             headers: { Authorization: "Bearer " + $jwt_token },
         };
 

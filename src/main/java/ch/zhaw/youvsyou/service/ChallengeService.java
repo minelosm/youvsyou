@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import ch.zhaw.youvsyou.model.Challenge;
 import ch.zhaw.youvsyou.model.ChallengeState;
-import ch.zhaw.youvsyou.model.Fitnesscoach;
 import ch.zhaw.youvsyou.model.Fitnessuser;
 import ch.zhaw.youvsyou.repository.ChallengeRepository;
 import ch.zhaw.youvsyou.repository.FitnesscoachRepository;
