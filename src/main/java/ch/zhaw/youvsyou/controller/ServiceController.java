@@ -8,13 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ch.zhaw.youvsyou.model.Challenge;
-import ch.zhaw.youvsyou.model.ChallengeStateChangeDTO;
 import ch.zhaw.youvsyou.service.AuthService;
 import ch.zhaw.youvsyou.service.ChallengeService;
 
@@ -62,11 +60,10 @@ public class ServiceController {
 
 
     @PutMapping("/finishchallenge")
-    public ResponseEntity<Challenge> finishChallenge(@RequestBody ChallengeStateChangeDTO changeC) {
-        String challengeId = changeC.getChallengeId();
-        String fitnessuserEmail1 = changeC.getFitnessuserEmail1();
-        String fitnessuserEmail2 = changeC.getFitnessuserEmail2();
-        Optional<Challenge> challenge = challengeService.finishChallenge(challengeId, fitnessuserEmail1, fitnessuserEmail2);
+    public ResponseEntity<Challenge> finishChallenge(@RequestParam String challengeId,
+    @AuthenticationPrincipal Jwt jwt) {
+        String fitnesscoachEmail = jwt.getClaimAsString("email");
+        Optional<Challenge> challenge = challengeService.finishChallenge(challengeId, fitnesscoachEmail);
         if (challenge.isPresent()) {
             return new ResponseEntity<>(challenge.get(), HttpStatus.OK);
         } else {

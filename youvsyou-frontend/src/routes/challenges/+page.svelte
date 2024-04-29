@@ -1,9 +1,9 @@
 <script>
     import axios from "axios";
-    import { onMount } from "svelte";
     import { page } from "$app/stores";
     import { jwt_token } from "../../store";
     import { isAuthenticated, user, myFitnessuserId } from "../../store";
+    import { onMount } from "svelte";
 
     const api_root = $page.url.origin;
 
@@ -100,6 +100,25 @@
             })
             .catch(function (error) {
                 alert("Could not compete to me");
+                console.log(error);
+            });
+    }
+
+    function finishChallenge(challengeId) {
+        var config = {
+            method: "put",
+            url:
+                api_root +
+                "/api/service/finishchallenge?challengeId=" +
+                challengeId,
+            headers: { Authorization: "Bearer " + $jwt_token },
+        };
+        axios(config)
+            .then(function (response) {
+                getChallenges();
+            })
+            .catch(function (error) {
+                alert("Could not finish the challenge");
                 console.log(error);
             });
     }
@@ -280,7 +299,19 @@
                 <td>
                     {#if challenge.challengeState === "RUNNING"}
                         <span class="badge bg-secondary">Running</span>
-                    {:else if challenge.fitnessuserId1 === null || challenge.fitnessuserId2 === null}
+                        {#if $isAuthenticated && $user.user_roles && $user.user_roles.includes("fitnesscoach")}
+                            <button
+                                type="button"
+                                class="btn btn-primary btn-sm"
+                                on:click={() => {
+                                    finishChallenge(challenge.id);
+                                }}
+                            >
+                                Finish challenge
+                            </button>
+                        {/if}
+                    {/if}
+                    {#if challenge.fitnessuserId1 === null || challenge.fitnessuserId2 === null}
                         {#if $isAuthenticated && $user.user_roles && $user.user_roles.includes("fitnessuser") && challenge.fitnessuserId1 !== $myFitnessuserId && challenge.fitnessuserId2 !== $myFitnessuserId}
                             <button
                                 type="button"

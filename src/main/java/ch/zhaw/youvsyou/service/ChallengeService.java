@@ -7,8 +7,10 @@ import org.springframework.stereotype.Service;
 
 import ch.zhaw.youvsyou.model.Challenge;
 import ch.zhaw.youvsyou.model.ChallengeState;
+import ch.zhaw.youvsyou.model.Fitnesscoach;
 import ch.zhaw.youvsyou.model.Fitnessuser;
 import ch.zhaw.youvsyou.repository.ChallengeRepository;
+import ch.zhaw.youvsyou.repository.FitnesscoachRepository;
 import ch.zhaw.youvsyou.repository.FitnessuserRepository;
 
 @Service
@@ -19,6 +21,9 @@ public class ChallengeService {
 
     @Autowired
     FitnessuserRepository fitnessuserRepository;
+
+    @Autowired
+    FitnesscoachRepository fitnesscoachRepository;
 
     public Optional<Challenge> competeChallenge(String challengeId, String fitnessuserEmail) {
         Optional<Challenge> challengeToCompete = challengeRepository.findById(challengeId);
@@ -46,16 +51,13 @@ public class ChallengeService {
     }
 
 
-    public Optional<Challenge> finishChallenge(String challengeId, String fitnessuserEmail1, String fitnessuserEmail2) {
+    public Optional<Challenge> finishChallenge(String challengeId, String fitnesscoachEmail) {
         Optional<Challenge> challengeToFinish = challengeRepository.findById(challengeId);
         if (challengeToFinish.isPresent()) {
             Challenge challenge = challengeToFinish.get();
             if (challenge.getChallengeState() == ChallengeState.RUNNING) {
-                Fitnessuser fitnessuser1 = fitnessuserRepository.findFirstByEmail(fitnessuserEmail1);
-                Fitnessuser fitnessuser2 = fitnessuserRepository.findFirstByEmail(fitnessuserEmail2);
-                if (fitnessuser1 != null && fitnessuser2 != null
-                        && fitnessuser1.getId().equals(challenge.getFitnessuserId1())
-                        && fitnessuser2.getId().equals(challenge.getFitnessuserId2())) {
+                Fitnessuser fitnessuser = fitnessuserRepository.findFirstByEmail(fitnesscoachEmail); //eigentlich ein fitnesscoach
+                if (fitnessuser != null && fitnessuser.getId().equals(challenge.getFitnesscoachId())) {
                     challenge.setChallengeState(ChallengeState.FINISHED);
                     challengeRepository.save(challenge);
                     return Optional.of(challenge);
