@@ -300,7 +300,7 @@
                 <td>
                     {#if challenge.challengeState === "RUNNING"}
                         <span class="badge bg-secondary">Running</span>
-                        {#if $isAuthenticated && $user.user_roles && $user.user_roles.includes("fitnesscoach")}
+                        {#if $isAuthenticated && $user.user_roles && $user.user_roles.includes("fitnesscoach") && challenge.fitnesscoachId === $myFitnessuserId}
                             <button
                                 type="button"
                                 class="btn btn-primary btn-sm"
