@@ -30,7 +30,7 @@ jwt_token.subscribe(jwt_token => {
     } else {
         var config = {
             method: "get",
-            url: window.location.origin + "/api/me/myinfo",
+            url: window.location.origin + "/api/service/me/myinfo",
             headers: { Authorization: "Bearer " + jwt_token },
         };
         axios(config)

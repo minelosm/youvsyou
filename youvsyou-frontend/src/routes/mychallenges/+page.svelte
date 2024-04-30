@@ -39,7 +39,7 @@
     function fetchMyFitnessuserId() {
         var config = {
             method: "get",
-            url: api_root + "/api/me/myinfo",
+            url: api_root + "/api/service/me/myinfo",
             headers: { Authorization: "Bearer " + $jwt_token },
         };
 

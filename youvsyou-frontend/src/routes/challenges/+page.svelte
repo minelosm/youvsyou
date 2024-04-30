@@ -125,7 +125,7 @@
     function fetchMyFitnessuserId() {
         var config = {
             method: "get",
-            url: api_root + "/api/me/myinfo",
+            url: api_root + "/api/service/me/myinfo",
             headers: { Authorization: "Bearer " + $jwt_token },
         };
 
@@ -139,6 +139,8 @@
             });
     }
 </script>
+
+<p>{$myFitnessuserId}</p>
 
 {#if $isAuthenticated && $user.user_roles && $user.user_roles.includes("fitnesscoach")}
     <h1 class="mt-3">Create Challenge</h1>
