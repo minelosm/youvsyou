@@ -60,6 +60,9 @@ function signup(
       setTimeout(() => {
         login(email, password, true);
       }, 2000);
+      if (userType === "fitnessuser") {
+        goto("/accountedit");
+      }
     })
     .catch(function (error) {
       alert("signup failed: " + error);

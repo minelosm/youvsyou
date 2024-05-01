@@ -88,16 +88,16 @@
             <div class="mb-3">
               <label for="userType" class="form-label">User Type</label>
               <select
-              bind:value={selectedUserType}
-              class="form-select"
-              required
+                bind:value={selectedUserType}
+                class="form-select"
+                required
               >
-              {#each userTypes as userType}
-              <option value={userType}>{userType}</option>
-              {/each}
+                {#each userTypes as userType}
+                  <option value={userType}>{userType}</option>
+                {/each}
               </select>
               <div class="invalid-feedback">Please select a user type.</div>
-              </div>
+            </div>
             <div class="row align-items-end">
               <div class="col">
                 <button type="submit" class="btn btn-primary">Sign up</button>
