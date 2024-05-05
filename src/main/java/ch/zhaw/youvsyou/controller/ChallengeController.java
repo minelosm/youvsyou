@@ -21,9 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 import ch.zhaw.youvsyou.model.Challenge;
 import ch.zhaw.youvsyou.model.ChallengeCreateDTO;
 import ch.zhaw.youvsyou.model.ChallengeType;
+import ch.zhaw.youvsyou.model.chatGPT.MessageResponse;
 import ch.zhaw.youvsyou.repository.ChallengeRepository;
 import ch.zhaw.youvsyou.service.AuthService;
-
+import ch.zhaw.youvsyou.service.ChatGPTService;
 
 @RestController
 @RequestMapping("/api")
@@ -35,14 +36,46 @@ public class ChallengeController {
     @Autowired
     AuthService authService;
 
+    @Autowired
+    ChatGPTService chatGptService;
+
+    /*
+     * @PostMapping("/challenge")
+     * public ResponseEntity<Challenge> createChallenge(@RequestBody
+     * ChallengeCreateDTO cDTO, @AuthenticationPrincipal Jwt jwt) {
+     * if (!authService.isFitnesscoach()) {
+     * return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+     * }
+     * Challenge cDAO = new Challenge(cDTO.getName(), cDTO.getDescription(),
+     * cDTO.getStartDate(), cDTO.getEndDate(), cDTO.getWager(),
+     * cDTO.getChallengeType(), cDTO.getFitnesscoachId());
+     * Challenge c = challengeRepository.save(cDAO);
+     * return new ResponseEntity<>(c, HttpStatus.CREATED);
+     * }
+     */
+
     @PostMapping("/challenge")
-    public ResponseEntity<Challenge> createChallenge(@RequestBody ChallengeCreateDTO cDTO, @AuthenticationPrincipal Jwt jwt) { 
+    public ResponseEntity<Challenge> createChallenge(@RequestBody ChallengeCreateDTO cDTO,
+            @AuthenticationPrincipal Jwt jwt) {
         if (!authService.isFitnesscoach()) {
-        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-        Challenge cDAO = new Challenge(cDTO.getName(), cDTO.getDescription(), cDTO.getStartDate(), cDTO.getEndDate(), cDTO.getWager(), cDTO.getChallengeType(), cDTO.getFitnesscoachId());
-        Challenge c = challengeRepository.save(cDAO);
-        return new ResponseEntity<>(c, HttpStatus.CREATED);
+        // ChatGPT Service zum Generieren der Beschreibung aufrufen
+        MessageResponse chatGptResponse = chatGptService.chatWithChatGpt(
+                "Erstelle mir eine ganz kurze Beschreibung mit folgenden überbegriff" +cDTO.getName() + "und ChallengeType:" + cDTO.getChallengeType() + ". Und mache mir kleine 3 Zeile, welche gemessen werden können");
+        if (chatGptResponse.getChoices().isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        String descriptionFromGPT = chatGptResponse.getChoices().get(0).getMessage().getContent();
+        cDTO.setDescription(descriptionFromGPT); // Setzen der von ChatGPT generierten Beschreibung
+
+        // Job mit der ChatGPT Beschreibung erstellen
+        Challenge challenge = new Challenge(cDTO.getName(), descriptionFromGPT,
+                cDTO.getStartDate(),
+                cDTO.getEndDate(), cDTO.getWager(), cDTO.getChallengeType(), cDTO.getFitnesscoachId());
+        Challenge savedChallenge = challengeRepository.save(challenge);
+        return new ResponseEntity<>(savedChallenge, HttpStatus.CREATED);
     }
 
     @GetMapping("/challenge")
@@ -70,31 +103,35 @@ public class ChallengeController {
     }
 
     /*
-    @GetMapping("/challenge")
-    public ResponseEntity<List<Challenge>> getAllChallenges(@RequestParam(required = false) Double min,
-            @RequestParam(required = false) ChallengeType type) {
-        if (min != null && type != null) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        } else if (min != null) {
-            return new ResponseEntity<>(challengeRepository.findByWagerGreaterThan(min), HttpStatus.OK);
-        } else if (type != null) {
-            return new ResponseEntity<>(challengeRepository.findByChallengeType(type), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(challengeRepository.findAll(), HttpStatus.OK);
-    }
-    */
+     * @GetMapping("/challenge")
+     * public ResponseEntity<List<Challenge>>
+     * getAllChallenges(@RequestParam(required = false) Double min,
+     * 
+     * @RequestParam(required = false) ChallengeType type) {
+     * if (min != null && type != null) {
+     * return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+     * } else if (min != null) {
+     * return new ResponseEntity<>(challengeRepository.findByWagerGreaterThan(min),
+     * HttpStatus.OK);
+     * } else if (type != null) {
+     * return new ResponseEntity<>(challengeRepository.findByChallengeType(type),
+     * HttpStatus.OK);
+     * }
+     * return new ResponseEntity<>(challengeRepository.findAll(), HttpStatus.OK);
+     * }
+     */
 
     /*
-    @GetMapping("/challenge/aggregation/state")
-    public List<ChallengeStateAggregation> getChallengeStateAggregation() {
-        return challengeRepository.getChallengeStateAggregation();
-    }
-    */
+     * @GetMapping("/challenge/aggregation/state")
+     * public List<ChallengeStateAggregation> getChallengeStateAggregation() {
+     * return challengeRepository.getChallengeStateAggregation();
+     * }
+     */
 
     @GetMapping("/challenge/{id}")
     public ResponseEntity<Challenge> getChallengeById(@PathVariable String id) {
         Optional<Challenge> optChallenge = challengeRepository.findById(id);
-        if(optChallenge.isPresent()) {
+        if (optChallenge.isPresent()) {
             return new ResponseEntity<>(optChallenge.get(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -102,11 +139,11 @@ public class ChallengeController {
     }
 
     @GetMapping("/challenge/fitness/{id}")
-    public ResponseEntity<List<Challenge>> getChallengeByUserId(@PathVariable String id){
+    public ResponseEntity<List<Challenge>> getChallengeByUserId(@PathVariable String id) {
         List<Challenge> optChallengesCoach = challengeRepository.findByFitnesscoachId(id);
         List<Challenge> optChallengesUser1 = challengeRepository.findByFitnessuserId1(id);
         List<Challenge> optChallengesUser2 = challengeRepository.findByFitnessuserId2(id);
-        if(!optChallengesCoach.isEmpty() && optChallengesCoach != null) {
+        if (!optChallengesCoach.isEmpty() && optChallengesCoach != null) {
             return new ResponseEntity<>(optChallengesCoach, HttpStatus.OK);
         } else if (!optChallengesUser1.isEmpty() && optChallengesUser1 != null) {
             return new ResponseEntity<>(optChallengesUser1, HttpStatus.OK);

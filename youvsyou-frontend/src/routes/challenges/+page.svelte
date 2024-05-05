@@ -4,6 +4,8 @@
     import { jwt_token } from "../../store";
     import { isAuthenticated, user, myFitnessuserId } from "../../store";
 
+    let loading = true;
+
     const api_root = $page.url.origin;
 
     let currentPage;
@@ -13,7 +15,6 @@
     let challenges = [];
     let challenge = {
         name: null,
-        description: null,
         startDate: null,
         endDate: null,
         wager: null,
@@ -38,6 +39,7 @@
     }
 
     function getChallenges() {
+        loading = true;
         let query =
             "?pageSize=" + defaultPageSize + "&pageNumber=" + currentPage;
 
@@ -58,14 +60,17 @@
             .then(function (response) {
                 challenges = response.data.content;
                 nrOfPages = response.data.totalPages;
+                loading = false;
             })
             .catch(function (error) {
                 alert("Could not get challenges");
                 console.log(error);
+                loading = false;
             });
     }
 
     function createChallenge() {
+        loading = true;
         var config = {
             method: "post",
             url: api_root + "/api/challenge",
@@ -81,6 +86,8 @@
             .catch(function (error) {
                 alert("Could not create Challenge");
                 console.log(error);
+            }).finally(() => {
+                loading = false;
             });
     }
 
@@ -158,17 +165,6 @@
         </div>
         <div class="row mb-3">
             <div class="col">
-                <label class="form-label" for="description">Description</label>
-                <input
-                    bind:value={challenge.description}
-                    class="form-control"
-                    id="name"
-                    type="description"
-                />
-            </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col">
                 <label class="form-label" for="startDate">Start Date</label>
                 <input
                     bind:value={challenge.startDate}
@@ -217,9 +213,14 @@
                 />
             </div>
         </div>
-        <button type="button" class="btn btn-primary" on:click={createChallenge}
-            >Submit</button
-        >
+        <button type="button" class="btn btn-primary" on:click={createChallenge} disabled={loading}>
+            {#if loading}
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Loading...
+            {:else}
+                Create Challenge
+            {/if}
+        </button>
     </form>
 {/if}
 
