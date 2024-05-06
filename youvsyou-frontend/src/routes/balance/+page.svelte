@@ -10,6 +10,7 @@
     let account = {
         iban: null,
         balance: 0.0,
+        transactions: [],
     };
 
     $: {
@@ -69,6 +70,7 @@
                     account.iban = response.data.iban;
                 }
                 account.balance = response.data.balance;
+                account.transactions = response.data.transactions || [];
             })
             .catch(function (error) {
                 alert("Could not get account");
@@ -78,7 +80,7 @@
 </script>
 
 {#if $isAuthenticated}
-    <h1>Account Details</h1>
+    <h1>Balance Account</h1>
     <p>Balance: {account.balance}</p>
     <p>IBAN: {account.iban}</p>
 
@@ -117,4 +119,28 @@
     </div>
     <button type="button" class="btn btn-warning" on:click={addBalance}>Add Balance</button>
 </form>
+
+{#if account.transactions.length > 0}
+        <h2>Transaction History</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {#each account.transactions as transaction}
+                    <tr>
+                        <td>{transaction.transactionDate}</td>
+                        <td>{transaction.amount}</td>
+                        <td>{transaction.description}</td>
+                    </tr>
+                {/each}
+            </tbody>
+        </table>
+    {:else}
+        <p>No transactions found.</p>
+    {/if}
 {/if}
