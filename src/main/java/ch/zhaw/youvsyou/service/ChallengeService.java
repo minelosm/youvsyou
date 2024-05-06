@@ -5,9 +5,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ch.zhaw.youvsyou.model.BalanceAccount;
 import ch.zhaw.youvsyou.model.Challenge;
 import ch.zhaw.youvsyou.model.ChallengeState;
+import ch.zhaw.youvsyou.model.Fitnesscoach;
 import ch.zhaw.youvsyou.model.Fitnessuser;
+import ch.zhaw.youvsyou.repository.BalanceAccountRepository;
 import ch.zhaw.youvsyou.repository.ChallengeRepository;
 import ch.zhaw.youvsyou.repository.FitnesscoachRepository;
 import ch.zhaw.youvsyou.repository.FitnessuserRepository;
@@ -24,6 +27,10 @@ public class ChallengeService {
     @Autowired
     FitnesscoachRepository fitnesscoachRepository;
 
+    @Autowired
+    BalanceAccountRepository balanceAccountRepository;
+
+    /* ALTE FUNKTIONIERENDE FUNKTION
     public Optional<Challenge> competeChallenge(String challengeId, String fitnessuserEmail) {
         Optional<Challenge> challengeToCompete = challengeRepository.findById(challengeId);
         if (challengeToCompete.isPresent()) {
@@ -36,7 +43,8 @@ public class ChallengeService {
                     challengeRepository.save(challenge);
                     return Optional.of(challenge);
                 }
-            } if (challenge.getChallengeState() == ChallengeState.WAITING) {
+            }
+            if (challenge.getChallengeState() == ChallengeState.WAITING) {
                 Fitnessuser fitnessuser2 = fitnessuserRepository.findFirstByEmail(fitnessuserEmail);
                 if (fitnessuser2 != null) {
                     challenge.setFitnessuserId2(fitnessuser2.getId());
@@ -48,15 +56,17 @@ public class ChallengeService {
         }
         return Optional.empty();
     }
-
+    */
 
     public Optional<Challenge> finishChallenge(String challengeId, String fitnesscoachEmail) {
         Optional<Challenge> challengeToFinish = challengeRepository.findById(challengeId);
         if (challengeToFinish.isPresent()) {
             Challenge challenge = challengeToFinish.get();
             if (challenge.getChallengeState() == ChallengeState.RUNNING) {
-                Fitnessuser fitnessuser = fitnessuserRepository.findFirstByEmail(fitnesscoachEmail); //eigentlich ein fitnesscoach
-                if (fitnessuser != null && fitnessuser.getId().equals(challenge.getFitnesscoachId())) {
+                Fitnesscoach fitnesscoach = fitnesscoachRepository.findFirstByEmail(fitnesscoachEmail); // eigentlich
+                                                                                                        // ein
+                                                                                                        // fitnesscoach
+                if (fitnesscoach != null && fitnesscoach.getId().equals(challenge.getFitnesscoachId())) {
                     challenge.setChallengeState(ChallengeState.FINISHED);
                     challengeRepository.save(challenge);
                     return Optional.of(challenge);
@@ -66,24 +76,69 @@ public class ChallengeService {
         return Optional.empty();
     }
 
+    /*
+    public Optional<Challenge> transferMoneyToChallenge(String toChallengeId, String userEmail) {
+        Optional<BalanceAccount> fromAccount = balanceAccountRepository.findByUserEmail(userEmail);
+        Optional<Challenge> toChallenge = challengeRepository.findById(toChallengeId);
+        if (fromAccount.isPresent() && toChallenge.isPresent()) {
+            BalanceAccount account = fromAccount.get();
+            Challenge challenge = toChallenge.get();
+            double wager = challenge.getWager();
+            double oneWager = (wager / 2);
+            account.setBalance(account.getBalance() - oneWager);
+            balanceAccountRepository.save(account);
+            challenge.setBalance(challenge.getBalance() + oneWager);
+            challengeRepository.save(challenge);
+            return Optional.of(challenge);
+        }
+        return Optional.empty();
+    }
+    */
+
+public Optional<Challenge> competeInAndFinanceChallenge(String challengeId, String userEmail) {
+    Optional<Challenge> challengeToCompete = challengeRepository.findById(challengeId);
+    BalanceAccount fromAccount = balanceAccountRepository.findFirstByUserEmail(userEmail);
+        if (challengeToCompete.isPresent()) {
+            Challenge challenge = challengeToCompete.get();
+            Double oneWager = challenge.getWager() / 2;
+            if (challenge.getChallengeState() == ChallengeState.OPEN) {
+                Fitnessuser fitnessuser1 = fitnessuserRepository.findFirstByEmail(userEmail);
+                if (fitnessuser1 != null) {
+                    challenge.setFitnessuserId1(fitnessuser1.getId());
+                    challenge.setChallengeState(ChallengeState.WAITING);
+                    challenge.setBalance(oneWager);
+                    fromAccount.setBalance(fromAccount.getBalance() - oneWager);
+                    challengeRepository.save(challenge);
+                    balanceAccountRepository.save(fromAccount);
+                    return Optional.of(challenge);
+                }
+            } if (challenge.getChallengeState() == ChallengeState.WAITING) {
+                Fitnessuser fitnessuser2 = fitnessuserRepository.findFirstByEmail(userEmail);
+                if (fitnessuser2 != null) {
+                    challenge.setFitnessuserId2(fitnessuser2.getId());
+                    challenge.setChallengeState(ChallengeState.RUNNING);
+                    challenge.setBalance(oneWager);
+                    fromAccount.setBalance(fromAccount.getBalance() - oneWager);
+                    challengeRepository.save(challenge);
+                    balanceAccountRepository.save(fromAccount);
+                    return Optional.of(challenge);
+                }
+            }
+    }
+    return Optional.empty();
+}
 
     /*
-    // Method to define conditions for competing challenges
-    private boolean meetChallengeConditions(Challenge challenge, Fitnessuser user1, Fitnessuser user2) {
-        // Example condition: Only allow competing if both users have a certain fitness level
-        // Add your specific conditions here
-        // For example:
-        // return user1.getFitnessLevel() >= challenge.getMinFitnessLevel() && user2.getFitnessLevel() >= challenge.getMinFitnessLevel();
-        return true; // For demonstration purposes, always return true
-    }
-
-    // Method to define conditions for finishing challenges
-    private boolean meetFinishConditions(Challenge challenge) {
-        // Example condition: Only allow finishing if challenge duration has passed
-        // Add your specific conditions here
-        // For example:
-        // return challenge.getEndDate().isBeforeNow();
-        return true; // For demonstration purposes, always return true
+    public Optional<Challenge> competeAndTransfer(String challengeId, String userEmail) {
+        Optional<Challenge> competedChallenge = competeChallenge(challengeId, userEmail);
+        if (!competedChallenge.isPresent()) {
+            return Optional.empty();
+        }
+            Optional<Challenge> challengeAfterTransfer = transferMoneyToChallenge(challengeId, userEmail);
+            if (!challengeAfterTransfer.isPresent()) {
+            return Optional.empty();
+        }
+        return challengeAfterTransfer;
     }
     */
 }

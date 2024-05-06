@@ -11,7 +11,7 @@
         if (loginForm.checkValidity()) {
             console.log("login");
             auth.login(username, password);
-            goto("/");
+            goto("/account");
         }
         loginForm.classList.add("was-validated");
     }

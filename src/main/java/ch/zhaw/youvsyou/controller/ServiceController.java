@@ -29,6 +29,7 @@ public class ServiceController {
     @Autowired
     ChallengeService challengeService;
 
+
     @Autowired
     AuthService authService;
 
@@ -63,16 +64,21 @@ public class ServiceController {
     public ResponseEntity<Challenge> assignToMe(@RequestParam String challengeId,
             @AuthenticationPrincipal Jwt jwt) {
         String userEmail = jwt.getClaimAsString("email");
-        Optional<Challenge> challenge = challengeService.competeChallenge(challengeId, userEmail);
+        Optional<Challenge> challenge = challengeService.competeInAndFinanceChallenge(challengeId, userEmail);
         if (challenge.isPresent()) {
             return new ResponseEntity<>(challenge.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping("/finishchallenge")
     public ResponseEntity<Challenge> finishChallenge(@RequestParam String challengeId,
+            @RequestParam String winner,
             @AuthenticationPrincipal Jwt jwt) {
+        if (!authService.isFitnesscoach()) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         String fitnesscoachEmail = jwt.getClaimAsString("email");
         Optional<Challenge> challenge = challengeService.finishChallenge(challengeId, fitnesscoachEmail);
         if (challenge.isPresent()) {

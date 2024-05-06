@@ -26,7 +26,7 @@ public class Challenge {
     @NonNull private String fitnesscoachId;
     private String fitnessuserId1;
     private String fitnessuserId2;
-    
+    private Double balance;
 
 
 }

@@ -17,6 +17,7 @@ import org.springframework.security.oauth2.jwt.JwtValidators;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import ch.zhaw.youvsyou.repository.BalanceAccountRepository;
 import ch.zhaw.youvsyou.repository.FitnesscoachRepository;
 import ch.zhaw.youvsyou.repository.FitnessuserRepository;
 
@@ -36,6 +37,9 @@ public class SecurityConfig {
     @Autowired
     FitnesscoachRepository fitnesscoachRepository;
 
+    @Autowired
+    BalanceAccountRepository balanceAccountRepository;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -53,7 +57,7 @@ public class SecurityConfig {
     @ConditionalOnMissingBean
     JwtDecoder jwtDecoder() {
         NimbusJwtDecoder jwtDecoder = (NimbusJwtDecoder) JwtDecoders.fromIssuerLocation(issuerUri);
-        OAuth2TokenValidator<Jwt> userValidator = new UserValidator(fitnessuserRepository, fitnesscoachRepository);
+        OAuth2TokenValidator<Jwt> userValidator = new UserValidator(fitnessuserRepository, fitnesscoachRepository, balanceAccountRepository);
         OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);
         OAuth2TokenValidator<Jwt> myValidator = new DelegatingOAuth2TokenValidator<>(withIssuer, userValidator);
         jwtDecoder.setJwtValidator(myValidator);

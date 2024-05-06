@@ -60,9 +60,6 @@ function signup(
       setTimeout(() => {
         login(email, password, true);
       }, 2000);
-      if (userType === "fitnessuser") {
-        goto("/accountedit");
-      }
     })
     .catch(function (error) {
       alert("signup failed: " + error);
@@ -94,7 +91,7 @@ function login(username, password, redirectToHome = false) {
         // go to start page after 500ms. Explanation: if we do not wait, the login form on the
         // start page might still be visible because $isAuthenticated is not yet set to true.
         setTimeout(() => {
-          goto("/") 
+          goto("/account") 
         }, 500);
       }
     })
