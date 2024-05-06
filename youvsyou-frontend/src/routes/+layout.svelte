@@ -57,6 +57,11 @@
       </ul>
       <div class="d-flex">
         {#if $isAuthenticated}
+        <a class="navbar-text me-2" href="/balance">Balance</a>
+        {/if}
+      </div>
+      <div class="d-flex">
+        {#if $isAuthenticated}
         <a class="navbar-text me-2" href="/account">{$user.name}</a>
         <button type="button" class="btn btn-primary" on:click={auth.logout}>Log Out</button>
         {/if}

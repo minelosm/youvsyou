@@ -77,8 +77,11 @@
         </b>
         {$user.user_roles}
     </p>
+    <button type="button" class="btn btn-warning">
+        <a href="/balance">Balance</a>
+    </button>
 
-    {#if $isAuthenticated && fitnessuser.birthDate == null}
+    {#if $isAuthenticated && fitnessuser.birthDate == null && $user.user_roles === "fitnessuser"}
     <button type="button" class="btn btn-warning">
         <a href="/accountedit">Edit Account</a>
     </button>

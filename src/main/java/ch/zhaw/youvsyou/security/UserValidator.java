@@ -35,21 +35,24 @@ class UserValidator implements OAuth2TokenValidator<Jwt> {
         List<String> userRoles = jwt.getClaimAsStringList("user_roles");
         if (userEmail != null && !userEmail.equals("")) {
             Fitnessuser f = fitnessuserRepository.findFirstByEmail(userEmail);
+            BalanceAccount b = balanceAccountRepository.findFirstByUserEmail(userEmail);
             if (f == null && userRoles.contains("fitnessuser")) {
                 String username = jwt.getClaimAsString("nickname");
                 fitnessuserRepository.save(new Fitnessuser(userEmail, username));
-                balanceAccountRepository.save(new BalanceAccount(userEmail));
                 System.out.println("Creating new fitnessuser:");
                 System.out.println("  - name:  " + username);
                 System.out.println("  - email: " + userEmail);
-            }
+            } 
             Fitnesscoach c = fitnesscoachRepository.findFirstByEmail(userEmail);
             if (c == null && userRoles.contains("fitnesscoach")) {
                 String username = jwt.getClaimAsString("nickname");
                 fitnesscoachRepository.save(new Fitnesscoach(userEmail, username));
-                balanceAccountRepository.save(new BalanceAccount(userEmail));
                 System.out.println("Creating new fitnesscoach:");
                 System.out.println("  - name:  " + username);
+                System.out.println("  - email: " + userEmail);
+            } if (b == null) {
+                balanceAccountRepository.save(new BalanceAccount(userEmail));
+                System.out.println("Creating new balance account for:");
                 System.out.println("  - email: " + userEmail);
             }
             return OAuth2TokenValidatorResult.success();
