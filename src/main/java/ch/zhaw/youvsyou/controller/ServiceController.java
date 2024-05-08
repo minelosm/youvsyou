@@ -39,27 +39,6 @@ public class ServiceController {
     @Autowired
     FitnesscoachRepository fitnesscoachRepository;
 
-    /*
-     * @PutMapping("/competechallenge")
-     * public ResponseEntity<Challenge> competeChallenge
-     * (@RequestBody ChallengeStateChangeDTO changeC,
-     * 
-     * @AuthenticationPrincipal Jwt jwt) {
-     * if (!authService.isFitnesscoach()) {
-     * return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-     * }
-     * 
-     * String fitnessuserEmail = changeC.getFitnessuserEmail();
-     * String challengeId = changeC.getChallengeId();
-     * Optional<Challenge> challenge =
-     * challengeService.competeChallenge(challengeId, fitnessuserEmail);
-     * if (challenge.isPresent()) {
-     * return new ResponseEntity<>(challenge.get(), HttpStatus.OK);
-     * }
-     * return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-     * }
-     */
-
     @PutMapping("/me/competechallenge")
     public ResponseEntity<Challenge> assignToMe(@RequestParam String challengeId,
             @AuthenticationPrincipal Jwt jwt) {
@@ -74,7 +53,6 @@ public class ServiceController {
 
     @PutMapping("/finishchallenge")
     public ResponseEntity<Challenge> finishChallenge(@RequestParam String challengeId,
-            @RequestParam String winner,
             @AuthenticationPrincipal Jwt jwt) {
         if (!authService.isFitnesscoach()) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
@@ -103,3 +81,24 @@ public class ServiceController {
         }
     }
 }
+
+/*
+     * @PutMapping("/competechallenge")
+     * public ResponseEntity<Challenge> competeChallenge
+     * (@RequestBody ChallengeStateChangeDTO changeC,
+     * 
+     * @AuthenticationPrincipal Jwt jwt) {
+     * if (!authService.isFitnesscoach()) {
+     * return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+     * }
+     * 
+     * String fitnessuserEmail = changeC.getFitnessuserEmail();
+     * String challengeId = changeC.getChallengeId();
+     * Optional<Challenge> challenge =
+     * challengeService.competeChallenge(challengeId, fitnessuserEmail);
+     * if (challenge.isPresent()) {
+     * return new ResponseEntity<>(challenge.get(), HttpStatus.OK);
+     * }
+     * return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+     * }
+     */

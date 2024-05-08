@@ -68,14 +68,14 @@ public class ChallengeService {
 
     public Optional<Challenge> finishChallenge(String challengeId, String fitnesscoachEmail) {
         Optional<Challenge> challengeToFinish = challengeRepository.findById(challengeId);
+        BalanceAccount coachAccount = balanceAccountRepository.findFirstByUserEmail(fitnesscoachEmail);
         if (challengeToFinish.isPresent()) {
             Challenge challenge = challengeToFinish.get();
             if (challenge.getChallengeState() == ChallengeState.RUNNING) {
-                Fitnesscoach fitnesscoach = fitnesscoachRepository.findFirstByEmail(fitnesscoachEmail); // eigentlich
-                                                                                                        // ein
-                                                                                                        // fitnesscoach
+                Fitnesscoach fitnesscoach = fitnesscoachRepository.findFirstByEmail(fitnesscoachEmail);
                 if (fitnesscoach != null && fitnesscoach.getId().equals(challenge.getFitnesscoachId())) {
                     challenge.setChallengeState(ChallengeState.FINISHED);
+                    
                     challengeRepository.save(challenge);
                     return Optional.of(challenge);
                 }

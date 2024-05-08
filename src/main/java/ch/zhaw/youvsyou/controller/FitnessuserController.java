@@ -18,11 +18,10 @@ import ch.zhaw.youvsyou.model.Fitnessuser;
 import ch.zhaw.youvsyou.model.FitnessuserCreateDTO;
 import ch.zhaw.youvsyou.repository.FitnessuserRepository;
 
-
 @RestController
 @RequestMapping("/api")
 public class FitnessuserController {
-    
+
     @Autowired
     FitnessuserRepository fitnessuserRepository;
 
@@ -49,6 +48,23 @@ public class FitnessuserController {
         }
     }
 
+    @PutMapping("/fitnessuser/edit/{email}")
+    public ResponseEntity<Fitnessuser> putAccountDetails(
+            @PathVariable String email,
+            @RequestBody Fitnessuser updatedUser) {
+        return fitnessuserRepository.findByEmail(email).map(fitnessuser -> {
+            if (updatedUser.getBirthDate() != null)
+                fitnessuser.setBirthDate(updatedUser.getBirthDate());
+            if (updatedUser.getHeight() != null)
+                fitnessuser.setHeight(updatedUser.getHeight());
+            if (updatedUser.getWeight() != null)
+                fitnessuser.setWeight(updatedUser.getWeight());
+
+            fitnessuserRepository.save(fitnessuser);
+            return new ResponseEntity<>(fitnessuser, HttpStatus.OK);
+        }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
     /*
     @GetMapping("/me/fitnessuser")
     public ResponseEntity<Fitnessuser> getMyFitnessuserId(
@@ -59,19 +75,5 @@ public class FitnessuserController {
                         .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
     */
-
-    @PutMapping("/fitnessuser/edit/{email}")
-public ResponseEntity<Fitnessuser> putAccountDetails(
-    @PathVariable String email,
-    @RequestBody Fitnessuser updatedUser) {
-    return fitnessuserRepository.findByEmail(email).map(fitnessuser -> {
-        if (updatedUser.getBirthDate() != null) fitnessuser.setBirthDate(updatedUser.getBirthDate());
-        if (updatedUser.getHeight() != null) fitnessuser.setHeight(updatedUser.getHeight());
-        if (updatedUser.getWeight() != null) fitnessuser.setWeight(updatedUser.getWeight());
-        
-        fitnessuserRepository.save(fitnessuser);
-        return new ResponseEntity<>(fitnessuser, HttpStatus.OK);
-    }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-}
 
 }
