@@ -8,7 +8,6 @@
     let amount = 0;
 
     let account = {
-        iban: null,
         balance: 0.0,
         transactions: [],
     };
@@ -66,9 +65,6 @@
 
         axios(config)
             .then(function (response) {
-                if (response.data.iban != null) {
-                    account.iban = response.data.iban;
-                }
                 account.balance = response.data.balance;
                 account.transactions = response.data.transactions || [];
             })
@@ -82,29 +78,9 @@
 {#if $isAuthenticated}
     <h1>Balance Account</h1>
     <p>Balance: {account.balance}</p>
-    <p>IBAN: {account.iban}</p>
 
     <form class="mb-5">
     <div class="row mb-3">
-        <div class="col">
-            <label class="form-label" for="iban">IBAN</label>
-            {#if account.iban == null}
-                <input
-                    type="text"
-                    id="iban"
-                    class="form-control"
-                    bind:value={account.iban}
-                />
-            {:else}
-                <input
-                    type="text"
-                    id="IBAN"
-                    class="form-control"
-                    bind:value={account.iban}
-                    readonly
-                />
-            {/if}
-        </div>
     </div>
     <div class="row mb-3">
         <div class="col">

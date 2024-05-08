@@ -22,7 +22,6 @@ import lombok.Setter;
 public class BalanceAccount {
     @Id private String id;
     @NonNull private String userEmail;
-    private String iban;
     private Double balance;
     private List<Transaction> transactions = new ArrayList<>();
 
