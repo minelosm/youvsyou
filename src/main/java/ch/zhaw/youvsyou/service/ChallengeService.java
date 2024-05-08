@@ -71,7 +71,7 @@ public class ChallengeService {
         BalanceAccount coachAccount = balanceAccountRepository.findFirstByUserEmail(fitnesscoachEmail);
         BalanceAccount winnerAccount = balanceAccountRepository.findFirstByUserEmail(winnerEmail);
         BalanceAccount platform = balanceAccountRepository.findFirstByUserEmail("admin@youvsyou.ch");
-        if (challengeToFinish.isPresent()) {
+        if (challengeToFinish.isPresent()) {    
             Challenge challenge = challengeToFinish.get();
             if (challenge.getChallengeState() == ChallengeState.RUNNING) {
                 Fitnesscoach fitnesscoach = fitnesscoachRepository.findFirstByEmail(fitnesscoachEmail);
@@ -94,10 +94,11 @@ public class ChallengeService {
                     coachTransaction.setDescription("Challenge coach fee from challenge: " + challenge.getName());
                     coachAccount.getTransactions().add(coachTransaction);
                     Transaction platformTransaction = new Transaction();
-                    platformTransaction.setAmount(platformWager);
+                    platform.setBalance(platformWager);
                     platformTransaction.setTransactionDate(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
                     platformTransaction.setDescription("Challenge platform fee from challenge: " + challenge.getName());
                     platformTransaction.setAmount(platformWager);
+                    platform.getTransactions().add(platformTransaction);
                     challenge.setBalance(0.0);
                     challengeRepository.save(challenge);
                     balanceAccountRepository.save(winnerAccount);

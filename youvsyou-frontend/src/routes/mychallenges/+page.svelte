@@ -165,7 +165,7 @@
                         {/if}
                     </td>
                     <td>
-                        {#if winnerId == null}
+                        {#if winnerId === null}
                         <span class="badge bg-info">Select a winner</span>
                         {:else}
                         <button
