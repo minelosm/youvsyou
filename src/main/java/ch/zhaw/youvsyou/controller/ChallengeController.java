@@ -47,7 +47,7 @@ public class ChallengeController {
         }
         // ChatGPT Service zum Generieren der Beschreibung aufrufen
         MessageResponse chatGptResponse = chatGptService.chatWithChatGpt(
-                "Erstelle mir eine ganz kurze Beschreibung mit folgenden überbegriff" +cDTO.getName() + "und ChallengeType:" + cDTO.getChallengeType() + ". Und mache mir das auf Deutsch und mit kleine 3 Ziele, welche damit gemessen werden können");
+                "Erstelle mir eine ganz kurze Beschreibung mit maximal 20 Wörter mit folgenden überbegriff als Hilfe:" +cDTO.getName() + "und" + cDTO.getChallengeType() + ". Und mache mir das auf Deutsch und mache 3 kleine Ziele, welche damit gemessen werden können");
         if (chatGptResponse.getChoices().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
