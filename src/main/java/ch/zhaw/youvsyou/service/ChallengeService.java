@@ -66,17 +66,43 @@ public class ChallengeService {
      * }
      */
 
-    public Optional<Challenge> finishChallenge(String challengeId, String fitnesscoachEmail) {
+    public Optional<Challenge> finishChallenge(String challengeId, String fitnesscoachEmail, String winnerEmail) {
         Optional<Challenge> challengeToFinish = challengeRepository.findById(challengeId);
         BalanceAccount coachAccount = balanceAccountRepository.findFirstByUserEmail(fitnesscoachEmail);
+        BalanceAccount winnerAccount = balanceAccountRepository.findFirstByUserEmail(winnerEmail);
+        BalanceAccount platform = balanceAccountRepository.findFirstByUserEmail("admin@youvsyou.ch");
         if (challengeToFinish.isPresent()) {
             Challenge challenge = challengeToFinish.get();
             if (challenge.getChallengeState() == ChallengeState.RUNNING) {
                 Fitnesscoach fitnesscoach = fitnesscoachRepository.findFirstByEmail(fitnesscoachEmail);
                 if (fitnesscoach != null && fitnesscoach.getId().equals(challenge.getFitnesscoachId())) {
                     challenge.setChallengeState(ChallengeState.FINISHED);
-                    
+                    double totalWager = challenge.getBalance();
+                    double winnerWager = totalWager * 0.8;
+                    double coachWager = totalWager * 0.15;
+                    double platformWager = totalWager * 0.5;
+                    Transaction winnerTransaction = new Transaction();
+                    winnerAccount.setBalance(winnerAccount.getBalance() + winnerWager);
+                    winnerTransaction.setAmount(winnerWager);
+                    winnerTransaction.setTransactionDate(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                    winnerTransaction.setDescription("Challenge win from challenge: " + challenge.getName());
+                    winnerAccount.getTransactions().add(winnerTransaction);
+                    Transaction coachTransaction = new Transaction();
+                    coachAccount.setBalance(coachAccount.getBalance() + coachWager);
+                    coachTransaction.setAmount(coachWager);
+                    coachTransaction.setTransactionDate(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                    coachTransaction.setDescription("Challenge coach fee from challenge: " + challenge.getName());
+                    coachAccount.getTransactions().add(coachTransaction);
+                    Transaction platformTransaction = new Transaction();
+                    platformTransaction.setAmount(platformWager);
+                    platformTransaction.setTransactionDate(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+                    platformTransaction.setDescription("Challenge platform fee from challenge: " + challenge.getName());
+                    platformTransaction.setAmount(platformWager);
+                    challenge.setBalance(0.0);
                     challengeRepository.save(challenge);
+                    balanceAccountRepository.save(winnerAccount);
+                    balanceAccountRepository.save(coachAccount);
+                    balanceAccountRepository.save(platform);
                     return Optional.of(challenge);
                 }
             }
@@ -114,7 +140,7 @@ public class ChallengeService {
             Double oneWager = challenge.getWager() / 2;
             if (challenge.getChallengeState() == ChallengeState.OPEN) {
                 Fitnessuser fitnessuser1 = fitnessuserRepository.findFirstByEmail(userEmail);
-                if (fitnessuser1 != null) {
+                if (fitnessuser1 != null && fromAccount.getBalance() >= oneWager){
                     challenge.setFitnessuserId1(fitnessuser1.getId());
                     challenge.setChallengeState(ChallengeState.WAITING);
                     challenge.setBalance(oneWager);
@@ -131,10 +157,10 @@ public class ChallengeService {
             }
             if (challenge.getChallengeState() == ChallengeState.WAITING) {
                 Fitnessuser fitnessuser2 = fitnessuserRepository.findFirstByEmail(userEmail);
-                if (fitnessuser2 != null) {
+                if (fitnessuser2 != null && fromAccount.getBalance() >= oneWager){
                     challenge.setFitnessuserId2(fitnessuser2.getId());
                     challenge.setChallengeState(ChallengeState.RUNNING);
-                    challenge.setBalance(oneWager);
+                    challenge.setBalance(challenge.getBalance() + oneWager);
                     fromAccount.setBalance(fromAccount.getBalance() - oneWager);
                     Transaction transaction = new Transaction();
                     transaction.setAmount(oneWager);

@@ -6,6 +6,10 @@
 
     const api_root = $page.url.origin;
     let id;
+    let winnerEmail = "";
+    let winnerId = null;
+
+    let winnerUserData = [];
 
     let challenges = [];
 
@@ -19,7 +23,6 @@
     }
 
     function getChallenges() {
-
         var config = {
             method: "get",
             url: api_root + "/api/challenge/fitness/" + id,
@@ -32,6 +35,47 @@
             })
             .catch(function (error) {
                 alert("Could not get challenges");
+                console.log(error);
+            });
+    }
+
+    function finishChallenge(challengeId, winnerEmail) {
+        var config = {
+            method: "put",
+            url:
+                api_root +
+                "/api/service/finishchallenge?challengeId=" +
+                challengeId +
+                "&winnerEmail=" +
+                winnerEmail,
+            headers: { Authorization: "Bearer " + $jwt_token },
+        };
+
+        axios(config)
+            .then(function (response) {
+                getChallenges();
+            })
+            .catch(function (error) {
+                alert("Could not finish challenge");
+                console.log(error);
+            });
+    }
+
+    function getWinnerEmail(winnerId) {
+        var config = {
+            method: "get",
+            url: api_root + "/api/fitnessuser/" + winnerId,
+            headers: { Authorization: "Bearer " + $jwt_token },
+        };
+        axios(config)
+            .then(function (response) {
+                winnerUserData = response.data;
+                winnerEmail = response.data.email;
+                console.log(winnerUserData);
+                console.log(winnerEmail);
+            })
+            .catch(function (error) {
+                alert("Could not get fitnessuser id");
                 console.log(error);
             });
     }
@@ -52,6 +96,18 @@
                 console.log(error);
             });
     }
+
+    function saveWinnerIdFrom1(id) {
+        winnerId = id;
+        console.log(winnerId);
+        getWinnerEmail(winnerId);
+    }
+
+    function saveWinnerIdFrom2(id) {
+        winnerId = id;
+        console.log(winnerId);
+        getWinnerEmail(winnerId);
+    }
 </script>
 
 {#if $isAuthenticated && $user.user_roles && $user.user_roles.includes("fitnesscoach")}
@@ -67,30 +123,66 @@
                 <th scope="col">Fitnessuser Id1</th>
                 <th scope="col">Fitnessuser Id2</th>
                 <th scope="col">Actions</th>
+                <th scope="col">Actions to Finish</th>
                 <th scope="col">View Single</th>
             </tr>
         </thead>
         <tbody>
             {#each challenges as challenge}
-                    <tr>
-                        <td>{challenge.id}</td>
-                        <td>{challenge.description}</td>
-                        <td>{challenge.challengeType}</td>
-                        <td>{challenge.wager}</td>
-                        <td>{challenge.challengeState}</td>
-                        <td>{challenge.fitnessuserId1}</td>
-                        <td>{challenge.fitnessuserId2}</td>
-                        <td>
-                            {#if challenge.challengeState === "RUNNING"}
-                                <span class="badge bg-secondary">Running</span>
-                            {:else if challenge.challengeState === "FINISHED"}
-                                <span class="badge bg-success">Finished</span>
-                            {/if}
-                        </td>
-                        <td>
-                            <a href={"/challenge?id=" + challenge.id}>View</a>
-                        </td>
-                    </tr>
+                <tr>
+                    <td>{challenge.id}</td>
+                    <td>{challenge.description}</td>
+                    <td>{challenge.challengeType}</td>
+                    <td>{challenge.wager}</td>
+                    <td>{challenge.challengeState}</td>
+                    <td>
+                        <button
+                                type="button"
+                                class="btn btn-primary btn-sm"
+                                on:click={() => {
+                                    saveWinnerIdFrom1(challenge.fitnessuserId1);
+                                }}
+                            >
+                                Select Winner: {challenge.fitnessuserId1}
+                            </button>
+                    </td>
+                    <td>
+                        <button
+                                type="button"
+                                class="btn btn-primary btn-sm"
+                                on:click={() => {
+                                    saveWinnerIdFrom2(challenge.fitnessuserId2);
+                                }}
+                            >
+                                Select Winner: {challenge.fitnessuserId2}
+                            </button>
+                    </td>
+                    <td>
+                        {#if challenge.challengeState === "RUNNING"}
+                            <span class="badge bg-secondary">Running</span>
+                        {:else if challenge.challengeState === "FINISHED"}
+                            <span class="badge bg-success">Finished</span>
+                        {/if}
+                    </td>
+                    <td>
+                        {#if winnerId == null}
+                        <span class="badge bg-info">Select a winner</span>
+                        {:else}
+                        <button
+                            type="button"
+                            class="btn btn-primary btn-sm"
+                            on:click={() => {
+                                finishChallenge(challenge.id, winnerEmail);
+                            }}
+                        >
+                            Finish Challenge
+                        </button>
+                        {/if}
+                    </td>
+                    <td>
+                        <a href={"/challenge?id=" + challenge.id}>View</a>
+                    </td>
+                </tr>
             {/each}
         </tbody>
     </table>
@@ -114,25 +206,25 @@
         </thead>
         <tbody>
             {#each challenges as challenge}
-                    <tr>
-                        <td>{challenge.id}</td>
-                        <td>{challenge.description}</td>
-                        <td>{challenge.challengeType}</td>
-                        <td>{challenge.wager}</td>
-                        <td>{challenge.challengeState}</td>
-                        <td>{challenge.fitnessuserId1}</td>
-                        <td>{challenge.fitnessuserId2}</td>
-                        <td>
-                            {#if challenge.challengeState === "RUNNING"}
-                                <span class="badge bg-secondary">Running</span>
-                            {:else if challenge.challengeState === "FINISHED"}
-                                <span class="badge bg-success">Finished</span>
-                            {/if}
-                        </td>
-                        <td>
-                            <a href={"/challenge?id=" + challenge.id}>View</a>
-                        </td>
-                    </tr>
+                <tr>
+                    <td>{challenge.id}</td>
+                    <td>{challenge.description}</td>
+                    <td>{challenge.challengeType}</td>
+                    <td>{challenge.wager}</td>
+                    <td>{challenge.challengeState}</td>
+                    <td>{challenge.fitnessuserId1}</td>
+                    <td>{challenge.fitnessuserId2}</td>
+                    <td>
+                        {#if challenge.challengeState === "RUNNING"}
+                            <span class="badge bg-secondary">Running</span>
+                        {:else if challenge.challengeState === "FINISHED"}
+                            <span class="badge bg-success">Finished</span>
+                        {/if}
+                    </td>
+                    <td>
+                        <a href={"/challenge?id=" + challenge.id}>View</a>
+                    </td>
+                </tr>
             {/each}
         </tbody>
     </table>

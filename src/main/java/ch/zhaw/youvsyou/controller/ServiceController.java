@@ -53,12 +53,13 @@ public class ServiceController {
 
     @PutMapping("/finishchallenge")
     public ResponseEntity<Challenge> finishChallenge(@RequestParam String challengeId,
+            @RequestParam String winnerEmail,
             @AuthenticationPrincipal Jwt jwt) {
         if (!authService.isFitnesscoach()) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         String fitnesscoachEmail = jwt.getClaimAsString("email");
-        Optional<Challenge> challenge = challengeService.finishChallenge(challengeId, fitnesscoachEmail);
+        Optional<Challenge> challenge = challengeService.finishChallenge(challengeId, fitnesscoachEmail, winnerEmail);
         if (challenge.isPresent()) {
             return new ResponseEntity<>(challenge.get(), HttpStatus.OK);
         } else {

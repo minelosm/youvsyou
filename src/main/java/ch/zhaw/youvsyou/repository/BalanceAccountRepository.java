@@ -12,5 +12,4 @@ public interface BalanceAccountRepository extends MongoRepository<BalanceAccount
 
     BalanceAccount findFirstByUserEmail(String userEmail);
 
-    BalanceAccount findByEmail(String userEmail);
 }
