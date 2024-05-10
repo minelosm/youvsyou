@@ -86,7 +86,8 @@
             .catch(function (error) {
                 alert("Could not create Challenge");
                 console.log(error);
-            }).finally(() => {
+            })
+            .finally(() => {
                 loading = false;
             });
     }
@@ -213,9 +214,18 @@
                 />
             </div>
         </div>
-        <button type="button" class="btn btn-primary" on:click={createChallenge} disabled={loading}>
+        <button
+            type="button"
+            class="btn btn-primary"
+            on:click={createChallenge}
+            disabled={loading}
+        >
             {#if loading}
-                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span
+                    class="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                ></span>
                 Loading...
             {:else}
                 Create Challenge
@@ -271,81 +281,67 @@
     </div>
 </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">Challenge ID</th>
-            <th scope="col">Description</th>
-            <th scope="col">Type</th>
-            <th scope="col">Wager</th>
-            <th scope="col">Fitnesscoach Id</th>
-            <th scope="col">State</th>
-            <th scope="col">Fitnessuser Id1</th>
-            <th scope="col">Fitnessuser Id2</th>
-            <th scope="col">Actions</th>
-            <th scope="col">Actions</th>
-            <th scope="col">View Single</th>
-        </tr>
-    </thead>
-    <tbody>
-        {#each challenges as challenge}
-            <tr>
-                <td>{challenge.id}</td>
-                <td>{challenge.description}</td>
-                <td>{challenge.challengeType}</td>
-                <td>{challenge.wager}</td>
-                <td>{challenge.fitnesscoachId}</td>
-                <td>{challenge.challengeState}</td>
-                <td>{challenge.fitnessuserId1}</td>
-                <td>{challenge.fitnessuserId2}</td>
-                <td>
-                    {#if challenge.challengeState === "RUNNING"}
-                        <span class="badge bg-secondary">Running</span>
-                        {#if $isAuthenticated && $user.user_roles && $user.user_roles.includes("fitnesscoach") && challenge.fitnesscoachId === $myFitnessuserId}
-                            <button
-                                type="button"
-                                class="btn btn-primary btn-sm"
-                                on:click={() => {
-                                    finishChallenge(challenge.id);
-                                }}
-                            >
-                                Finish challenge
-                            </button>
-                        {/if}
+<div class="columns">
+    {#each challenges as challenge}
+    {#if challenge.challengeState === "OPEN" || challenge.challengeState === "WAITING"}
+        <div class="column is-one-third">
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">
+                        {challenge.name}<span class="tag is-info is-light"
+                            >{challenge.challengeType}</span
+                        >
+                    </p>
+                    <button class="card-header-icon" aria-label="more options">
+                        <span class="icon">
+                            <i class="fas fa-dumbbell" aria-hidden="true"></i>
+                        </span>
+                    </button>
+                </header>
+                <div class="card-content">
+                    <div class="content">
+                        {challenge.description}
+                    </div>
+                    <div class="content">
+                        <i class="fas fa-money-bill"></i>
+                        {challenge.wager} CHF
+                    </div>
+                    <div class="content">
+                        <i class="fas fa-calendar-alt"></i>
+                        {challenge.startDate} - {challenge.endDate}
+                    </div>
+                    <div class="content">
+                    {#if challenge.challengeState === "OPEN"}
+                        <i class="fas fa-check"></i>
+                        {challenge.challengeState} to compete
+                    {:else if challenge.challengeState === "WAITING"}
+                    <i class="fas fa-clock"></i>
+                    {challenge.challengeState} for a competitor
                     {/if}
-                    {#if challenge.fitnessuserId1 === null || challenge.fitnessuserId2 === null}
-                        {#if $isAuthenticated && $user.user_roles && $user.user_roles.includes("fitnessuser") && challenge.fitnessuserId1 !== $myFitnessuserId && challenge.fitnessuserId2 !== $myFitnessuserId}
-                            <button
-                                type="button"
-                                class="btn btn-primary btn-sm"
-                                on:click={() => {
-                                    competeToMe(challenge.id);
-                                }}
-                            >
-                                Compete to me
-                            </button>
-                        {/if}
-                    {/if}
-                </td>
-                <td>
-                    {#if challenge.challengeState === "FINISHED"}
-                        <span class="badge bg-success">Finished</span>
-                    {/if}
-                </td>
-                <td>
-                    <a href={"/challenge?id=" + challenge.id}>View</a>
-                </td>
-            </tr>
-        {/each}
-    </tbody>
-</table>
+                    </div>
+                </div>
+                <footer class="card-footer">
+                    <a href="#" on:click={competeToMe} class="card-footer-item"
+                        >Compete to me</a
+                    >
+                    <a
+                        href={"/challenge?id=" + challenge.id}
+                        class="card-footer-item">Detail</a
+                    >
+                </footer>
+            </div>
+        </div>
+    {/if}
+    {/each}
+</div>
 
-<nav>
-    <ul class="pagination">
+<nav class="pagination" role="navigation" aria-label="pagination">
+    <ul class="pagination-list">
         {#each Array(nrOfPages) as _, i}
-            <li class="page-item">
+            <li>
                 <a
-                    class="page-link"
+                    class="pagination-link is-current"
+                    aria-label="Page 1"
                     class:active={currentPage == i + 1}
                     href={"/challenges?page=" + (i + 1)}
                     >{i + 1}

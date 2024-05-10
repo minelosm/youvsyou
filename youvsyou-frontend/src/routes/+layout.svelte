@@ -9,69 +9,73 @@
   const api_root = $page.url.origin;
 
   function fetchMyFitnessuserId() {
-        var config = {
-            method: "get",
-            url: api_root + "/api/service/me/myinfo",
-            headers: { Authorization: "Bearer " + $jwt_token },
-        };
+    var config = {
+      method: "get",
+      url: api_root + "/api/service/me/myinfo",
+      headers: { Authorization: "Bearer " + $jwt_token },
+    };
 
-        axios(config)
-            .then(function (response) {
-                $myFitnessuserId = response.data.id;
-            })
-            .catch(function (error) {
-                alert("Could not get fitnessuser id");
-                console.log(error);
-            });
-    }
+    axios(config)
+      .then(function (response) {
+        $myFitnessuserId = response.data.id;
+      })
+      .catch(function (error) {
+        alert("Could not get fitnessuser id");
+        console.log(error);
+      });
+  }
 
-    $: {
-        if ($jwt_token !== "") {
-            fetchMyFitnessuserId();
-        }
+  $: {
+    if ($jwt_token !== "") {
+      fetchMyFitnessuserId();
     }
+  }
 </script>
 
-<nav class="navbar navbar-expand-lg bg-light">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/">YOUvsYOU</a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
-      aria-controls="navbarNav"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon" />
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" href="/challenges">Challenges</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href={"/mychallenges?id=" + $myFitnessuserId}>My Challenges</a>
-        </li>
-      </ul>
-      <div class="d-flex">
-        {#if $isAuthenticated}
-        <a class="navbar-text me-2" href="/balance">Balance</a>
-        {/if}
-      </div>
-      <div class="d-flex">
-        {#if $isAuthenticated}
-        <a class="navbar-text me-2" href="/account">{$user.name}</a>
-        <button type="button" class="btn btn-primary" on:click={auth.logout}>Log Out</button>
-        {/if}
-      </div>
-      <div class="d-flex">
-        {#if !$isAuthenticated}
-        <a class="btn btn-primary me-2" href="/login">Log In</a>
-        <a class="btn btn-primary" href="/signup">Sign Up</a>
-        {/if}
-      </div>
+<nav class="navbar is-white">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="/">
+      <img src="/images/youvsyou_logo.png" alt="youvsyou_logo">YOUvsYOU</a>
+    <div class="navbar-burger" id="navbarBurger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+
+  <div id="navbarMenu" class="navbar-menu">
+    <div class="navbar-start">
+      <a class="navbar-item" href="/challenges">Challenges</a>
+      <a class="navbar-item" href={"/mychallenges?id=" + $myFitnessuserId}>My Challenges</a>
+    </div>
+
+    <div class="navbar-end">
+      {#if $isAuthenticated}
+        <a class="navbar-item" href="/balance">Balance</a>
+        <a class="navbar-item" href="/account">{$user.name}</a>
+        <div class="navbar-item">
+          <button class="button is-primary" on:click={auth.logout}>
+            <span class="icon">
+              <i class="fas fa-sign-out-alt"></i>
+            </span>
+            <span>Log Out</span></button>
+        </div>
+      {/if}
+      {#if !$isAuthenticated}
+        <div class="navbar-item">
+          <button class="button is-info is-rounded" href="/login">
+            <span class="icon">
+              <i class="fas fa-sign-in-alt"></i>
+            </span>
+            <span>Log In</span></button>
+        </div>
+        <div class="navbar-item">
+          <button class="button is-info is-rounded" href="/signup"><span class="icon">
+            <i class="fas fa-user-circle"></i>
+          </span>
+          <span>Sign Up</span></button>
+        </div>
+      {/if}
     </div>
   </div>
 </nav>
