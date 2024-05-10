@@ -40,10 +40,51 @@
 </script>
 
 {#if $isAuthenticated}
-<h1>
+<h1 class="title is-1">
     Account Details
 </h1>
 
+<div class="card">
+    <div class="card-content">
+        <div class="media">
+            <div class="media-left">
+                <figure class="image is-96x96">
+                    <img src="{$user.picture}" alt="{$user.picture}"/>
+                </figure>
+            </div>
+            <div class="media-content">
+                <p class="title is-4">{$user.given_name}</p>
+                <p class="subtitle is-6">{$user.email}</p>
+            </div>
+        </div>
+        <div class="content">
+            <p>
+                <b>First Name:</b> {$user.given_name}
+            </p>
+            <p>
+                <b>Surname:</b> {$user.family_name}
+            </p>
+            <p>
+                <b>Nickname:</b> {$user.nickname}
+            </p>
+            {#if $user.user_roles && $user.user_roles.length > 0}
+            <p>
+                <b>Roles:</b> {$user.user_roles}
+            </p>
+            {#if $isAuthenticated && fitnessuser.birthDate == null && $user.user_roles === "fitnessuser"}
+            <button type="button" class="btn btn-warning">
+                <a href="/accountedit">Edit Account</a>
+            </button>
+            {/if}
+            {/if}
+        </div>
+    </div>
+</div>
+{:else}
+<h1 class="title is-1">You are not logged in.</h1>
+{/if}
+
+<!--
 <div>
     <p>
         <img src="{$user.picture}" alt="{$user.picture}"/>
@@ -93,3 +134,4 @@
     You are not logged in.
 </p>
 {/if}
+-->

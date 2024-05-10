@@ -18,6 +18,7 @@
 
         if ($jwt_token !== "") {
             fetchMyFitnessuserId();
+            console.log($myFitnessuserId);
         }
         getChallenges();
     }
@@ -109,6 +110,8 @@
         getWinnerEmail(winnerId);
     }
 </script>
+
+<p>{$myFitnessuserId}</p>
 
 {#if $isAuthenticated && $user.user_roles && $user.user_roles.includes("fitnesscoach")}
     <h1>My Created Challenges</h1>

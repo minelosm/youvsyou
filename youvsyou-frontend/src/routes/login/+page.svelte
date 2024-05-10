@@ -17,64 +17,33 @@
     }
 </script>
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">Login</div>
-                <div class="card-body">
-                    <form
-                        on:submit|preventDefault={loginWithUsernameAndPassword}
-                        bind:this={loginForm}
-                        class="needs-validation"
-                        novalidate
-                    >
-                        <div class="mb-3">
-                            <label for="username" class="form-label"
-                                >Email</label
-                            >
-                            <input
-                                bind:value={username}
-                                type="text"
-                                class="form-control"
-                                id="username"
-                                name="username"
-                                required
-                            />
-                            <div class="invalid-feedback">
-                                Please provide your username.
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label"
-                                >Password</label
-                            >
-                            <input
-                                bind:value={password}
-                                type="password"
-                                class="form-control"
-                                id="password"
-                                name="password"
-                                required
-                            />
-                            <div class="invalid-feedback">
-                                Please provide your password.
-                            </div>
-                        </div>
-                        <div class="row align-items-end">
-                            <div class="col">
-                                <button
-                                    type="submit"
-                                    class="btn btn-primary">Log in</button
-                                >
-                            </div>
-                            <div class="col-auto">
-                                <a href="/signup">Sign up</a>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+<form
+    class="box"
+    on:submit|preventDefault={loginWithUsernameAndPassword}
+    bind:this={loginForm}
+>
+    <h1 class="title is-1">Sign up</h1>
+    <div class="field">
+        <label class="label" for="email">E-Mail</label>
+        <div class="control has-icons-left has-icons-right">
+            <input class="input" type="email" bind:value={username} required />
+            <span class="icon is-small is-left">
+                <i class="fas fa-envelope"></i>
+            </span>
         </div>
     </div>
-</div>
+    <div class="field">
+        <label class="label" for="password">Password</label>
+        <div class="control has-icons-left has-icons-right">
+            <input class="input" type="password" bind:value={password} required/>
+            <span class="icon is-small is-left">
+                <i class="fas fa-lock"></i>
+            </span>
+        </div>
+    </div>
+    <div class="field is-grouped">
+        <div class="control">
+            <button class="button is-link">Log In</button>
+        </div>
+    </div>
+</form>

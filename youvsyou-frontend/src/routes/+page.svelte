@@ -18,4 +18,3 @@
 
 
     <h1>Welcome to YOUvsYOU</h1>
-    <img src="/images/youvsyou.webp" />

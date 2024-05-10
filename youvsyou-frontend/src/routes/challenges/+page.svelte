@@ -5,6 +5,7 @@
     import { isAuthenticated, user, myFitnessuserId } from "../../store";
 
     let loading = true;
+    let filter = false;
 
     const api_root = $page.url.origin;
 
@@ -69,29 +70,6 @@
             });
     }
 
-    function createChallenge() {
-        loading = true;
-        var config = {
-            method: "post",
-            url: api_root + "/api/challenge",
-            headers: { Authorization: "Bearer " + $jwt_token },
-            data: challenge,
-        };
-
-        axios(config)
-            .then(function (response) {
-                alert("Challenge created");
-                getChallenges();
-            })
-            .catch(function (error) {
-                alert("Could not create Challenge");
-                console.log(error);
-            })
-            .finally(() => {
-                loading = false;
-            });
-    }
-
     function competeToMe(challengeId) {
         var config = {
             method: "put",
@@ -146,192 +124,135 @@
                 console.log(error);
             });
     }
+
+    function clearFilter() {
+        wagerMin = null;
+        challengeType = null;
+        filter = false;
+        getChallenges();
+    }
+
+    function filterChallenges() {
+        filter = true;
+        getChallenges();
+    }
 </script>
 
 <p>{$myFitnessuserId}</p>
 
-{#if $isAuthenticated && $user.user_roles && $user.user_roles.includes("fitnesscoach")}
-    <h1 class="mt-3">Create Challenge</h1>
-    <form class="mb-5">
-        <div class="row mb-3">
-            <div class="col">
-                <label class="form-label" for="name">Name</label>
-                <input
-                    bind:value={challenge.name}
-                    class="form-control"
-                    id="name"
-                    type="text"
-                />
-            </div>
+<h1 class="title is-1">All Challenges</h1>
+
+<div class="box">
+    <div class="field">
+        <label for="wager" class="label">Wager: </label>
+        <div class="control">
+            <input
+                class="input"
+                type="number"
+                placeholder="min"
+                bind:value={wagerMin}
+            />
         </div>
-        <div class="row mb-3">
-            <div class="col">
-                <label class="form-label" for="startDate">Start Date</label>
-                <input
-                    bind:value={challenge.startDate}
-                    class="form-control"
-                    id="startDate"
-                    type="text"
-                />
-            </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col">
-                <label class="form-label" for="endDate">End Date</label>
-                <input
-                    bind:value={challenge.endDate}
-                    class="form-control"
-                    id="endDate"
-                    type="text"
-                />
-            </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col">
-                <label class="form-label" for="type">Challenge Type</label>
-                <select
-                    bind:value={challenge.challengeType}
-                    class="form-select"
-                    id="type"
-                >
+    </div>
+    <div class="field">
+        <label for="challengetype" class="label">Challenge Type: </label>
+        <div class="control">
+            <div class="select">
+                <select bind:value={challengeType}>
+                    <option value="ALL"></option>
+                    <option value="STAMINA">STAMINA</option>
+                    <option value="MUSCLEBUILDING">MUSCLEBUILDING</option>
                     <option value="SPEED">SPEED</option>
                     <option value="POWER">POWER</option>
                     <option value="WEIGTHLOSS">WEIGTHLOSS</option>
-                    <option value="MUSCLEBUILDING">MUSCLEBUILDING</option>
                     <option value="CARDIO">CARDIO</option>
-                    <option value="STAMINA">STAMINA</option>
                     <option value="AGILITY">AGILITY</option>
                     <option value="REACTION">REACTION</option>
                 </select>
             </div>
-            <div class="col">
-                <label class="form-label" for="wager">Wager</label>
-                <input
-                    bind:value={challenge.wager}
-                    class="form-control"
-                    id="wager"
-                    type="number"
-                />
-            </div>
         </div>
-        <button
-            type="button"
-            class="btn btn-primary"
-            on:click={createChallenge}
-            disabled={loading}
-        >
-            {#if loading}
-                <span
-                    class="spinner-border spinner-border-sm"
-                    role="status"
-                    aria-hidden="true"
-                ></span>
-                Loading...
-            {:else}
-                Create Challenge
-            {/if}
+    </div>
+    <div class="field">
+        <button class="button is-success" on:click={filterChallenges}>
+            <span class="icon is-small">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </span>
+            <span>Search</span>
         </button>
-    </form>
-{/if}
-
-<h1>All Challenges</h1>
-
-<div class="row my-3">
-    <div class="col-auto">
-        <label for="" class="col-form-label">Wager: </label>
     </div>
-    <div class="col-3">
-        <input
-            class="form-control"
-            type="number"
-            placeholder="min"
-            bind:value={wagerMin}
-        />
+    {#if filter}
+    <div class="field">
+        <button class="button is-danger" on:click={clearFilter}>
+            <span class="icon is-small">
+                <i class="fa-solid fa-xmark"></i>
+            </span>
+            <span>Clear Filter</span>
+        </button>
     </div>
-    <div class="col-auto">
-        <label for="" class="col-form-label">Challenge Type: </label>
-    </div>
-    <div class="col-3">
-        <select
-            bind:value={challengeType}
-            class="form-select"
-            id="type"
-            type="text"
-        >
-            <option value="ALL"></option>
-            <option value="STAMINA">STAMINA</option>
-            <option value="MUSCLEBUILDING">MUSCLEBUILDING</option>
-            <option value="SPEED">SPEED</option>
-            <option value="POWER">POWER</option>
-            <option value="WEIGTHLOSS">WEIGTHLOSS</option>
-            <option value="CARDIO">CARDIO</option>
-            <option value="AGILITY">AGILITY</option>
-            <option value="REACTION">REACTION</option>
-        </select>
-    </div>
-    <div class="col-3">
-        <a
-            class="btn btn-primary"
-            href={"/challenges?page=1&challengeType=" +
-                challengeType +
-                "&wagerMin=" +
-                wagerMin}
-            role="button">Apply</a
-        >
-    </div>
+    {/if}
 </div>
 
 <div class="columns">
     {#each challenges as challenge}
     {#if challenge.challengeState === "OPEN" || challenge.challengeState === "WAITING"}
-        <div class="column is-one-third">
-            <div class="card">
-                <header class="card-header">
-                    <p class="card-header-title">
-                        {challenge.name}<span class="tag is-info is-light"
-                            >{challenge.challengeType}</span
+    {#if challenge.fitnessuserId1 !== $myFitnessuserId}
+    {#if challenge.fitnessuserId2 !== $myFitnessuserId}
+            <div class="column is-one-third">
+                <div class="card">
+                    <header class="card-header">
+                        <p class="card-header-title">
+                            {challenge.name}<span class="tag is-info is-light"
+                                >{challenge.challengeType}</span
+                            >
+                        </p>
+                        <button
+                            class="card-header-icon"
+                            aria-label="more options"
                         >
-                    </p>
-                    <button class="card-header-icon" aria-label="more options">
-                        <span class="icon">
-                            <i class="fas fa-dumbbell" aria-hidden="true"></i>
-                        </span>
-                    </button>
-                </header>
-                <div class="card-content">
-                    <div class="content">
-                        {challenge.description}
+                            <span class="icon">
+                                <i class="fas fa-dumbbell" aria-hidden="true"
+                                ></i>
+                            </span>
+                        </button>
+                    </header>
+                    <div class="card-content">
+                        <div class="content">
+                            {challenge.description}
+                        </div>
+                        <div class="content">
+                            <i class="fas fa-money-bill"></i>
+                            {challenge.wager} CHF
+                        </div>
+                        <div class="content">
+                            <i class="fas fa-calendar-alt"></i>
+                            {challenge.startDate} - {challenge.endDate}
+                        </div>
+                        <div class="content">
+                            {#if challenge.challengeState === "OPEN"}
+                                <i class="fas fa-check"></i>
+                                {challenge.challengeState} to compete
+                            {:else if challenge.challengeState === "WAITING"}
+                                <i class="fas fa-clock"></i>
+                                {challenge.challengeState} for a competitor
+                            {/if}
+                        </div>
                     </div>
-                    <div class="content">
-                        <i class="fas fa-money-bill"></i>
-                        {challenge.wager} CHF
-                    </div>
-                    <div class="content">
-                        <i class="fas fa-calendar-alt"></i>
-                        {challenge.startDate} - {challenge.endDate}
-                    </div>
-                    <div class="content">
-                    {#if challenge.challengeState === "OPEN"}
-                        <i class="fas fa-check"></i>
-                        {challenge.challengeState} to compete
-                    {:else if challenge.challengeState === "WAITING"}
-                    <i class="fas fa-clock"></i>
-                    {challenge.challengeState} for a competitor
-                    {/if}
-                    </div>
+                    <footer class="card-footer">
+                        <a
+                            href="#"
+                            on:click={competeToMe(challenge.id)}
+                            class="card-footer-item">Compete to me</a
+                        >
+                        <a
+                            href={"/challenge?id=" + challenge.id}
+                            class="card-footer-item">Detail</a
+                        >
+                    </footer>
                 </div>
-                <footer class="card-footer">
-                    <a href="#" on:click={competeToMe} class="card-footer-item"
-                        >Compete to me</a
-                    >
-                    <a
-                        href={"/challenge?id=" + challenge.id}
-                        class="card-footer-item">Detail</a
-                    >
-                </footer>
             </div>
-        </div>
-    {/if}
+            {/if}
+            {/if}
+        {/if}
     {/each}
 </div>
 
