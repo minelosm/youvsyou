@@ -181,76 +181,79 @@
         </button>
     </div>
     {#if filter}
-    <div class="field">
-        <button class="button is-danger" on:click={clearFilter}>
-            <span class="icon is-small">
-                <i class="fa-solid fa-xmark"></i>
-            </span>
-            <span>Clear Filter</span>
-        </button>
-    </div>
+        <div class="field">
+            <button class="button is-danger" on:click={clearFilter}>
+                <span class="icon is-small">
+                    <i class="fa-solid fa-xmark"></i>
+                </span>
+                <span>Clear Filter</span>
+            </button>
+        </div>
     {/if}
 </div>
 
 <div class="columns">
     {#each challenges as challenge}
-    {#if challenge.challengeState === "OPEN" || challenge.challengeState === "WAITING"}
-    {#if challenge.fitnessuserId1 !== $myFitnessuserId}
-    {#if challenge.fitnessuserId2 !== $myFitnessuserId}
-            <div class="column is-one-third">
-                <div class="card">
-                    <header class="card-header">
-                        <p class="card-header-title">
-                            {challenge.name}<span class="tag is-info is-light"
-                                >{challenge.challengeType}</span
-                            >
-                        </p>
-                        <button
-                            class="card-header-icon"
-                            aria-label="more options"
-                        >
-                            <span class="icon">
-                                <i class="fas fa-dumbbell" aria-hidden="true"
-                                ></i>
-                            </span>
-                        </button>
-                    </header>
-                    <div class="card-content">
-                        <div class="content">
-                            {challenge.description}
-                        </div>
-                        <div class="content">
-                            <i class="fas fa-money-bill"></i>
-                            {challenge.wager} CHF
-                        </div>
-                        <div class="content">
-                            <i class="fas fa-calendar-alt"></i>
-                            {challenge.startDate} - {challenge.endDate}
-                        </div>
-                        <div class="content">
-                            {#if challenge.challengeState === "OPEN"}
-                                <i class="fas fa-check"></i>
-                                {challenge.challengeState} to compete
-                            {:else if challenge.challengeState === "WAITING"}
-                                <i class="fas fa-clock"></i>
-                                {challenge.challengeState} for a competitor
-                            {/if}
+        {#if challenge.challengeState === "OPEN" || challenge.challengeState === "WAITING"}
+            {#if challenge.fitnessuserId1 !== $myFitnessuserId}
+                {#if challenge.fitnessuserId2 !== $myFitnessuserId}
+                    <div class="column is-one-third">
+                        <div class="card">
+                            <header class="card-header">
+                                <p class="card-header-title">
+                                    {challenge.name}<span
+                                        class="tag is-info is-light"
+                                        >{challenge.challengeType}</span
+                                    >
+                                </p>
+                                <button
+                                    class="card-header-icon"
+                                    aria-label="more options"
+                                >
+                                    <span class="icon">
+                                        <i
+                                            class="fas fa-dumbbell"
+                                            aria-hidden="true"
+                                        ></i>
+                                    </span>
+                                </button>
+                            </header>
+                            <div class="card-content">
+                                <div class="content">
+                                    {challenge.description}
+                                </div>
+                                <div class="content">
+                                    <i class="fa-solid fa-sack-dollar"></i>
+                                    {challenge.wager} CHF
+                                </div>
+                                <div class="content">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    {challenge.startDate} - {challenge.endDate}
+                                </div>
+                                <div class="content">
+                                    {#if challenge.challengeState === "OPEN"}
+                                        <i class="fas fa-check"></i>
+                                        {challenge.challengeState} to compete
+                                    {:else if challenge.challengeState === "WAITING"}
+                                        <i class="fas fa-clock"></i>
+                                        {challenge.challengeState} for a competitor
+                                    {/if}
+                                </div>
+                            </div>
+                            <footer class="card-footer">
+                                <a
+                                    href="#"
+                                    on:click={competeToMe(challenge.id)}
+                                    class="card-footer-item">Compete to me</a
+                                >
+                                <a
+                                    href={"/challenge?id=" + challenge.id}
+                                    class="card-footer-item">Detail</a
+                                >
+                            </footer>
                         </div>
                     </div>
-                    <footer class="card-footer">
-                        <a
-                            href="#"
-                            on:click={competeToMe(challenge.id)}
-                            class="card-footer-item">Compete to me</a
-                        >
-                        <a
-                            href={"/challenge?id=" + challenge.id}
-                            class="card-footer-item">Detail</a
-                        >
-                    </footer>
-                </div>
-            </div>
-            {/if}
+                {/if}
             {/if}
         {/if}
     {/each}
