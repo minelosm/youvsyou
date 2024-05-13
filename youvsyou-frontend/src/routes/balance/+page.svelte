@@ -90,7 +90,11 @@
         <span class="icon">
             <i class="fa-solid fa-coins"></i>
         </span>
+        {#if account.balance === null}
+            0
+        {:else}
         {account.balance}
+        {/if}
     </p>
 </div>
 

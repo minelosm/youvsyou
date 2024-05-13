@@ -1,7 +1,17 @@
 <script>
-    import { isAuthenticated, user, myFitnessuserId, jwt_token } from "../../store";
+    import {
+        isAuthenticated,
+        user,
+        myFitnessuserId,
+        jwt_token,
+    } from "../../store";
     import { page } from "$app/stores";
     import axios from "axios";
+    import { goto } from "$app/navigation";
+
+    function goToPage(page) {
+        goto(page);
+    }
 
     const api_root = $page.url.origin;
 
@@ -31,6 +41,7 @@
             .then(function (response) {
                 $myFitnessuserId = response.data.id;
                 fitnessuser = response.data;
+                console.log(fitnessuser);
             })
             .catch(function (error) {
                 alert("Could not get fitnessuser id");
@@ -40,48 +51,69 @@
 </script>
 
 {#if $isAuthenticated}
-<h1 class="title is-1">
-    Account Details
-</h1>
+    <h1 class="title is-1">Account Details</h1>
 
-<div class="card">
-    <div class="card-content">
-        <div class="media">
-            <div class="media-left">
-                <figure class="image is-96x96">
-                    <img src="{$user.picture}" alt="{$user.picture}"/>
-                </figure>
+    <div class="card">
+        <div class="card-content">
+            <div class="media">
+                <div class="media-left">
+                    <figure class="image is-96x96">
+                        <img src={$user.picture} alt={$user.picture} />
+                    </figure>
+                </div>
+                <div class="media-content">
+                    <p class="title is-4">{$user.given_name}</p>
+                    <p class="subtitle is-6">{$user.email}</p>
+                </div>
             </div>
-            <div class="media-content">
-                <p class="title is-4">{$user.given_name}</p>
-                <p class="subtitle is-6">{$user.email}</p>
+            <div class="content">
+                <p>
+                    <b>First Name:</b>
+                    {$user.given_name}
+                </p>
+                <p>
+                    <b>Surname:</b>
+                    {$user.family_name}
+                </p>
+                <p>
+                    <b>Nickname:</b>
+                    {$user.nickname}
+                </p>
+                {#if $user.user_roles && $user.user_roles.length > 0}
+                    <p>
+                        <b>Roles:</b>
+                        {$user.user_roles}
+                    </p>
+                {/if}
             </div>
-        </div>
-        <div class="content">
-            <p>
-                <b>First Name:</b> {$user.given_name}
-            </p>
-            <p>
-                <b>Surname:</b> {$user.family_name}
-            </p>
-            <p>
-                <b>Nickname:</b> {$user.nickname}
-            </p>
-            {#if $user.user_roles && $user.user_roles.length > 0}
-            <p>
-                <b>Roles:</b> {$user.user_roles}
-            </p>
-            {#if $isAuthenticated && fitnessuser.birthDate == null && $user.user_roles === "fitnessuser"}
-            <button type="button" class="btn btn-warning">
-                <a href="/accountedit">Edit Account</a>
-            </button>
-            {/if}
-            {/if}
         </div>
     </div>
-</div>
+
+    {#if $user.user_roles && $user.user_roles.includes("fitnessuser") && fitnessuser.birthDate == null}
+        <div class="box">
+            <h1 class="title is-1">You can Fullfill your Account here</h1>
+            <button class="button is-fullwidth is-success" on:click={() => goToPage("/accountedit")}>
+                <span class="icon">
+                    <i class="fa-solid fa-user-pen"></i>
+                </span>
+                <span>Fullfill Account</span>
+            </button>
+        </div>
+    {/if}
+
+    {#if $user.user_roles && $user.user_roles === "fitnesscoach" && fitnessuser.fitnesscenter == null}
+        <div class="box">
+            <h1 class="title is-1">You can Fullfill your Account here</h1>
+            <button class="button is-fullwidth is-success" on:click={() => goToPage("/accountedit")}>
+                <span class="icon">
+                    <i class="fa-solid fa-user-pen"></i>
+                </span>
+                <span>Fullfill Account</span>
+            </button>
+        </div>
+    {/if}
 {:else}
-<h1 class="title is-1">You are not logged in.</h1>
+    <h1 class="title is-1">Waiting...</h1>
 {/if}
 
 <!--
