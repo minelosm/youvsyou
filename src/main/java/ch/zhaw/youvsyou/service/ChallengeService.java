@@ -143,6 +143,7 @@ public class ChallengeService {
                 Fitnessuser fitnessuser1 = fitnessuserRepository.findFirstByEmail(userEmail);
                 if (fitnessuser1 != null && fromAccount.getBalance() >= oneWager){
                     challenge.setFitnessuserId1(fitnessuser1.getId());
+                    challenge.setFitnessuserEmail1(userEmail);
                     challenge.setChallengeState(ChallengeState.WAITING);
                     challenge.setBalance(oneWager);
                     fromAccount.setBalance(fromAccount.getBalance() - oneWager);
@@ -160,6 +161,7 @@ public class ChallengeService {
                 Fitnessuser fitnessuser2 = fitnessuserRepository.findFirstByEmail(userEmail);
                 if (fitnessuser2 != null && fromAccount.getBalance() >= oneWager){
                     challenge.setFitnessuserId2(fitnessuser2.getId());
+                    challenge.setFitnessuserEmail2(userEmail);
                     challenge.setChallengeState(ChallengeState.RUNNING);
                     challenge.setBalance(challenge.getBalance() + oneWager);
                     fromAccount.setBalance(fromAccount.getBalance() - oneWager);
@@ -176,21 +178,4 @@ public class ChallengeService {
         }
         return Optional.empty();
     }
-
-    /*
-     * public Optional<Challenge> competeAndTransfer(String challengeId, String
-     * userEmail) {
-     * Optional<Challenge> competedChallenge = competeChallenge(challengeId,
-     * userEmail);
-     * if (!competedChallenge.isPresent()) {
-     * return Optional.empty();
-     * }
-     * Optional<Challenge> challengeAfterTransfer =
-     * transferMoneyToChallenge(challengeId, userEmail);
-     * if (!challengeAfterTransfer.isPresent()) {
-     * return Optional.empty();
-     * }
-     * return challengeAfterTransfer;
-     * }
-     */
 }

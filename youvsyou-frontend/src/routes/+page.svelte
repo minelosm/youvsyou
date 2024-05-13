@@ -5,15 +5,6 @@
     let username = "";
     let password = "";
     let loginForm;
-
-    function loginWithUsernameAndPassword() {
-        // form validation with bootstrap: see https://getbootstrap.com/docs/5.3/forms/validation/
-        if (loginForm.checkValidity()) {
-            console.log("login");
-            auth.login(username, password);
-        }
-        loginForm.classList.add("was-validated");
-    }
 </script>
 
 <section class="hero is-primary is-bold is-large">
@@ -49,14 +40,7 @@
 <footer class="footer">
     <div class="content has-text-centered">
         <p>
-            <strong>YOUvsYOU</strong> by
-            <a href="https://example.com">YOUR COMPANY</a>. The source code is
-            licensed
-            <a href="http://opensource.org/licenses/mit-license.php">MIT</a>.
-            The website content is licensed
-            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
-                >CC BY NC SA 4.0</a
-            >.
+            <strong>YOUvsYOU</strong> by Minel Osmanagic, osmanmin@students.zhaw.ch
         </p>
     </div>
 </footer>

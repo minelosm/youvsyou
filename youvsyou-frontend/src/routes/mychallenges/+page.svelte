@@ -9,6 +9,10 @@
     let winnerEmail = "";
     let winnerId = null;
 
+    let currentPage;
+    let nrOfPages = 0;
+    let defaultPageSize = 4;
+
     let winnerUserData = [];
 
     let challenges = [];
@@ -111,7 +115,250 @@
     }
 </script>
 
-<p>{$myFitnessuserId}</p>
+
+<style>
+    .full-height-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.full-height-card .card-content {
+    flex-grow: 1;
+}
+</style>
+
+{#if $isAuthenticated && $user.user_roles && $user.user_roles.includes("fitnesscoach")}
+    <div class="box">
+        <h1 class="title is-1">My Created Challenges</h1>
+        <p class="subtitle is-3">from {$user.email}</p>
+    </div>
+
+    <div class="columns is-multiline">
+        {#each challenges as challenge}
+            <div class="column is-one-third">
+                <div class="card full-height-card">
+                    <header class="card-header">
+                        <p class="card-header-title">
+                            {challenge.name}<span class="tag is-info is-light"
+                                >{challenge.challengeType}</span
+                            >
+                        </p>
+                        <button
+                            class="card-header-icon"
+                            aria-label="more options"
+                        >
+                            <span class="icon">
+                                <i class="fas fa-dumbbell" aria-hidden="true"
+                                ></i>
+                            </span>
+                        </button>
+                    </header>
+                    <div class="card-content">
+                        <div class="content">
+                            {challenge.description}
+                        </div>
+                        <div class="content">
+                            <i class="fa-solid fa-sack-dollar"></i>
+                            {challenge.wager} CHF
+                        </div>
+                        <div class="content">
+                            <i class="fas fa-calendar-alt"></i>
+                            {challenge.startDate} - {challenge.endDate}
+                        </div>
+                        <div class="content">
+                            {#if challenge.challengeState === "OPEN"}
+                                <i class="fas fa-check"></i>
+                                {challenge.challengeState} to compete
+                            {:else if challenge.challengeState === "WAITING"}
+                                <i class="fas fa-clock"></i>
+                                {challenge.challengeState} for a competitor
+                            {:else if challenge.challengeState === "RUNNING"}
+                                <i class="fa-solid fa-hourglass-start"
+                                    >is {challenge.challengeState}</i
+                                >
+                            {/if}
+                        </div>
+                    </div>
+                    <footer class="card-footer">
+                        <a
+                            href="#"
+                            on:click={saveWinnerIdFrom1(
+                                challenge.fitnessuserId1,
+                            )}
+                            class="card-footer-item">Choose Winner User 1</a
+                        >
+                        <a
+                            href="#"
+                            on:click={finishChallenge(
+                                challenge.id,
+                                winnerEmail,
+                            )}
+                            class="card-footer-item">Finish Challenge</a
+                        >
+                        <a
+                            href="#"
+                            on:click={saveWinnerIdFrom2(
+                                challenge.fitnessuserId2,
+                            )}
+                            class="card-footer-item">Choose Winner User 2</a
+                        >
+                    </footer>
+                </div>
+            </div>
+        {/each}
+    </div>
+
+    <nav class="pagination" role="navigation" aria-label="pagination">
+        <ul class="pagination-list">
+            {#each Array(nrOfPages) as _, i}
+                <li>
+                    <a
+                        class="pagination-link is-current"
+                        aria-label="Page 1"
+                        class:active={currentPage == i + 1}
+                        href={"/challenges?page=" + (i + 1)}
+                        >{i + 1}
+                    </a>
+                </li>
+            {/each}
+        </ul>
+    </nav>
+{/if}
+
+{#if $isAuthenticated && $user.user_roles && $user.user_roles.includes("fitnessuser")}
+    <div class="box">
+        <h1 class="title is-1">My Competed Challenges</h1>
+        <p class="subtitle is-3">from {$user.email}</p>
+    </div>
+
+    <div class="columns">
+        {#each challenges as challenge}
+            {#if challenge.fitnessuserId1 === $myFitnessuserId || challenge.fitnessuserId2 === $myFitnessuserId}
+                <div class="column is-one-third">
+                    <div class="card full-height-card">
+                        <header class="card-header">
+                            <p class="card-header-title">
+                                {challenge.name}<span
+                                    class="tag is-info is-light"
+                                    >{challenge.challengeType}</span
+                                >
+                            </p>
+                            <button
+                                class="card-header-icon"
+                                aria-label="more options"
+                            >
+                                <span class="icon">
+                                    <i
+                                        class="fas fa-dumbbell"
+                                        aria-hidden="true"
+                                    ></i>
+                                </span>
+                            </button>
+                        </header>
+                        <div class="card-content">
+                            <div class="content">
+                                {challenge.description}
+                            </div>
+                            <div class="content">
+                                <i class="fa-solid fa-sack-dollar"></i>
+                                {challenge.wager} CHF
+                            </div>
+                            <div class="content">
+                                <i class="fas fa-calendar-alt"></i>
+                                {challenge.startDate} - {challenge.endDate}
+                            </div>
+                            <div class="content">
+                                {#if challenge.challengeState === "OPEN"}
+                                    <i class="fas fa-check"></i>
+                                    {challenge.challengeState} to compete
+                                {:else if challenge.challengeState === "WAITING"}
+                                    <i class="fas fa-clock"></i>
+                                    {challenge.challengeState} for a competitor
+                                {:else if challenge.challengeState === "RUNNING"}
+                                    <i class="fa-solid fa-hourglass-start"
+                                        >is {challenge.challengeState}</i
+                                    >
+                                {/if}
+                            </div>
+                        </div>
+                        <footer class="card-footer">
+                            <a
+                                    href={"/challenge?id=" + challenge.id}
+                                    class="card-footer-item">Detail</a
+                                >
+                        </footer>
+                    </div>
+                </div>
+            {/if}
+        {/each}
+    </div>
+
+    <nav class="pagination" role="navigation" aria-label="pagination">
+        <ul class="pagination-list">
+            {#each Array(nrOfPages) as _, i}
+                <li>
+                    <a
+                        class="pagination-link is-current"
+                        aria-label="Page 1"
+                        class:active={currentPage == i + 1}
+                        href={"/challenges?page=" + (i + 1)}
+                        >{i + 1}
+                    </a>
+                </li>
+            {/each}
+        </ul>
+    </nav>
+{/if}
+<!--
+{#each challenges as challenge}
+    <div class="box">
+        <h1 class="title is-1">Challenge {challenge.name}</h1>
+        <div class="columns">
+            <div class="column">
+                <div class="card full-height-card">
+                    <header class="card-header">
+                        <p class="card-header-title">Competitor 1: {challenge.fitnessuserId1}</p>
+                    </header>
+                    <div class="card-content">
+                        Choose him as winner
+                        <button class="button is-primary" on:click={() => saveWinnerIdFrom1(challenge.fitnessuserId1)}>
+                            Select Winner
+                        </button>
+                    </div>
+                </div>
+                <div class="card full-height-card">
+                    <header class="card-header">
+                        <p class="card-header-title">
+                            {challenge.name}
+                            <span class="tag is-info is-light">{challenge.challengeType}</span>
+                        </p>
+                    </header>
+                    <div class="card-content">
+                        <div class="content">{challenge.description}</div>
+                        <div class="content"><i class="fa-solid fa-sack-dollar"></i>{challenge.wager} CHF</div>
+                        <div class="content"><i class="fas fa-calendar-alt"></i>{challenge.startDate} - {challenge.endDate}</div>
+                    </div>
+                    <footer class="card-footer">
+                        <button class="button is-success" on:click={finishChallenge(challenge.id, winnerEmail)}>Finish Challenge</button>
+                    </footer>
+                </div>
+                <div class="card full-height-card">
+                    <header class="card-header">
+                        <p class="card-header-title">Competitor 2: {challenge.fitnessuserId2}</p>
+                    </header>
+                    <div class="card-content">
+                        Choose him as winner
+                        <button class="button is-primary" on:click={() => saveWinnerIdFrom2(challenge.fitnessuserId2)}>
+                            Select Winner
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{/each}
+
 
 {#if $isAuthenticated && $user.user_roles && $user.user_roles.includes("fitnesscoach")}
     <h1>My Created Challenges</h1>
@@ -140,25 +387,25 @@
                     <td>{challenge.challengeState}</td>
                     <td>
                         <button
-                                type="button"
-                                class="btn btn-primary btn-sm"
-                                on:click={() => {
-                                    saveWinnerIdFrom1(challenge.fitnessuserId1);
-                                }}
-                            >
-                                Select Winner: {challenge.fitnessuserId1}
-                            </button>
+                            type="button"
+                            class="btn btn-primary btn-sm"
+                            on:click={() => {
+                                saveWinnerIdFrom1(challenge.fitnessuserId1);
+                            }}
+                        >
+                            Select Winner: {challenge.fitnessuserId1}
+                        </button>
                     </td>
                     <td>
                         <button
-                                type="button"
-                                class="btn btn-primary btn-sm"
-                                on:click={() => {
-                                    saveWinnerIdFrom2(challenge.fitnessuserId2);
-                                }}
-                            >
-                                Select Winner: {challenge.fitnessuserId2}
-                            </button>
+                            type="button"
+                            class="btn btn-primary btn-sm"
+                            on:click={() => {
+                                saveWinnerIdFrom2(challenge.fitnessuserId2);
+                            }}
+                        >
+                            Select Winner: {challenge.fitnessuserId2}
+                        </button>
                     </td>
                     <td>
                         {#if challenge.challengeState === "RUNNING"}
@@ -169,17 +416,17 @@
                     </td>
                     <td>
                         {#if winnerId === null}
-                        <span class="badge bg-info">Select a winner</span>
+                            <span class="badge bg-info">Select a winner</span>
                         {:else}
-                        <button
-                            type="button"
-                            class="btn btn-primary btn-sm"
-                            on:click={() => {
-                                finishChallenge(challenge.id, winnerEmail);
-                            }}
-                        >
-                            Finish Challenge
-                        </button>
+                            <button
+                                type="button"
+                                class="btn btn-primary btn-sm"
+                                on:click={() => {
+                                    finishChallenge(challenge.id, winnerEmail);
+                                }}
+                            >
+                                Finish Challenge
+                            </button>
                         {/if}
                     </td>
                     <td>
@@ -232,3 +479,4 @@
         </tbody>
     </table>
 {/if}
+-->

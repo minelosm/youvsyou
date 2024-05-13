@@ -25,7 +25,9 @@ public class Challenge {
     private ChallengeState challengeState = ChallengeState.OPEN;
     @NonNull private String fitnesscoachId;
     private String fitnessuserId1;
+    private String fitnessuserEmail1;
     private String fitnessuserId2;
+    private String fitnessuserEmail2;
     private Double balance;
 
 

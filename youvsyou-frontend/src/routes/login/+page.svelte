@@ -22,7 +22,7 @@
     on:submit|preventDefault={loginWithUsernameAndPassword}
     bind:this={loginForm}
 >
-    <h1 class="title is-1">Sign up</h1>
+    <h1 class="title is-1">Log In</h1>
     <div class="field">
         <label class="label" for="email">E-Mail</label>
         <div class="control has-icons-left has-icons-right">

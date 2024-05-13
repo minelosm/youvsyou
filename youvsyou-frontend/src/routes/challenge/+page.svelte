@@ -14,8 +14,7 @@
         wager: null,
         challengeType: null,
         challengeState: null,
-        fitnesscoachId: null
-
+        fitnesscoachId: null,
     };
 
     $: {
@@ -41,13 +40,39 @@
     }
 </script>
 
-<h1>Challenge Details</h1>
-<p>ID: {challenge.id}</p>
-<p>Name: {challenge.name}</p>
-<p>Description: {challenge.description}</p>
-<p>Start Date: {challenge.startDate}</p>
-<p>End Date: {challenge.endDate}</p>
-<p>Wager: {challenge.wager}</p>
-<p>Challenge Type: {challenge.challengeType}</p>
-<p>Challenge State: {challenge.challengeState}</p>
-<p>Fitnesscoach Id: {challenge.fitnesscoachId}</p>
+<div class="card full-height-card">
+    <header class="card-header">
+        <p class="card-header-title">
+            {challenge.name}<span class="tag is-info is-light"
+                >{challenge.challengeType}</span
+            >
+        </p>
+        <button class="card-header-icon" aria-label="more options">
+            <span class="icon">
+                <i class="fas fa-dumbbell" aria-hidden="true"></i>
+            </span>
+        </button>
+    </header>
+    <div class="card-content">
+        <div class="content">
+            {challenge.description}
+        </div>
+        <div class="content">
+            <i class="fa-solid fa-sack-dollar"></i>
+            {challenge.wager} CHF
+        </div>
+        <div class="content">
+            <i class="fas fa-calendar-alt"></i>
+            {challenge.startDate} - {challenge.endDate}
+        </div>
+        <div class="content">
+            {#if challenge.challengeState === "OPEN"}
+                <i class="fas fa-check"></i>
+                {challenge.challengeState} to compete
+            {:else if challenge.challengeState === "WAITING"}
+                <i class="fas fa-clock"></i>
+                {challenge.challengeState} for a competitor
+            {/if}
+        </div>
+    </div>
+</div>

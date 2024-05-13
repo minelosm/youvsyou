@@ -138,7 +138,17 @@
     }
 </script>
 
-<p>{$myFitnessuserId}</p>
+<style>
+    .full-height-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.full-height-card .card-content {
+    flex-grow: 1;
+}
+</style>
 
 <h1 class="title is-1">All Challenges</h1>
 
@@ -198,7 +208,7 @@
             {#if challenge.fitnessuserId1 !== $myFitnessuserId}
                 {#if challenge.fitnessuserId2 !== $myFitnessuserId}
                     <div class="column is-one-third">
-                        <div class="card">
+                        <div class="card full-height-card">
                             <header class="card-header">
                                 <p class="card-header-title">
                                     {challenge.name}<span
