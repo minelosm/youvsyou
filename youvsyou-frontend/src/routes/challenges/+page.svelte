@@ -238,7 +238,6 @@
                             <footer class="card-footer">
                                 {#if $user.user_roles.includes("fitnessuser")}
                                 <a
-                                    href="#"
                                     on:click={competeToMe(challenge.id)}
                                     class="card-footer-item">Compete to me</a
                                 >

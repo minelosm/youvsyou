@@ -40,6 +40,7 @@ public class ChallengeControllerTest {
         private static final Double TEST_WAGER = 100.0;
         private static final ChallengeType TEST_CHALLENGETYPE = ChallengeType.STAMINA;
         private static final String TEST_FITNESSCOACHID = "1";
+        private static final String TEST_FITNESSCENTER = "Cleverfit";
         private static ObjectMapper mapper = new ObjectMapper();
         private static ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
 
@@ -60,6 +61,7 @@ public class ChallengeControllerTest {
                 challengeDTO.setWager(TEST_WAGER);
                 challengeDTO.setChallengeType(TEST_CHALLENGETYPE);
                 challengeDTO.setFitnesscoachId(TEST_FITNESSCOACHID);
+                challengeDTO.setFitnesscenter(TEST_FITNESSCENTER);
 
                 var jsonBody = ow.writeValueAsString(challengeDTO);
 
