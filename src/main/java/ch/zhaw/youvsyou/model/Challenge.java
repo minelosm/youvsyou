@@ -24,6 +24,7 @@ public class Challenge {
     @NonNull private ChallengeType challengeType;
     private ChallengeState challengeState = ChallengeState.OPEN;
     @NonNull private String fitnesscoachId;
+    @NonNull private String fitnesscenter;
     private String fitnessuserId1;
     private String fitnessuserEmail1;
     private String fitnessuserId2;

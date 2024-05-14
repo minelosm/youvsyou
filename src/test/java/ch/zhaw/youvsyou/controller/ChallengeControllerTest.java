@@ -114,7 +114,8 @@ public class ChallengeControllerTest {
                                 "15.09.2024",
                                 150.0,
                                 ChallengeType.STAMINA,
-                                "2002"
+                                "2002",
+                                "Cleverfit"
                 );
 
                 challenge = challengeRepository.save(challenge);
@@ -145,7 +146,8 @@ public class ChallengeControllerTest {
                                 "30.09.2024",
                                 200.0,
                                 ChallengeType.WEIGTHLOSS,
-                                fitnessCoachId);
+                                fitnessCoachId,
+                                "Cleverfit");
                 challengeRepository.save(challenge1);
 
                 // Challenge 2
@@ -156,7 +158,8 @@ public class ChallengeControllerTest {
                                 "31.10.2024",
                                 300.0,
                                 ChallengeType.POWER,
-                                fitnessCoachId);
+                                fitnessCoachId,
+                                "Cleverfit");
                 challengeRepository.save(challenge2);
 
                 mvc.perform(get("/api/challenge/fitness/{id}", fitnessCoachId)

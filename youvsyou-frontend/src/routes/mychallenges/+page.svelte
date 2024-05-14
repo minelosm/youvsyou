@@ -167,6 +167,10 @@
                             {challenge.startDate} - {challenge.endDate}
                         </div>
                         <div class="content">
+                            <i class="fa-solid fa-weight-hanging"></i>
+                            {challenge.fitnesscenter}
+                        </div>
+                        <div class="content">
                             {#if challenge.challengeState === "OPEN"}
                                 <i class="fas fa-check"></i>
                                 {challenge.challengeState} to compete
@@ -174,9 +178,11 @@
                                 <i class="fas fa-clock"></i>
                                 {challenge.challengeState} for a competitor
                             {:else if challenge.challengeState === "RUNNING"}
-                                <i class="fa-solid fa-hourglass-start"
-                                    >is {challenge.challengeState}</i
-                                >
+                                <i class="fa-solid fa-hourglass-start"></i>
+                                is {challenge.challengeState}
+                            {:else if challenge.challengeState === "FINSIHED"}
+                                <i class="fa-solid fa-flag-checkered"></i>
+                                challenge is {challenge.challengeState}
                             {/if}
                         </div>
                     </div>
@@ -186,7 +192,7 @@
                             on:click={saveWinnerIdFrom1(
                                 challenge.fitnessuserId1,
                             )}
-                            class="card-footer-item">Choose Winner User 1</a
+                            class="card-footer-item">Choose Winner User 1: {challenge.fitnessuserEmail1}</a
                         >
                         <a
                             href="#"
@@ -201,7 +207,7 @@
                             on:click={saveWinnerIdFrom2(
                                 challenge.fitnessuserId2,
                             )}
-                            class="card-footer-item">Choose Winner User 2</a
+                            class="card-footer-item">Choose Winner User 2: {challenge.fitnessuserEmail2}</a
                         >
                     </footer>
                 </div>
@@ -209,7 +215,7 @@
         {/each}
     </div>
 
-    <nav class="pagination" role="navigation" aria-label="pagination">
+    <nav class="pagination" aria-label="pagination">
         <ul class="pagination-list">
             {#each Array(nrOfPages) as _, i}
                 <li>
@@ -294,7 +300,7 @@
         {/each}
     </div>
 
-    <nav class="pagination" role="navigation" aria-label="pagination">
+    <nav class="pagination" aria-label="pagination">
         <ul class="pagination-list">
             {#each Array(nrOfPages) as _, i}
                 <li>

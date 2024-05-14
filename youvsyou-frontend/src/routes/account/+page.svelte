@@ -22,6 +22,7 @@
         birthDate: null,
         height: null,
         weight: null,
+        fitnesscenter: null,
     };
 
     $: {
@@ -52,7 +53,7 @@
 
 {#if $isAuthenticated}
     <h1 class="title is-1">Account Details</h1>
-
+    <p class="subtitle is-3">for <b>{$user.given_name} {$user.family_name}</b></p>
     <div class="card">
         <div class="card-content">
             <div class="media">
@@ -62,7 +63,7 @@
                     </figure>
                 </div>
                 <div class="media-content">
-                    <p class="title is-4">{$user.given_name}</p>
+                    <p class="title is-4">{$user.nickname}</p>
                     <p class="subtitle is-6">{$user.email}</p>
                 </div>
             </div>
@@ -74,10 +75,6 @@
                 <p>
                     <b>Surname:</b>
                     {$user.family_name}
-                </p>
-                <p>
-                    <b>Nickname:</b>
-                    {$user.nickname}
                 </p>
                 {#if $user.user_roles && $user.user_roles.length > 0}
                     <p>
@@ -101,7 +98,7 @@
         </div>
     {/if}
 
-    {#if $user.user_roles && $user.user_roles === "fitnesscoach" && fitnessuser.fitnesscenter == null}
+    {#if $user.user_roles && $user.user_roles.includes("fitnesscoach") && fitnessuser.fitnesscenter == null}
         <div class="box">
             <h1 class="title is-1">You can Fullfill your Account here</h1>
             <button class="button is-fullwidth is-success" on:click={() => goToPage("/accountedit")}>

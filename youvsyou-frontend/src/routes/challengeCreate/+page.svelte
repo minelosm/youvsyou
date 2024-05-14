@@ -4,6 +4,7 @@
     import { jwt_token } from "../../store";
     import { isAuthenticated, user, myFitnessuserId } from "../../store";
 
+
     let loading = true;
     let signupForm;
 
@@ -16,6 +17,7 @@
         wager: null,
         challengeType: null,
         fitnesscoachId: $myFitnessuserId,
+        fitnesscenter: null
     };
 
 
@@ -26,6 +28,7 @@
     }
 
     function createChallenge() {
+        fetchMyFitnessuserId();
         loading = true;
         var config = {
             method: "post",
@@ -39,7 +42,7 @@
                 alert("Challenge created");
             })
             .catch(function (error) {
-                alert("Could not create Challenge");
+                alert("Could not create Challenge. Please provide a fitnesscenter in your Account.");
                 console.log(error);
             })
             .finally(() => {
@@ -57,6 +60,8 @@
         axios(config)
             .then(function (response) {
                 $myFitnessuserId = response.data.id;
+                challenge.fitnesscenter = response.data.fitnesscenter;
+                console.log(response.data);
             })
             .catch(function (error) {
                 alert("Could not get fitnessuser id");

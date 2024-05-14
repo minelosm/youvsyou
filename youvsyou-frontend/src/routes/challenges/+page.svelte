@@ -84,26 +84,7 @@
                 getChallenges();
             })
             .catch(function (error) {
-                alert("Could not compete to me");
-                console.log(error);
-            });
-    }
-
-    function finishChallenge(challengeId) {
-        var config = {
-            method: "put",
-            url:
-                api_root +
-                "/api/service/finishchallenge?challengeId=" +
-                challengeId,
-            headers: { Authorization: "Bearer " + $jwt_token },
-        };
-        axios(config)
-            .then(function (response) {
-                getChallenges();
-            })
-            .catch(function (error) {
-                alert("Could not finish the challenge");
+                alert("Could not compete to the challenge, Balance Account is too low");
                 console.log(error);
             });
     }
@@ -241,6 +222,10 @@
                                     {challenge.startDate} - {challenge.endDate}
                                 </div>
                                 <div class="content">
+                                    <i class="fa-solid fa-weight-hanging"></i>
+                                    {challenge.fitnesscenter}
+                                </div>
+                                <div class="content">
                                     {#if challenge.challengeState === "OPEN"}
                                         <i class="fas fa-check"></i>
                                         {challenge.challengeState} to compete
@@ -251,11 +236,13 @@
                                 </div>
                             </div>
                             <footer class="card-footer">
+                                {#if $user.user_roles.includes("fitnessuser")}
                                 <a
                                     href="#"
                                     on:click={competeToMe(challenge.id)}
                                     class="card-footer-item">Compete to me</a
                                 >
+                                {/if}
                                 <a
                                     href={"/challenge?id=" + challenge.id}
                                     class="card-footer-item">Detail</a

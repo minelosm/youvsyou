@@ -29,7 +29,7 @@
 </script>
 
 <form class="box" on:submit|preventDefault={signup} bind:this={signupForm}>
-  <h1 class="title is-1">Sign up</h1>
+  <h1 class="title is-1">Sign up as a new User</h1>
   <div class="field">
     <label class="label" for="email">E-Mail</label>
     <div class="control has-icons-left has-icons-right">

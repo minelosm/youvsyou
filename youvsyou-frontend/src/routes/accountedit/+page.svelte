@@ -9,8 +9,6 @@
 
     let signupForm;
 
-    let fitnesscenter = null;
-
     let oldFitnessuser = {
         id: null,
         email: $user.email,
@@ -35,9 +33,8 @@
     };
 
     let newFitnesscoach = {
-        email: $user.email,
         fitnesscenter: null,
-    };
+    }
 
     onMount(() => {
         if ($jwt_token !== "") {
@@ -88,6 +85,7 @@
     }
 
     function editCoach() {
+        console.log(newFitnesscoach.fitnesscenter);
         var config = {
             method: "put",
             url: api_root + "/api/fitnesscoach/edit/" + $user.email,
@@ -106,13 +104,13 @@
             });
     }
 </script>
-{#if $isAuthenticated && $user.user_roles === "fitnesscoach" && oldFitnesscoach.fitnesscenter == null}
+{#if $isAuthenticated && $user.user_roles.includes("fitnesscoach") && oldFitnesscoach.fitnesscenter == null}
     <form class="box" on:submit|preventDefault={editCoach} bind:this={signupForm}>
         <h1 class="title is-1">Fullfill Account Details</h1>
         <div class="field">
             <label for="fitnesscenter">Fitnesscenter</label>
             <div class="control has-icons-left has-icons-right">
-                <input type="text" class="input" bind:value={fitnesscenter}>
+                <input type="text" class="input" bind:value={newFitnesscoach.fitnesscenter}>
                 <span class="icon is-small is-left">
                     <i class="fa-solid fa-weight-hanging"></i>
                 </span>
@@ -126,7 +124,7 @@
     </form>
 {/if}
 
-{#if $isAuthenticated && $user.user_roles == "fitnessuser" && oldFitnessuser.birthDate == null}
+{#if $isAuthenticated && $user.user_roles.includes("fitnessuser") && oldFitnessuser.birthDate == null}
 <form class="box" on:submit|preventDefault={editUser} bind:this={signupForm}>
     <h1 class="title is-1">Fullfill Account Details</h1>
     <div class="field">
@@ -162,6 +160,7 @@
         </div>
     </div>
 </form>
+{/if}
 
 <!--
     <h2>Fullfillment Account Details</h2>
@@ -197,7 +196,7 @@
         >Edit Changes
     </button>
 -->
-{:else}
+{#if oldFitnessuser.birthDate != null || oldFitnesscoach.fitnesscenter != null} 
 <h1 class="title is-1">Can't edit account</h1>
 <p class="subtitle is-3">Account was already edited</p>
 {/if}

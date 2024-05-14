@@ -15,6 +15,7 @@ public class ChallengeCreateDTO {
     private Double wager;
     private ChallengeType challengeType;
     private String fitnesscoachId;
+    private String fitnesscenter;
 
     public void setDescription(String description) {
         this.description = description;

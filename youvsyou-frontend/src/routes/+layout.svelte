@@ -40,7 +40,7 @@
 <nav class="navbar is-white">
   <div class="navbar-brand">
     <a class="navbar-item" href="/">
-      <img src="/images/youvsyou_logo.png"/>YOUvsYOU</a
+      <img src="/images/youvsyou_logo.png" alt="youvsyou_logo"/>YOUvsYOU</a
     >
     <div class="navbar-burger" id="navbarBurger">
       <span></span>

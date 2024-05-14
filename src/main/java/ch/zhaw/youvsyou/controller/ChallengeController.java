@@ -59,7 +59,7 @@ public class ChallengeController {
         // Job mit der ChatGPT Beschreibung erstellen
         Challenge challenge = new Challenge(cDTO.getName(), descriptionFromGPT,
                 cDTO.getStartDate(),
-                cDTO.getEndDate(), cDTO.getWager(), cDTO.getChallengeType(), cDTO.getFitnesscoachId());
+                cDTO.getEndDate(), cDTO.getWager(), cDTO.getChallengeType(), cDTO.getFitnesscoachId(), cDTO.getFitnesscenter());
         Challenge savedChallenge = challengeRepository.save(challenge);
         return new ResponseEntity<>(savedChallenge, HttpStatus.CREATED);
     }

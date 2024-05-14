@@ -66,6 +66,10 @@
             {challenge.startDate} - {challenge.endDate}
         </div>
         <div class="content">
+            <i class="fa-solid fa-weight-hanging"></i>
+            {challenge.fitnesscenter}
+        </div>
+        <div class="content">
             {#if challenge.challengeState === "OPEN"}
                 <i class="fas fa-check"></i>
                 {challenge.challengeState} to compete
