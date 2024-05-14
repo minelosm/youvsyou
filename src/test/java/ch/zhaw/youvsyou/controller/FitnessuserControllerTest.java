@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -31,7 +32,7 @@ public class FitnessuserControllerTest {
 
     private static final String TEST_EMAIL = "user@example.com";
     private static final String TEST_NAME = "User One";
-    private static final String TEST_BIRTHDATE = "2000-01-01";
+    private static final String TEST_BIRTHDATE = "01.01.2000";
     private static final String TEST_HEIGHT = "175";
     private static final String TEST_WEIGHT = "70";
 
@@ -43,6 +44,11 @@ public class FitnessuserControllerTest {
 
     @Autowired
     private MockMvc mvc;
+
+    @BeforeEach
+    void setup() {
+        fitnessuserRepository.deleteAll();
+    }
 
     @Test
     @WithMockUser
@@ -63,7 +69,6 @@ public class FitnessuserControllerTest {
     @Test
     @WithMockUser
     void testGetAllFitnessuser() throws Exception {
-        // Create a fitness user for testing
         Fitnessuser fitnessuser = new Fitnessuser(TEST_EMAIL, TEST_NAME);
         fitnessuserRepository.save(fitnessuser);
 

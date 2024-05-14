@@ -42,14 +42,13 @@ public class FitnesscoachControllerTest {
 
     @BeforeEach
     void setup() {
-        // Clean the repository before each test
         fitnesscoachRepository.deleteAll();
     }
 
     @Test
     @WithMockUser
     void testCreateFitnesscoach() throws Exception {
-        FitnesscoachCreateDTO fitnesscoachDTO = new FitnesscoachCreateDTO("test@fitness.com", "Test Coach");
+        FitnesscoachCreateDTO fitnesscoachDTO = new FitnesscoachCreateDTO("coach@fitness.com", "Test Coach");
         String jsonBody = ow.writeValueAsString(fitnesscoachDTO);
 
         mvc.perform(post("/api/fitnesscoach")
@@ -58,14 +57,13 @@ public class FitnesscoachControllerTest {
                 .header(HttpHeaders.AUTHORIZATION, "Bearer token"))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.email").value("test@fitness.com"))
+                .andExpect(jsonPath("$.email").value("coach@fitness.com"))
                 .andExpect(jsonPath("$.name").value("Test Coach"));
     }
 
     @Test
     @WithMockUser
     void testGetAllFitnesscoach() throws Exception {
-        // Create some fitness coaches for testing
         Fitnesscoach fitnesscoach1 = new Fitnesscoach("coach1@fitness.com", "Coach One");
         Fitnesscoach fitnesscoach2 = new Fitnesscoach("coach2@fitness.com", "Coach Two");
         fitnesscoachRepository.saveAll(List.of(fitnesscoach1, fitnesscoach2));
@@ -82,11 +80,9 @@ public class FitnesscoachControllerTest {
     @Test
     @WithMockUser
     void testGetFitnesscoachById() throws Exception {
-        // Create and save a fitness coach
         Fitnesscoach fitnesscoach = new Fitnesscoach("coach3@fitness.com", "Coach Three");
         fitnesscoachRepository.save(fitnesscoach);
 
-        // Retrieve it by ID
         mvc.perform(get("/api/fitnesscoach/{id}", fitnesscoach.getId())
                 .header(HttpHeaders.AUTHORIZATION, "Bearer token")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -97,20 +93,18 @@ public class FitnesscoachControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "coach4@fitness.com", roles = "fitnesscoach")
+    @WithMockUser
     void testGetMyFitnesscoachId() throws Exception {
-        // Create a fitness coach linked to the authenticated user
-        Fitnesscoach fitnesscoach = new Fitnesscoach("coach4@fitness.com", "Coach Four");
+        Fitnesscoach fitnesscoach = new Fitnesscoach("coach@example.com", "Coach Example");
         fitnesscoachRepository.save(fitnesscoach);
 
-        // Simulate the authenticated user calling the endpoint
         mvc.perform(get("/api/me/fitnesscoach")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer token")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value("coach4@fitness.com"))
-                .andExpect(jsonPath("$.name").value("Coach Four"));
+                .andExpect(jsonPath("$.email").value("coach@example.com"))
+                .andExpect(jsonPath("$.name").value("Coach Example"));
     }
 
 }

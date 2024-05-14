@@ -30,8 +30,11 @@ public class SecurityConfigTest {
     public Jwt jwt() {
         Map<String, Object> claims = new HashMap<>();
         claims.put(SUB, "test");
+        claims.put("user_roles", Arrays.asList("fitnessuser"));
+        claims.put("email", "user@example.com"); // Add the expected email here
+        claims.put(SUB, "test");
         claims.put("user_roles", Arrays.asList("fitnesscoach"));
-        claims.put("email", "coach4@fitness.com"); // Add the expected email here
+        claims.put("email", "coach@example.com");
         return new Jwt(
                 AUTH0_TOKEN,
                 Instant.now(),

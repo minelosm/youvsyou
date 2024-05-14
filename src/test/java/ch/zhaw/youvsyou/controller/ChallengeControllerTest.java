@@ -61,10 +61,8 @@ public class ChallengeControllerTest {
                 challengeDTO.setChallengeType(TEST_CHALLENGETYPE);
                 challengeDTO.setFitnesscoachId(TEST_FITNESSCOACHID);
 
-                // Convert to JSON for the request body
                 var jsonBody = ow.writeValueAsString(challengeDTO);
 
-                // Perform the POST request
                 mvc.perform(post("/api/challenge")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(jsonBody)
@@ -78,7 +76,6 @@ public class ChallengeControllerTest {
         @Test
         @WithMockUser
         void testGetAllChallenges_DefaultPagination() throws Exception {
-                // Testing default pagination behavior
                 mvc.perform(get("/api/challenge")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer token")) // Simulated authorization
@@ -110,20 +107,18 @@ public class ChallengeControllerTest {
         @Test
         @WithMockUser
         void testGetChallengeById() throws Exception {
-                // Create and save a test challenge in the repository
                 Challenge challenge = new Challenge(
-                                "Marathon Training", // Test name
-                                "A challenge for marathon runners.", // Test description
-                                "2024-09-01", // Start date
-                                "2024-09-15", // End date
-                                150.0, // Wager
-                                ChallengeType.STAMINA, // Challenge type
-                                "2002" // Fitness coach ID
+                                "Marathon Training", 
+                                "A challenge for marathon runners.",
+                                "01.09.2024",
+                                "15.09.2024",
+                                150.0,
+                                ChallengeType.STAMINA,
+                                "2002"
                 );
 
                 challenge = challengeRepository.save(challenge);
 
-                // Perform GET request to retrieve this challenge by its ID
                 mvc.perform(get("/api/challenge/{id}", challenge.getId())
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer token")
                                 .contentType(MediaType.APPLICATION_JSON))
@@ -140,15 +135,14 @@ public class ChallengeControllerTest {
         @Test
         @WithMockUser
         void testGetChallengesByFitnessId() throws Exception {
-                // Given: A fitness coach ID and two associated challenges
                 String fitnessCoachId = "187";
 
                 // Challenge 1
                 Challenge challenge1 = new Challenge(
                                 "Weight Loss Challenge",
                                 "A weight loss challenge for participants.",
-                                "2024-09-01",
-                                "2024-09-30",
+                                "16.09.2024",
+                                "30.09.2024",
                                 200.0,
                                 ChallengeType.WEIGTHLOSS,
                                 fitnessCoachId);
@@ -158,14 +152,13 @@ public class ChallengeControllerTest {
                 Challenge challenge2 = new Challenge(
                                 "Strength Training Challenge",
                                 "A strength training challenge for participants.",
-                                "2024-10-01",
-                                "2024-10-31",
+                                "01.10.2024",
+                                "31.10.2024",
                                 300.0,
                                 ChallengeType.POWER,
                                 fitnessCoachId);
                 challengeRepository.save(challenge2);
 
-                // When: Perform GET request to retrieve challenges by fitness coach ID
                 mvc.perform(get("/api/challenge/fitness/{id}", fitnessCoachId)
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer token")
                                 .contentType(MediaType.APPLICATION_JSON))

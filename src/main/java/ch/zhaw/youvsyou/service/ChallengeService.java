@@ -21,6 +21,16 @@ import ch.zhaw.youvsyou.repository.FitnessuserRepository;
 @Service
 public class ChallengeService {
 
+    public ChallengeService(ChallengeRepository challengeRepository, 
+                            FitnessuserRepository fitnessuserRepository, 
+                            BalanceAccountRepository balanceAccountRepository,
+                            FitnesscoachRepository fitnesscoachRepository) {
+        this.challengeRepository = challengeRepository;
+        this.fitnessuserRepository = fitnessuserRepository;
+        this.balanceAccountRepository = balanceAccountRepository;
+        this.fitnesscoachRepository = fitnesscoachRepository;
+    }
+
     @Autowired
     ChallengeRepository challengeRepository;
 
@@ -80,7 +90,7 @@ public class ChallengeService {
                     double totalWager = challenge.getBalance();
                     double winnerWager = totalWager * 0.8;
                     double coachWager = totalWager * 0.15;
-                    double platformWager = totalWager * 0.5;
+                    double platformWager = totalWager * 0.05;
                     Transaction winnerTransaction = new Transaction();
                     winnerAccount.setBalance(winnerAccount.getBalance() + winnerWager);
                     winnerTransaction.setAmount(winnerWager);
