@@ -43,9 +43,11 @@ public class ChallengeServiceTest {
         String challengeId = "1";
         String userEmail = "user1@test.com";
         String userEmail2 = "user2@test.com";
+        String challengeName = "Challenge 1";
 
         Challenge challenge = new Challenge();
         challenge.setId(challengeId);
+        challenge.setName(challengeName);
         challenge.setWager(100.0);
         challenge.setChallengeState(ChallengeState.OPEN);
 
@@ -70,6 +72,8 @@ public class ChallengeServiceTest {
         assertEquals(ChallengeState.WAITING, result.get().getChallengeState());
         assertEquals(450.0, balanceAccount.getBalance());
         assertEquals(fitnessuser.getId(), result.get().getFitnessuserId1());
+        assertEquals("Challenge wager from challenge: " + challengeName, balanceAccount.getTransactions().get(0).getDescription());
+        assertEquals(50.0, balanceAccount.getTransactions().get(0).getAmount());
 
         verify(challengeRepository).save(challenge);
         verify(balanceAccountRepository).save(balanceAccount);
@@ -87,6 +91,8 @@ public class ChallengeServiceTest {
         assertEquals(ChallengeState.RUNNING, result2.get().getChallengeState());
         assertEquals(200.0, balanceAccount2.getBalance());
         assertEquals(fitnessuser2.getId(), result2.get().getFitnessuserId2());
+        assertEquals("Challenge wager from challenge: " + challengeName, balanceAccount2.getTransactions().get(0).getDescription());
+        assertEquals(50.0, balanceAccount2.getTransactions().get(0).getAmount());
     }
 
 
@@ -96,8 +102,11 @@ public class ChallengeServiceTest {
         String coachId = "12345";
         String coachEmail = "coach@test.com";
         String winnerEmail = "winner@test.com";
+        String challengeName = "Challenge 1";
+
         Challenge challenge = new Challenge();
         challenge.setId(challengeId);
+        challenge.setName(challengeName);
         challenge.setFitnesscoachId(coachId);
         challenge.setWager(100.0);
         challenge.setChallengeState(ChallengeState.RUNNING);
@@ -138,5 +147,11 @@ public class ChallengeServiceTest {
         assertEquals(135.0, coachAccount.getBalance());  
         assertEquals(5.0, platformAccount.getBalance());
         assertEquals(challenge.getBalance(), result.get().getBalance());
+        assertEquals("Challenge win from challenge: " + challengeName, winnerAccount.getTransactions().get(0).getDescription());
+        assertEquals(80.0, winnerAccount.getTransactions().get(0).getAmount());
+        assertEquals("Challenge coach fee from challenge: " + challengeName, coachAccount.getTransactions().get(0).getDescription());
+        assertEquals(15.0, coachAccount.getTransactions().get(0).getAmount());
+        assertEquals("Challenge platform fee from challenge: " + challengeName, platformAccount.getTransactions().get(0).getDescription());
+        assertEquals(5.0, platformAccount.getTransactions().get(0).getAmount());
     }
 }

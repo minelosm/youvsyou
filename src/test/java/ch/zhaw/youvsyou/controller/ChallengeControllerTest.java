@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -25,15 +26,23 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import ch.zhaw.youvsyou.model.Challenge;
 import ch.zhaw.youvsyou.model.ChallengeCreateDTO;
 import ch.zhaw.youvsyou.model.ChallengeType;
+import ch.zhaw.youvsyou.model.Fitnessuser;
 import ch.zhaw.youvsyou.repository.ChallengeRepository;
+import ch.zhaw.youvsyou.repository.FitnessuserRepository;
 import ch.zhaw.youvsyou.security.SecurityConfigTest;
+import ch.zhaw.youvsyou.service.ChallengeService;
 
 @Import(SecurityConfigTest.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 public class ChallengeControllerTest {
 
-        private static final String TEST_NAME = "MOUNTAIN WALKING";
+        @BeforeEach
+        void setup() {
+                challengeRepository.deleteAll();
+        }
+
+        private static final String TEST_NAME = "Mountain Climber";
         private static final String TEST_DESCRIPTION = " ";
         private static final String TEST_STARTDATE = "09.05.2024";
         private static final String TEST_ENDDATE = "10.05.2024";
@@ -48,10 +57,15 @@ public class ChallengeControllerTest {
         ChallengeRepository challengeRepository;
 
         @Autowired
+        ChallengeService challengeService;
+
+        @Autowired
+        FitnessuserRepository fitnessuserRepository;
+
+        @Autowired
         private MockMvc mvc;
 
         @Test
-        @WithMockUser
         void testCreateChallenge() throws Exception {
                 ChallengeCreateDTO challengeDTO = new ChallengeCreateDTO();
                 challengeDTO.setName(TEST_NAME);
@@ -68,7 +82,7 @@ public class ChallengeControllerTest {
                 mvc.perform(post("/api/challenge")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(jsonBody)
-                                .header(HttpHeaders.AUTHORIZATION, "Bearer token")) // Mocked token is sufficient
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer token_three"))
                                 .andDo(print())
                                 .andExpect(status().isCreated())
                                 .andExpect(jsonPath("$.name").value(TEST_NAME))
@@ -77,10 +91,54 @@ public class ChallengeControllerTest {
 
         @Test
         @WithMockUser
+        void testCreateChallenge_Failing() throws Exception {
+                ChallengeCreateDTO challengeDTO = new ChallengeCreateDTO();
+                challengeDTO.setName(TEST_NAME);
+                challengeDTO.setDescription(TEST_DESCRIPTION);
+                challengeDTO.setStartDate(TEST_STARTDATE);
+                challengeDTO.setEndDate(TEST_ENDDATE);
+                challengeDTO.setWager(TEST_WAGER);
+                challengeDTO.setChallengeType(TEST_CHALLENGETYPE);
+                challengeDTO.setFitnesscoachId(TEST_FITNESSCOACHID);
+                challengeDTO.setFitnesscenter(TEST_FITNESSCENTER);
+
+                var jsonBody = ow.writeValueAsString(challengeDTO);
+
+                mvc.perform(post("/api/challenge")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(jsonBody))
+                                .andDo(print())
+                                .andExpect(status().isForbidden());
+        }
+
+        @Test
+        @WithMockUser
         void testGetAllChallenges_DefaultPagination() throws Exception {
+                Challenge challenge1 = new Challenge(
+                                "Marathon Training",
+                                "A challenge for marathon runners.",
+                                "01.09.2024",
+                                "15.09.2024",
+                                150.0,
+                                ChallengeType.STAMINA,
+                                "2002",
+                                "Cleverfit");
+                challengeRepository.save(challenge1);
+
+                Challenge challenge2 = new Challenge(
+                                "Weight Loss Challenge",
+                                "A challenge for weight loss.",
+                                "16.09.2024",
+                                "30.09.2024",
+                                200.0,
+                                ChallengeType.WEIGTHLOSS,
+                                "2002",
+                                "Cleverfit");
+                challengeRepository.save(challenge2);
+
                 mvc.perform(get("/api/challenge")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .header(HttpHeaders.AUTHORIZATION, "Bearer token")) // Simulated authorization
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer token"))
                                 .andDo(print())
                                 .andExpect(status().isOk())
                                 .andExpect(jsonPath("$.content").isArray())
@@ -110,15 +168,14 @@ public class ChallengeControllerTest {
         @WithMockUser
         void testGetChallengeById() throws Exception {
                 Challenge challenge = new Challenge(
-                                "Marathon Training", 
+                                "Marathon Training",
                                 "A challenge for marathon runners.",
                                 "01.09.2024",
                                 "15.09.2024",
                                 150.0,
                                 ChallengeType.STAMINA,
                                 "2002",
-                                "Cleverfit"
-                );
+                                "Cleverfit");
 
                 challenge = challengeRepository.save(challenge);
 
@@ -133,6 +190,16 @@ public class ChallengeControllerTest {
                                 .andExpect(jsonPath("$.wager").value(150.0))
                                 .andExpect(jsonPath("$.challengeType").value(ChallengeType.STAMINA.name()))
                                 .andExpect(jsonPath("$.fitnesscoachId").value("2002"));
+        }
+
+        @Test
+        @WithMockUser
+        void testGetChallengeById_NotFound() throws Exception {
+                mvc.perform(get("/api/challenge/{id}", "123")
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer token")
+                                .contentType(MediaType.APPLICATION_JSON))
+                                .andDo(print())
+                                .andExpect(status().isNotFound());
         }
 
         @Test
@@ -165,7 +232,7 @@ public class ChallengeControllerTest {
                 challengeRepository.save(challenge2);
 
                 mvc.perform(get("/api/challenge/fitness/{id}", fitnessCoachId)
-                                .header(HttpHeaders.AUTHORIZATION, "Bearer token")
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer token_three")
                                 .contentType(MediaType.APPLICATION_JSON))
                                 .andDo(print())
                                 .andExpect(status().isOk())
@@ -173,6 +240,144 @@ public class ChallengeControllerTest {
                                 .andExpect(jsonPath("$[0].fitnesscoachId").value(fitnessCoachId))
                                 .andExpect(jsonPath("$[1].name").value("Strength Training Challenge"))
                                 .andExpect(jsonPath("$[1].fitnesscoachId").value(fitnessCoachId));
+        }
+
+        @Test
+        @WithMockUser
+        void testGetChallengesByFitnessId_two() throws Exception {
+                String fitnessCoachId = "187";
+
+                Fitnessuser fitnessuser = new Fitnessuser("user@test.ch", "User One");
+                fitnessuser.setId("987");
+                fitnessuserRepository.save(fitnessuser);
+
+                // Challenge 1
+                Challenge challenge1 = new Challenge(
+                                "Weight Loss Challenge",
+                                "A weight loss challenge for participants.",
+                                "16.09.2024",
+                                "30.09.2024",
+                                200.0,
+                                ChallengeType.WEIGTHLOSS,
+                                fitnessCoachId,
+                                "Cleverfit");
+                challenge1.setId("99");
+                challenge1.setFitnessuserId1(fitnessuser.getId());
+                challenge1.setFitnessuserEmail1(fitnessuser.getEmail());
+                challengeRepository.save(challenge1);
+
+                Challenge challenge2 = new Challenge(
+                                "Strength Training Challenge",
+                                "A strength training challenge for participants.",
+                                "01.10.2024",
+                                "31.10.2024",
+                                300.0,
+                                ChallengeType.POWER,
+                                fitnessCoachId,
+                                "Cleverfit");
+                challengeRepository.save(challenge2);
+
+                mvc.perform(get("/api/challenge/fitness/{id}", fitnessuser.getId())
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer token")
+                                .contentType(MediaType.APPLICATION_JSON))
+                                .andDo(print())
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$[0].name").value("Weight Loss Challenge"))
+                                .andExpect(jsonPath("$[0].fitnesscoachId").value(fitnessCoachId))
+                                .andExpect(jsonPath("$[0].fitnessuserId1").value(fitnessuser.getId()))
+                                .andExpect(jsonPath("$[0].fitnessuserEmail1").value(fitnessuser.getEmail()));
+        }
+
+
+        @Test
+        @WithMockUser
+        void testGetChallengesByFitnessId_NotFound() throws Exception {
+                String fitnessCoachId = "2222";
+                mvc.perform(get("/api/challenge/fitness/{id}", fitnessCoachId)
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer token_three")
+                                .contentType(MediaType.APPLICATION_JSON))
+                                .andDo(print())
+                                .andExpect(status().isNotFound());
+        }
+
+        @Test
+        @WithMockUser
+        void testGetChallengesByFitnessId_User1() throws Exception {
+                String fitnessCoachId = "187";
+                String fitnessuserId = "987";
+
+                // Challenge 1
+                Challenge challenge1 = new Challenge(
+                                "Weight Loss Challenge",
+                                "A weight loss challenge for participants.",
+                                "16.09.2024",
+                                "30.09.2024",
+                                200.0,
+                                ChallengeType.WEIGTHLOSS,
+                                fitnessCoachId,
+                                "Cleverfit");
+                challenge1.setFitnessuserId1(fitnessuserId);
+                challengeRepository.save(challenge1);
+
+                // Challenge 2
+                Challenge challenge2 = new Challenge(
+                                "Strength Training Challenge",
+                                "A strength training challenge for participants.",
+                                "01.10.2024",
+                                "31.10.2024",
+                                300.0,
+                                ChallengeType.POWER,
+                                fitnessCoachId,
+                                "Cleverfit");
+                challengeRepository.save(challenge2);
+
+                mvc.perform(get("/api/challenge/fitness/{id}", fitnessuserId)
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer token")
+                                .contentType(MediaType.APPLICATION_JSON))
+                                .andDo(print())
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$[0].name").value("Weight Loss Challenge"))
+                                .andExpect(jsonPath("$[0].fitnessuserId1").value(fitnessuserId));
+        }
+
+        @Test
+        @WithMockUser
+        void testGetChallengesByFitnessId_User2() throws Exception {
+                String fitnessCoachId = "187";
+                String fitnessuserId = "987";
+
+                // Challenge 1
+                Challenge challenge1 = new Challenge(
+                                "Weight Loss Challenge",
+                                "A weight loss challenge for participants.",
+                                "16.09.2024",
+                                "30.09.2024",
+                                200.0,
+                                ChallengeType.WEIGTHLOSS,
+                                fitnessCoachId,
+                                "Cleverfit");
+                challenge1.setFitnessuserId2(fitnessuserId);
+                challengeRepository.save(challenge1);
+
+                // Challenge 2
+                Challenge challenge2 = new Challenge(
+                                "Strength Training Challenge",
+                                "A strength training challenge for participants.",
+                                "01.10.2024",
+                                "31.10.2024",
+                                300.0,
+                                ChallengeType.POWER,
+                                fitnessCoachId,
+                                "Cleverfit");
+                challengeRepository.save(challenge2);
+
+                mvc.perform(get("/api/challenge/fitness/{id}", fitnessuserId)
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer token_two")
+                                .contentType(MediaType.APPLICATION_JSON))
+                                .andDo(print())
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$[0].name").value("Weight Loss Challenge"))
+                                .andExpect(jsonPath("$[0].fitnessuserId2").value(fitnessuserId));
         }
 
 }

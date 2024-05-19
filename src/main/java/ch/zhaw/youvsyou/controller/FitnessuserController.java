@@ -64,16 +64,4 @@ public class FitnessuserController {
             return new ResponseEntity<>(fitnessuser, HttpStatus.OK);
         }).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
-
-    /*
-    @GetMapping("/me/fitnessuser")
-    public ResponseEntity<Fitnessuser> getMyFitnessuserId(
-            @AuthenticationPrincipal Jwt jwt) {
-        String userEmail = jwt.getClaimAsString("email");
-        Optional <Fitnessuser> optFitnessuser = fitnessuserRepository.findByEmail(userEmail);
-        return optFitnessuser.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                        .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
-    */
-
 }

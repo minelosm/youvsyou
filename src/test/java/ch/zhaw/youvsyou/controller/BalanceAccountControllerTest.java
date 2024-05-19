@@ -1,9 +1,10 @@
 package ch.zhaw.youvsyou.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,20 +37,51 @@ public class BalanceAccountControllerTest {
     }
 
     @Test
-void testAddBalance() throws Exception {
-    // Preset data
-    BalanceAccount balanceAccount = new BalanceAccount("coach@example.com");
-    balanceAccount.setBalance(100.0);
-    balanceAccountRepository.save(balanceAccount);
+    void testAddBalance() throws Exception {
+        BalanceAccount balanceAccount = new BalanceAccount("coach@test.ch");
+        balanceAccount.setBalance(100.0);
+        balanceAccountRepository.save(balanceAccount);
 
-    // Perform PUT request with 'amount' as a request parameter
-    mvc.perform(put("/api/balance/account/add")
-            .param("amount", "50")  // Send 'amount' as a parameter
-            .header(HttpHeaders.AUTHORIZATION, "Bearer token")
-            .contentType(MediaType.APPLICATION_JSON))  // Ensure content type is still set for other parts of the context
-        .andDo(print())
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.balance").value(150.0));  // Check if the balance has been correctly updated
-}
+        mvc.perform(put("/api/balance/account/add")
+                .param("amount", "50")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer token_three")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.balance").value(150.0))
+                .andExpect(jsonPath("$.transactions[0].amount").value(50.0))
+                .andExpect(jsonPath("$.transactions[0].description").value("Initial deposit"));
+    }
+
+    @Test
+    void testAddBalance_failing() throws Exception {
+        mvc.perform(put("/api/balance/account/add")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer token_three")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    void testGetMyInfo() throws Exception {
+        BalanceAccount balanceAccount = new BalanceAccount("coach@test.ch");
+        balanceAccount.setBalance(100.0);
+        balanceAccountRepository.save(balanceAccount);
+        mvc.perform(get("/api/balance/account/myinfo")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer token_three")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void testGetMyInfo_failing() throws Exception {
+        mvc.perform(get("/api/balance/account/myinfo")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer token_three")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
 
 }

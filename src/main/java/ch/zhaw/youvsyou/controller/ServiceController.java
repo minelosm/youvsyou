@@ -63,7 +63,7 @@ public class ServiceController {
         if (challenge.isPresent()) {
             return new ResponseEntity<>(challenge.get(), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -82,24 +82,3 @@ public class ServiceController {
         }
     }
 }
-
-/*
-     * @PutMapping("/competechallenge")
-     * public ResponseEntity<Challenge> competeChallenge
-     * (@RequestBody ChallengeStateChangeDTO changeC,
-     * 
-     * @AuthenticationPrincipal Jwt jwt) {
-     * if (!authService.isFitnesscoach()) {
-     * return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-     * }
-     * 
-     * String fitnessuserEmail = changeC.getFitnessuserEmail();
-     * String challengeId = changeC.getChallengeId();
-     * Optional<Challenge> challenge =
-     * challengeService.competeChallenge(challengeId, fitnessuserEmail);
-     * if (challenge.isPresent()) {
-     * return new ResponseEntity<>(challenge.get(), HttpStatus.OK);
-     * }
-     * return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-     * }
-     */

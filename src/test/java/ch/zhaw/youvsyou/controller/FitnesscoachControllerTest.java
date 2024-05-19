@@ -2,6 +2,7 @@ package ch.zhaw.youvsyou.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,63 +49,124 @@ public class FitnesscoachControllerTest {
     @Test
     @WithMockUser
     void testCreateFitnesscoach() throws Exception {
-        FitnesscoachCreateDTO fitnesscoachDTO = new FitnesscoachCreateDTO("coach@fitness.com", "Test Coach");
+        FitnesscoachCreateDTO fitnesscoachDTO = new FitnesscoachCreateDTO("coach@test.ch", "Test Coach");
         String jsonBody = ow.writeValueAsString(fitnesscoachDTO);
 
         mvc.perform(post("/api/fitnesscoach")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonBody)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer token"))
+                .header(HttpHeaders.AUTHORIZATION, "Bearer token_three"))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.email").value("coach@fitness.com"))
+                .andExpect(jsonPath("$.email").value("coach@test.ch"))
                 .andExpect(jsonPath("$.name").value("Test Coach"));
     }
 
     @Test
     @WithMockUser
     void testGetAllFitnesscoach() throws Exception {
-        Fitnesscoach fitnesscoach1 = new Fitnesscoach("coach1@fitness.com", "Coach One");
-        Fitnesscoach fitnesscoach2 = new Fitnesscoach("coach2@fitness.com", "Coach Two");
+        Fitnesscoach fitnesscoach1 = new Fitnesscoach("coach1@test.ch", "Coach One");
+        Fitnesscoach fitnesscoach2 = new Fitnesscoach("coach2@test.ch", "Coach Two");
         fitnesscoachRepository.saveAll(List.of(fitnesscoach1, fitnesscoach2));
 
         mvc.perform(get("/api/fitnesscoach")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer token")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer token_three")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].email").value("coach1@fitness.com"))
-                .andExpect(jsonPath("$[1].email").value("coach2@fitness.com"));
+                .andExpect(jsonPath("$[0].email").value("coach1@test.ch"))
+                .andExpect(jsonPath("$[1].email").value("coach2@test.ch"));
     }
 
     @Test
     @WithMockUser
     void testGetFitnesscoachById() throws Exception {
-        Fitnesscoach fitnesscoach = new Fitnesscoach("coach3@fitness.com", "Coach Three");
+        Fitnesscoach fitnesscoach = new Fitnesscoach("coach@test.ch", "Coach Three");
         fitnesscoachRepository.save(fitnesscoach);
 
         mvc.perform(get("/api/fitnesscoach/{id}", fitnesscoach.getId())
-                .header(HttpHeaders.AUTHORIZATION, "Bearer token")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer token_three")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value("coach3@fitness.com"))
+                .andExpect(jsonPath("$.email").value("coach@test.ch"))
                 .andExpect(jsonPath("$.name").value("Coach Three"));
     }
 
     @Test
     @WithMockUser
+    void testGetFitnesscoachById_notFound() throws Exception {
+        mvc.perform(get("/api/fitnesscoach/{id}", "998877")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer token_three")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithMockUser
     void testGetMyFitnesscoachId() throws Exception {
-        Fitnesscoach fitnesscoach = new Fitnesscoach("coach@example.com", "Coach Example");
+        Fitnesscoach fitnesscoach = new Fitnesscoach("coach@test.ch", "Coach Myself");
         fitnesscoachRepository.save(fitnesscoach);
 
         mvc.perform(get("/api/me/fitnesscoach")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer token")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer token_three")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value("coach@example.com"))
-                .andExpect(jsonPath("$.name").value("Coach Example"));
+                .andExpect(jsonPath("$.email").value("coach@test.ch"))
+                .andExpect(jsonPath("$.name").value("Coach Myself"));
     }
 
+    @Test
+    @WithMockUser
+    void testGetMyFitnesscoachId_notFound() throws Exception {
+        mvc.perform(get("/api/me/fitnesscoach")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer token_three")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithMockUser
+    void testPutAccountDetails() throws Exception {
+        String coachEmail = "coach@test.ch";
+
+        Fitnesscoach fitnesscoach = new Fitnesscoach(coachEmail, "Coach Example");
+        fitnesscoachRepository.save(fitnesscoach);
+
+        Fitnesscoach updatedFitnesscoach = new Fitnesscoach();
+        updatedFitnesscoach.setEmail(coachEmail);
+        updatedFitnesscoach.setName("Coach Example");
+        updatedFitnesscoach.setFitnesscenter("Cleverfit");
+
+        String jsonBody = ow.writeValueAsString(updatedFitnesscoach);
+
+        mvc.perform(put("/api/fitnesscoach/edit/{email}", "coach@test.ch")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer token_three")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonBody))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.email").value("coach@test.ch"))
+                .andExpect(jsonPath("$.fitnesscenter").value("Cleverfit"));
+    }
+
+    @Test
+    @WithMockUser
+    void testPutAccountDetails_notFound() throws Exception {
+        Fitnesscoach updatedFitnesscoach = new Fitnesscoach();
+        updatedFitnesscoach.setEmail("coach@test.ch");
+        updatedFitnesscoach.setName("Coach Example");
+
+        String jsonBody = ow.writeValueAsString(updatedFitnesscoach);
+
+        mvc.perform(put("/api/fitnesscoach/edit/{email}", "coach@test.ch")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer token_three")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonBody))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
 }

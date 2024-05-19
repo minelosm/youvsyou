@@ -11,8 +11,6 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 
 @TestConfiguration
 public class SecurityConfigTest {
-    // inspired by
-    // https://stackoverflow.com/questions/61500578/how-to-mock-jwt-authentication-in-a-spring-boot-unit-test
     static final String AUTH0_TOKEN = "token";
     static final String SUB = "sub";
     static final String AUTH0ID = "sms|12345678";
@@ -22,7 +20,15 @@ public class SecurityConfigTest {
         return new JwtDecoder() {
             @Override
             public Jwt decode(String token) {
-                return jwt();
+                if (token.equals("token")) {
+                    return jwt();
+                } else if (token.equals("token_two")) {
+                    return jwtUserTwo();
+                }
+                else if (token.equals("token_three")) {
+                    return jwtUserThree();
+                }
+                throw new IllegalArgumentException("Unexpected token: " + token);
             }
         };
     }
@@ -31,12 +37,35 @@ public class SecurityConfigTest {
         Map<String, Object> claims = new HashMap<>();
         claims.put(SUB, "test");
         claims.put("user_roles", Arrays.asList("fitnessuser"));
-        claims.put("email", "user@example.com"); // Add the expected email here
-        claims.put(SUB, "test");
-        claims.put("user_roles", Arrays.asList("fitnesscoach"));
-        claims.put("email", "coach@example.com");
+        claims.put("email", "user@test.ch");
         return new Jwt(
                 AUTH0_TOKEN,
+                Instant.now(),
+                Instant.now().plusSeconds(30),
+                Map.of("alg", "none"),
+                claims);
+    }
+
+    public Jwt jwtUserTwo() {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(SUB, "test");
+        claims.put("user_roles", Arrays.asList("fitnessuser"));
+        claims.put("email", "user2@test.ch");
+        return new Jwt(
+                "token_two",
+                Instant.now(),
+                Instant.now().plusSeconds(30),
+                Map.of("alg", "none"),
+                claims);
+    }
+
+    public Jwt jwtUserThree() {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(SUB, "test");
+        claims.put("user_roles", Arrays.asList("fitnesscoach"));
+        claims.put("email", "coach@test.ch");
+        return new Jwt(
+                "token_three",
                 Instant.now(),
                 Instant.now().plusSeconds(30),
                 Map.of("alg", "none"),

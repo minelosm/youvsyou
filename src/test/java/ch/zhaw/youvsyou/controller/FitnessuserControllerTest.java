@@ -2,6 +2,7 @@ package ch.zhaw.youvsyou.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -30,7 +31,7 @@ import ch.zhaw.youvsyou.security.SecurityConfigTest;
 @AutoConfigureMockMvc
 public class FitnessuserControllerTest {
 
-    private static final String TEST_EMAIL = "user@example.com";
+    private static final String TEST_EMAIL = "user@test.ch";
     private static final String TEST_NAME = "User One";
     private static final String TEST_BIRTHDATE = "01.01.2000";
     private static final String TEST_HEIGHT = "175";
@@ -52,8 +53,9 @@ public class FitnessuserControllerTest {
 
     @Test
     @WithMockUser
-    void testCreateFitnessuser() throws Exception {        
-        FitnessuserCreateDTO userDTO = new FitnessuserCreateDTO(TEST_EMAIL, TEST_NAME, TEST_BIRTHDATE, TEST_HEIGHT, TEST_WEIGHT);
+    void testCreateFitnessuser() throws Exception {
+        FitnessuserCreateDTO userDTO = new FitnessuserCreateDTO(TEST_EMAIL, TEST_NAME, TEST_BIRTHDATE, TEST_HEIGHT,
+                TEST_WEIGHT);
         var jsonBody = ow.writeValueAsString(userDTO);
 
         mvc.perform(post("/api/fitnessuser")
@@ -94,4 +96,38 @@ public class FitnessuserControllerTest {
                 .andExpect(jsonPath("$.email").value(TEST_EMAIL));
     }
 
+    @Test
+    @WithMockUser
+    void testGetFitnessuserById_notFound() throws Exception {
+        mvc.perform(get("/api/fitnessuser/{id}", "998877")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer token")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithMockUser
+    void testPutAccountDetails() throws Exception {
+        Fitnessuser fitnessuser = new Fitnessuser(TEST_EMAIL, TEST_NAME);
+        fitnessuserRepository.save(fitnessuser);
+
+        Fitnessuser updatedUser = new Fitnessuser();
+        updatedUser.setEmail(TEST_EMAIL);
+        updatedUser.setName(TEST_NAME);
+        updatedUser.setBirthDate(TEST_BIRTHDATE);
+        updatedUser.setHeight(TEST_HEIGHT);
+        updatedUser.setWeight(TEST_WEIGHT);
+
+        mvc.perform(put("/api/fitnessuser/edit/{email}", TEST_EMAIL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(ow.writeValueAsString(updatedUser))
+                .header(HttpHeaders.AUTHORIZATION, "Bearer token"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.email").value(TEST_EMAIL))
+                .andExpect(jsonPath("$.birthDate").value(TEST_BIRTHDATE))
+                .andExpect(jsonPath("$.height").value(TEST_HEIGHT))
+                .andExpect(jsonPath("$.weight").value(TEST_WEIGHT));
+    }
 }
