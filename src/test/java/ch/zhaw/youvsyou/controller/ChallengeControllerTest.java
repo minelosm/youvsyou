@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,8 +27,10 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import ch.zhaw.youvsyou.model.Challenge;
 import ch.zhaw.youvsyou.model.ChallengeCreateDTO;
 import ch.zhaw.youvsyou.model.ChallengeType;
+import ch.zhaw.youvsyou.model.Fitnesscoach;
 import ch.zhaw.youvsyou.model.Fitnessuser;
 import ch.zhaw.youvsyou.repository.ChallengeRepository;
+import ch.zhaw.youvsyou.repository.FitnesscoachRepository;
 import ch.zhaw.youvsyou.repository.FitnessuserRepository;
 import ch.zhaw.youvsyou.security.SecurityConfigTest;
 import ch.zhaw.youvsyou.service.ChallengeService;
@@ -61,6 +64,9 @@ public class ChallengeControllerTest {
 
         @Autowired
         FitnessuserRepository fitnessuserRepository;
+
+        @Autowired
+        FitnesscoachRepository fitnesscoachRepository;
 
         @Autowired
         private MockMvc mvc;
@@ -288,7 +294,6 @@ public class ChallengeControllerTest {
                                 .andExpect(jsonPath("$[0].fitnessuserEmail1").value(fitnessuser.getEmail()));
         }
 
-
         @Test
         @WithMockUser
         void testGetChallengesByFitnessId_NotFound() throws Exception {
@@ -380,4 +385,37 @@ public class ChallengeControllerTest {
                                 .andExpect(jsonPath("$[0].fitnessuserId2").value(fitnessuserId));
         }
 
+        @Test
+        void testDeleteChallenge() throws Exception {
+                Challenge challenge = new Challenge(
+                                "Marathon Training",
+                                "A challenge for marathon runners.",
+                                "01.09.2024",
+                                "15.09.2024",
+                                150.0,
+                                ChallengeType.STAMINA,
+                                "2002",
+                                "Cleverfit");
+                challenge = challengeRepository.save(challenge);
+
+                Fitnesscoach fitnesscoach = new Fitnesscoach("coach@test.ch", "Coach One");
+                fitnesscoach.setId("2002");
+                fitnesscoachRepository.save(fitnesscoach);
+
+                mvc.perform(delete("/api/challenge/" + fitnesscoach.getId() + "/" + challenge.getId())
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer token_three")
+                                .contentType(MediaType.APPLICATION_JSON))
+                                .andDo(print())
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$.id").value(challenge.getId()));
+        }
+
+        @Test
+        void testDeleteChallenge_NotFound() throws Exception {
+                mvc.perform(delete("/api/challenge/2002/123")
+                                .header(HttpHeaders.AUTHORIZATION, "Bearer token_three")
+                                .contentType(MediaType.APPLICATION_JSON))
+                                .andDo(print())
+                                .andExpect(status().isNotFound());
+        }
 }
