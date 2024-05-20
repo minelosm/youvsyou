@@ -128,6 +128,7 @@
 
         axios(config)
             .then(function (response) {
+                alert("Challenge deleted")
                 getChallenges();
             })
             .catch(function (error) {
