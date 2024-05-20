@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -109,6 +110,19 @@ public class ChallengeController {
             return new ResponseEntity<>(optChallengesUser1, HttpStatus.OK);
         } else if (!optChallengesUser2.isEmpty() && optChallengesUser2 != null) {
             return new ResponseEntity<>(optChallengesUser2, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/challenge/{fitnesscoachId}/{challengeId}")
+    public ResponseEntity<Challenge> deleteChallenge(@PathVariable String challengeId, @PathVariable String fitnesscoachId){
+        Optional<Challenge> optChallenge = challengeRepository.findById(challengeId);
+        if (optChallenge.isPresent() && authService.isFitnesscoach() && optChallenge.get().getFitnesscoachId().equals(fitnesscoachId)
+        && optChallenge.get().getChallengeState().name().equals("OPEN") && optChallenge.get().getFitnessuserId1() == null
+        && optChallenge.get().getFitnessuserId2() == null){
+            challengeRepository.deleteById(challengeId);
+            return new ResponseEntity<>(optChallenge.get(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
