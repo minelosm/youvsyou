@@ -11,7 +11,7 @@
 
     let currentPage;
     let nrOfPages = 0;
-    let defaultPageSize = 4;
+    let defaultPageSize = 3;
 
     let challenges = [];
     let challenge = {
@@ -261,11 +261,10 @@
             <li>
                 <a
                     class="pagination-link is-current"
-                    aria-label="Page 1"
+                    aria-label={`Page ${i + 1}`}
                     class:active={currentPage == i + 1}
                     href={"/challenges?page=" + (i + 1)}
-                    >{i + 1}
-                </a>
+                >{i + 1}</a>
             </li>
         {/each}
     </ul>

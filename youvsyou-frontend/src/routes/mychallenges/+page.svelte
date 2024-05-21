@@ -262,7 +262,7 @@
         <p class="subtitle is-3">from {$user.email}</p>
     </div>
 
-    <div class="columns">
+    <div class="columns is-multiline">
         {#each challenges as challenge}
             {#if challenge.fitnessuserId1 === $myFitnessuserId || challenge.fitnessuserId2 === $myFitnessuserId}
                 <div class="column is-one-third">

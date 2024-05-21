@@ -4,12 +4,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ch.zhaw.youvsyou.controller.ServiceController;
 import ch.zhaw.youvsyou.model.BalanceAccount;
 import ch.zhaw.youvsyou.model.BalanceAccount.Transaction;
 import ch.zhaw.youvsyou.model.Challenge;
@@ -24,8 +21,6 @@ import ch.zhaw.youvsyou.repository.FitnessuserRepository;
 
 @Service
 public class ChallengeService {
-        private static final Logger logger = LoggerFactory.getLogger(ServiceController.class);
-
 
     public ChallengeService(ChallengeRepository challengeRepository, 
                             FitnessuserRepository fitnessuserRepository, 
