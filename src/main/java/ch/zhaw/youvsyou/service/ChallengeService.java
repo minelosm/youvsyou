@@ -4,15 +4,19 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ch.zhaw.youvsyou.controller.ServiceController;
 import ch.zhaw.youvsyou.model.BalanceAccount;
 import ch.zhaw.youvsyou.model.BalanceAccount.Transaction;
 import ch.zhaw.youvsyou.model.Challenge;
 import ch.zhaw.youvsyou.model.ChallengeState;
 import ch.zhaw.youvsyou.model.Fitnesscoach;
 import ch.zhaw.youvsyou.model.Fitnessuser;
+import ch.zhaw.youvsyou.model.Mail;
 import ch.zhaw.youvsyou.repository.BalanceAccountRepository;
 import ch.zhaw.youvsyou.repository.ChallengeRepository;
 import ch.zhaw.youvsyou.repository.FitnesscoachRepository;
@@ -20,6 +24,8 @@ import ch.zhaw.youvsyou.repository.FitnessuserRepository;
 
 @Service
 public class ChallengeService {
+        private static final Logger logger = LoggerFactory.getLogger(ServiceController.class);
+
 
     public ChallengeService(ChallengeRepository challengeRepository, 
                             FitnessuserRepository fitnessuserRepository, 
@@ -43,38 +49,8 @@ public class ChallengeService {
     @Autowired
     BalanceAccountRepository balanceAccountRepository;
 
-    /*
-     * ALTE FUNKTIONIERENDE FUNKTION
-     * public Optional<Challenge> competeChallenge(String challengeId, String
-     * fitnessuserEmail) {
-     * Optional<Challenge> challengeToCompete =
-     * challengeRepository.findById(challengeId);
-     * if (challengeToCompete.isPresent()) {
-     * Challenge challenge = challengeToCompete.get();
-     * if (challenge.getChallengeState() == ChallengeState.OPEN) {
-     * Fitnessuser fitnessuser1 =
-     * fitnessuserRepository.findFirstByEmail(fitnessuserEmail);
-     * if (fitnessuser1 != null) {
-     * challenge.setFitnessuserId1(fitnessuser1.getId());
-     * challenge.setChallengeState(ChallengeState.WAITING);
-     * challengeRepository.save(challenge);
-     * return Optional.of(challenge);
-     * }
-     * }
-     * if (challenge.getChallengeState() == ChallengeState.WAITING) {
-     * Fitnessuser fitnessuser2 =
-     * fitnessuserRepository.findFirstByEmail(fitnessuserEmail);
-     * if (fitnessuser2 != null) {
-     * challenge.setFitnessuserId2(fitnessuser2.getId());
-     * challenge.setChallengeState(ChallengeState.RUNNING);
-     * challengeRepository.save(challenge);
-     * return Optional.of(challenge);
-     * }
-     * }
-     * }
-     * return Optional.empty();
-     * }
-     */
+    @Autowired
+    MailService mailService;
 
     public Optional<Challenge> finishChallenge(String challengeId, String fitnesscoachEmail, String winnerEmail) {
         Optional<Challenge> challengeToFinish = challengeRepository.findById(challengeId);
@@ -92,6 +68,15 @@ public class ChallengeService {
                     double coachWager = totalWager * 0.15;
                     double platformWager = totalWager * 0.05;
                     Transaction winnerTransaction = new Transaction();
+                    Mail mail = new Mail();
+                    mail.setTo(winnerEmail);
+                    mail.setSubject("Challenge " + challenge.getName() + " is now finished");
+                    mail.setMessage("Hi, the challenge " + challenge.getName() + " is now finished. You can check the challenge by clicking on the following link: http://localhost:8080/challenge/" + challenge.getId());
+                    if(challenge.getFitnessuserEmail1().equals(winnerEmail)) {
+                        mail.setTo(challenge.getFitnessuserEmail2());
+                        mail.setSubject("Challenge " + challenge.getName() + " is now finished");
+                        mail.setMessage("Hi, the challenge " + challenge.getName() + " is now finished. You can check the challenge by clicking on the following link: http://localhost:8080/challenge/" + challenge.getId());
+                    }
                     winnerAccount.setBalance(winnerAccount.getBalance() + winnerWager);
                     winnerTransaction.setAmount(winnerWager);
                     winnerTransaction.setTransactionDate(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
@@ -121,31 +106,10 @@ public class ChallengeService {
         return Optional.empty();
     }
 
-    /*
-     * public Optional<Challenge> transferMoneyToChallenge(String toChallengeId,
-     * String userEmail) {
-     * Optional<BalanceAccount> fromAccount =
-     * balanceAccountRepository.findByUserEmail(userEmail);
-     * Optional<Challenge> toChallenge =
-     * challengeRepository.findById(toChallengeId);
-     * if (fromAccount.isPresent() && toChallenge.isPresent()) {
-     * BalanceAccount account = fromAccount.get();
-     * Challenge challenge = toChallenge.get();
-     * double wager = challenge.getWager();
-     * double oneWager = (wager / 2);
-     * account.setBalance(account.getBalance() - oneWager);
-     * balanceAccountRepository.save(account);
-     * challenge.setBalance(challenge.getBalance() + oneWager);
-     * challengeRepository.save(challenge);
-     * return Optional.of(challenge);
-     * }
-     * return Optional.empty();
-     * }
-     */
-
     public Optional<Challenge> competeInAndFinanceChallenge(String challengeId, String userEmail) {
         Optional<Challenge> challengeToCompete = challengeRepository.findById(challengeId);
         BalanceAccount fromAccount = balanceAccountRepository.findFirstByUserEmail(userEmail);
+        Mail mail = new Mail();
         if (challengeToCompete.isPresent()) {
             Challenge challenge = challengeToCompete.get();
             Double oneWager = challenge.getWager() / 2;
@@ -164,12 +128,25 @@ public class ChallengeService {
                     fromAccount.getTransactions().add(transaction);
                     challengeRepository.save(challenge);
                     balanceAccountRepository.save(fromAccount);
+                    mail.setTo(challenge.getFitnessuserEmail1());
+                    mail.setSubject("Challenge " + challenge.getName() + " is now waiting for a competitor.");
+                    mail.setMessage("Hi, the challenge " + challenge.getName() + "is now waiting for a competitor. You can join the challenge by clicking on the following link: http://localhost:8080/challenge/"
+                    + challenge.getId() + ". Your new Balance is: " + fromAccount.getBalance() + " CHF.");
+                    boolean mailSent = mailService.sendMail(mail);
+                    if (mailSent) {
+                        System.out.println("Mail sent to " + challenge.getFitnessuserEmail1());
+                    } else {
+                        System.out.println("Mail not sent");
+                    }
                     return Optional.of(challenge);
                 }
             }
             if (challenge.getChallengeState() == ChallengeState.WAITING) {
                 Fitnessuser fitnessuser2 = fitnessuserRepository.findFirstByEmail(userEmail);
                 if (fitnessuser2 != null && fromAccount.getBalance() >= oneWager){
+                    mail.setTo(challenge.getFitnessuserEmail2());
+                    mail.setSubject("Challenge " + challenge.getName() + " is now running");
+                    mail.setMessage("Hi, the challenge " + challenge.getName() + " is now running. You can check the challenge by clicking on the following link: http://localhost:8080/challenge/" + challenge.getId());
                     challenge.setFitnessuserId2(fitnessuser2.getId());
                     challenge.setFitnessuserEmail2(userEmail);
                     challenge.setChallengeState(ChallengeState.RUNNING);
