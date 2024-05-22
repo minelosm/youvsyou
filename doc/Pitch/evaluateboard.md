@@ -7,15 +7,15 @@ Kooperation mit weiteren Fitnessstudios: Partnerschaften mit Fitnessstudios, um 
 
 ## UNFAIRER VORTEIL
 > Community und soziale Interaktion: Die starke Gemeinschaft und der soziale Aspekt der Plattform sind schwer zu kopieren und bieten einen einzigen Mehrwert für die Benutzer.
-Integration mit Fitnessstudios und Coaches: Durch Partnerschaften mit Fitnesstudios und qualifizierten Coaches bietet die Plattform Zugang zu noch mehr professionelle Unterstützung.
-Gamification-Elemente: Die Integration von spielerischen Elementen und Belohnungen in Challenges und Trainingspläne macht die Platftform ansprechend und motivierend, was die Bidung der Benutzer erhöht.
+Integration mit Fitnessstudios und Coaches: Durch Partnerschaften mit Fitnesstudios und qualifizierten Coaches bietet die Plattform Zugang zu noch mehr professionelle Unterstützung und vielvältige Challenges.
+Gamification-Elemente: Die Integration von spielerischen Elementen und Belohnungen in Challenges und Trainingspläne macht die Platftform ansprechend und motivierend, was die Bidung der Benutzer erhöhen kann.
 
 ## KPI
 > - Anzahl aktiver Benutzer
 - Anzahl Challenges
 - Anazhl angeschlossener Challenges und erreichte Ziele
 - Nutzereingagement und Interaktionsrate auf der Plattform
-- Umsatz aus Premium-Mitgliedschaften, allgemeine Einnahmequellen und Coach-Gebühren
+- Umsatz aus Wetten, allgemeine Einnahmequellen und Coach-Gebühren
 
 ## EINNAHMEQUELLEN
 > - Abonnementgebühren: Einnahmen aus monatlichen oder jährlichen Abonnementgebühren für Premium-Funktionen und erweiterete Mitgliegschaften.

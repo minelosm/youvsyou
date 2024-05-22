@@ -6,7 +6,7 @@
 > Unsere Idee konzentriert sich darauf, eine Fitnessplattform zu entwicklen, auf der Benutzer ungenutzte Fitnessabonnements nutzen können, indem sie sich gegenseitig zu Challenges herausfordern und unterstützen, um ihre Fitnessziele zu erreichen. Die Challenge beinhaltet mit einem Ziel und einigen Bedingungen. Das ungenutzte Fitnessabonnement ist somit nicht gleich weggeworfenes Geld. Vom "Sponsor" zum wirklichen "Mitglied".
 
 ## ADRESSIERTE NUTZER
-> Unsere Lösung richtet sich an Fitnessbesucher, insbesondere an diejenige, die Schwierigkeiten haben, ihre Fitnessabonnements voll auszunutzen und motiviert zu bleiben. Die Benutzer geben ihre Leistungsdaten (Alter, Grösse, Gewicht, ...) ein und werden entweder einer Challenge gematcht oder wählen den Gegenüber selber aus. Fitnesscoaches haben auch Interesse dabei was zu verdienen, indem sie gleichgesinnte für eine Challenge auswählen und Fitnesspläne erstellen.
+> Unsere Lösung richtet sich an Fitnessbesucher, insbesondere an diejenige, die Schwierigkeiten haben, ihre Fitnessabonnements voll auszunutzen und motiviert zu bleiben. Die Benutzer geben ihre Leistungsdaten (Alter, Grösse, Gewicht, ...) ein und wählen eine Challenge selber aus. Fitnesscoaches haben auch Interesse dabei was zu verdienen.
 
 ## ADRESSIERTE BEDÜRFNISSE
 > 1. Motivation und Unterstützung beim Erreichen von Fitnesszielen
@@ -36,7 +36,7 @@ Machbarkeit: Hammer vs. Raumschiff
 > Die Möglichkeit ungenutzte Fitnessabonnements in motivierende und unterstützende Community-Challenges zu verwandeln.
 
 ## HIGH-LEVEL-KONZEPT
-> Ein persönlicher Fitness-Coach in deiner Tasche, der dich motiviert, herausfordert und unterstüzt, um deine Ziele zu erreichen, sowie das Verlust von einem Geldbetrag in Betracht zu ziehen.
+> Ein persönlicher Fitnesscoach in deiner Tasche, der dich motiviert, herausfordert und unterstüzt, um deine Ziele zu erreichen, sowie das Verlust von einem Geldbetrag in Betracht zu ziehen.
 
 ## WERTVERSPRECHEN
-> Unser Werteversprechen ist es, eine Plattform zu schaffen, die es Fitness-Enthusiasten ermöglicht, ungenutzte Abonnements effektiv zu nutzen, indem sie sich gegenseitig motivieren und unterstützen, um ihre Fitnessziele zu erreichen.
+> Unser Werteversprechen ist es, eine Plattform zu schaffen, die es Fitness-Enthusiasten ermöglicht, ungenutzte Abonnements effektiv zu nutzen, indem sie sich gegenseitig motivieren und unterstützen, um ihre Fitnessziele zu erreichen. Dabei steht und das Geld nicht an erster Rolle. Viel mehr geht es darum sich selbst zu überwinden und was gutes für seinen Körper zu machen. "Geld kommt und geht, doch die Gesundheit soll stets positiv bleiben"

@@ -48,7 +48,7 @@ public class ChallengeController {
         }
         // ChatGPT Service zum Generieren der Beschreibung aufrufen
         MessageResponse chatGptResponse = chatGptService.chatWithChatGpt(
-                "Create me a small detailed description with a maximum of 20 words and in English with the following superordinate term as a help: (" + cDTO.getName() + " and " + cDTO.getChallengeType() + "). And give me 3 small goals that can be measured with it");
+                "Create me a small detailed description with a maximum of 20 words and in English with the following superordinate term as a help: (" + cDTO.getName() + " and " + cDTO.getChallengeType() + "). And give me 3 small goals that can be measured with it for non-experienced to a little experienced athletes.");
         if (chatGptResponse.getChoices().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
