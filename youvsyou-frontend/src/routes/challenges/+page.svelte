@@ -29,14 +29,14 @@
     $: {
         if ($jwt_token !== "") {
             fetchMyFitnessuserId();
-            let searchParams = $page.url.searchParams;
-            if (searchParams.has("page")) {
-                currentPage = searchParams.get("page");
-            } else {
-                currentPage = "1";
-            }
-            getChallenges();
         }
+        let searchParams = $page.url.searchParams;
+        if (searchParams.has("page")) {
+            currentPage = searchParams.get("page");
+        } else {
+            currentPage = "1";
+        }
+        getChallenges();
     }
 
     function getChallenges() {
@@ -54,7 +54,7 @@
         var config = {
             method: "get",
             url: api_root + "/api/challenge" + query,
-            headers: { Authorization: "Bearer " + $jwt_token },
+            headers: {},
         };
 
         axios(config)
@@ -65,7 +65,6 @@
             })
             .catch(function (error) {
                 alert("Could not get challenges");
-                console.log(error);
                 loading = false;
             });
     }
@@ -84,7 +83,9 @@
                 getChallenges();
             })
             .catch(function (error) {
-                alert("Could not compete to the challenge, Balance Account is too low");
+                alert(
+                    "Could not compete to the challenge, Balance Account is too low",
+                );
                 console.log(error);
             });
     }
@@ -118,18 +119,6 @@
         getChallenges();
     }
 </script>
-
-<style>
-    .full-height-card {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-.full-height-card .card-content {
-    flex-grow: 1;
-}
-</style>
 
 <h1 class="title is-1">All Challenges</h1>
 
@@ -237,10 +226,11 @@
                             </div>
                             <footer class="card-footer">
                                 {#if $user.user_roles.includes("fitnessuser")}
-                                <a
-                                    on:click={competeToMe(challenge.id)}
-                                    class="card-footer-item">Compete to me</a
-                                >
+                                    <a
+                                        on:click={competeToMe(challenge.id)}
+                                        class="card-footer-item"
+                                        >Compete to me</a
+                                    >
                                 {/if}
                                 <a
                                     href={"/challenge?id=" + challenge.id}
@@ -255,6 +245,65 @@
     {/each}
 </div>
 
+<div class="columns">
+    {#if $jwt_token == ""}
+        {#each challenges as challenge}
+                <div class="column is-one-third">
+                    <div class="card full-height-card">
+                        <header class="card-header">
+                            <p class="card-header-title">
+                                {challenge.name}<span
+                                    class="tag is-info is-light"
+                                    >{challenge.challengeType}</span
+                                >
+                            </p>
+                            <button
+                                class="card-header-icon"
+                                aria-label="more options"
+                            >
+                                <span class="icon">
+                                    <i
+                                        class="fas fa-dumbbell"
+                                        aria-hidden="true"
+                                    ></i>
+                                </span>
+                            </button>
+                        </header>
+                        <div class="card-content">
+                            <div class="content">
+                                {challenge.description}
+                            </div>
+                            <div class="content">
+                                <i class="fa-solid fa-sack-dollar"></i>
+                                {challenge.wager} CHF
+                            </div>
+                            <div class="content">
+                                <i class="fas fa-calendar-alt"></i>
+                                {challenge.startDate} - {challenge.endDate}
+                            </div>
+                            <div class="content">
+                                <i class="fa-solid fa-weight-hanging"></i>
+                                {challenge.fitnesscenter}
+                            </div>
+                            <div class="content">
+                                {#if challenge.challengeState === "OPEN"}
+                                    <i class="fas fa-check"></i>
+                                    {challenge.challengeState} to compete
+                                {:else if challenge.challengeState === "WAITING"}
+                                    <i class="fas fa-clock"></i>
+                                    {challenge.challengeState} for a competitor
+                                {/if}
+                            </div>
+                        </div>
+                        <footer class="card-footer">
+                            <b>Log in to take more actions</b>
+                        </footer>
+                    </div>
+                </div>
+        {/each}
+    {/if}
+</div>
+
 <nav class="pagination" role="navigation" aria-label="pagination">
     <ul class="pagination-list">
         {#each Array(nrOfPages) as _, i}
@@ -263,9 +312,21 @@
                     class="pagination-link is-current"
                     aria-label={`Page ${i + 1}`}
                     class:active={currentPage == i + 1}
-                    href={"/challenges?page=" + (i + 1)}
-                >{i + 1}</a>
+                    href={"/challenges?page=" + (i + 1)}>{i + 1}</a
+                >
             </li>
         {/each}
     </ul>
 </nav>
+
+<style>
+    .full-height-card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .full-height-card .card-content {
+        flex-grow: 1;
+    }
+</style>

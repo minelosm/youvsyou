@@ -1,6 +1,6 @@
 #  CREATE BOARD: YOUvsYOU
 
-![Use case diagram](figures/uc-diagram.drawio.svg)
+![Use case diagram](/doc/figures/uc-diagram.drawio.svg)
 
 ## IDEEN-BESCHREIBUNG
 > Unsere Idee konzentriert sich darauf, eine Fitnessplattform zu entwicklen, auf der Benutzer ungenutzte Fitnessabonnements nutzen können, indem sie sich gegenseitig zu Challenges herausfordern und unterstützen, um ihre Fitnessziele zu erreichen. Die Challenge beinhaltet mit einem Ziel und einigen Bedingungen. Das ungenutzte Fitnessabonnement ist somit nicht gleich weggeworfenes Geld. Vom "Sponsor" zum wirklichen "Mitglied".

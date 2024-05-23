@@ -139,12 +139,12 @@ public class ChallengeService {
             if (challenge.getChallengeState() == ChallengeState.WAITING) {
                 Fitnessuser fitnessuser2 = fitnessuserRepository.findFirstByEmail(userEmail);
                 if (fitnessuser2 != null && fromAccount.getBalance() >= oneWager){
-                    mail.setTo(challenge.getFitnessuserEmail2());
-                    mail.setSubject("Challenge " + challenge.getName() + " is now running");
-                    mail.setMessage("Hi, the challenge " + challenge.getName() + " is now running. You can check the challenge by clicking on the following link: http://localhost:8080/challenge/" + challenge.getId());
                     challenge.setFitnessuserId2(fitnessuser2.getId());
                     challenge.setFitnessuserEmail2(userEmail);
                     challenge.setChallengeState(ChallengeState.RUNNING);
+                    mail.setTo(challenge.getFitnessuserEmail2());
+                    mail.setSubject("Challenge " + challenge.getName() + " is now running");
+                    mail.setMessage("Hi, the challenge " + challenge.getName() + " is now running. You can check the challenge by clicking on the following link: http://localhost:8080/challenge/" + challenge.getId());
                     challenge.setBalance(challenge.getBalance() + oneWager);
                     fromAccount.setBalance(fromAccount.getBalance() - oneWager);
                     Transaction transaction = new Transaction();
