@@ -95,7 +95,6 @@ function login(username, password, redirectToHome = false) {
     .then((response) => {
       const { id_token, access_token } = response.data;
       jwt_token.set(id_token);
-      console.log(id_token);
       getUserInfo(access_token);
       if (redirectToHome) {
         // go to start page after 500ms. Explanation: if we do not wait, the login form on the

@@ -42,7 +42,6 @@
             .then(function (response) {
                 $myFitnessuserId = response.data.id;
                 fitnessuser = response.data;
-                console.log(fitnessuser);
             })
             .catch(function (error) {
                 alert("Could not get fitnessuser id");

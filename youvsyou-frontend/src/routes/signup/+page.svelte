@@ -21,7 +21,6 @@
   function signup() {
     // form validation with bootstrap: see https://getbootstrap.com/docs/5.3/forms/validation/
     if (signupForm.checkValidity()) {
-      console.log("signup");
       auth.signup(email, password, firstName, lastName, selectedUserType, userName, picture);
     }
     signupForm.classList.add("was-validated");

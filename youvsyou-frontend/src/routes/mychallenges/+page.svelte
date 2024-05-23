@@ -22,7 +22,6 @@
 
         if ($jwt_token !== "") {
             fetchMyFitnessuserId();
-            console.log($myFitnessuserId);
         }
         getChallenges();
     }
@@ -79,8 +78,6 @@
             .then(function (response) {
                 winnerUserData = response.data;
                 winnerEmail = response.data.email;
-                console.log(winnerUserData);
-                console.log(winnerEmail);
             })
             .catch(function (error) {
                 alert("Could not get fitnessuser id");
@@ -107,13 +104,11 @@
 
     function saveWinnerIdFrom1(id) {
         winnerId = id;
-        console.log(winnerId);
         getWinnerEmail(winnerId);
     }
 
     function saveWinnerIdFrom2(id) {
         winnerId = id;
-        console.log(winnerId);
         getWinnerEmail(winnerId);
     }
 

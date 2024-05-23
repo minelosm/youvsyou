@@ -9,7 +9,6 @@
     function loginWithUsernameAndPassword() {
         // form validation with bootstrap: see https://getbootstrap.com/docs/5.3/forms/validation/
         if (loginForm.checkValidity()) {
-            console.log("login");
             auth.login(username, password);
             goto("/account");
         }

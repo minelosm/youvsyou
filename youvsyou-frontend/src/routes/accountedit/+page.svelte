@@ -85,7 +85,6 @@
     }
 
     function editCoach() {
-        console.log(newFitnesscoach.fitnesscenter);
         var config = {
             method: "put",
             url: api_root + "/api/fitnesscoach/edit/" + $user.email,
