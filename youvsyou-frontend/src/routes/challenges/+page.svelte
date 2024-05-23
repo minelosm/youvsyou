@@ -80,6 +80,7 @@
         };
         axios(config)
             .then(function (response) {
+                alert("Competed to the challenge successfully");
                 getChallenges();
             })
             .catch(function (error) {

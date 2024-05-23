@@ -39,7 +39,9 @@
                 challenges = response.data;
             })
             .catch(function (error) {
-                alert("Could not get challenges");
+                alert(
+                    "Could not get challenges. There are no challenges associated to you. Create a chellenge or compete in one.",
+                );
                 console.log(error);
             });
     }
@@ -58,6 +60,7 @@
 
         axios(config)
             .then(function (response) {
+                alert("Challenge set as finished");
                 getChallenges();
             })
             .catch(function (error) {
@@ -128,7 +131,7 @@
 
         axios(config)
             .then(function (response) {
-                alert("Challenge deleted")
+                alert("Challenge deleted");
                 getChallenges();
             })
             .catch(function (error) {
@@ -148,7 +151,7 @@
 
     <div class="columns is-multiline">
         {#each challenges as challenge}
-            <div class="column is-one-third">
+            <div class="column is-half">
                 <div class="card full-height-card">
                     <header class="card-header">
                         <p class="card-header-title">
@@ -192,11 +195,17 @@
                             {:else if challenge.challengeState === "RUNNING"}
                                 <i class="fa-solid fa-hourglass-start"></i>
                                 is {challenge.challengeState}
-                            {:else if challenge.challengeState === "FINSIHED"}
+                            {:else if challenge.challengeState === "FINISHED"}
                                 <i class="fa-solid fa-flag-checkered"></i>
                                 challenge is {challenge.challengeState}
                             {/if}
                         </div>
+                        {#if challenge.challengeState != "FINISHED"}
+                            <div class="content">
+                                <i class="fa-solid fa-trophy"></i>
+                                Winner: {winnerEmail}
+                            </div>
+                        {/if}
                     </div>
                     <footer class="card-footer">
                         {#if challenge.challengeState === "OPEN"}
@@ -207,7 +216,7 @@
                                     $myFitnessuserId,
                                 )}>Delete Challenge</button
                             >
-                        {:else}
+                        {:else if challenge.challengeState === "RUNNING"}
                             <a
                                 href="#"
                                 on:click={saveWinnerIdFrom1(
@@ -232,6 +241,10 @@
                                 class="card-footer-item"
                                 >Choose Winner User 2: {challenge.fitnessuserEmail2}</a
                             >
+                        {:else if challenge.challengeState === "WAITING"}
+                            <b>One User already joined</b>
+                        {:else if challenge.challengeState === "FINISHED"}
+                            <b>Check Balance Account for Wager</b>
                         {/if}
                     </footer>
                 </div>
@@ -306,9 +319,11 @@
                                     <i class="fas fa-clock"></i>
                                     {challenge.challengeState} for a competitor
                                 {:else if challenge.challengeState === "RUNNING"}
-                                    <i class="fa-solid fa-hourglass-start"
-                                        >is {challenge.challengeState}</i
-                                    >
+                                    <i class="fa-solid fa-hourglass-start"></i>
+                                    is {challenge.challengeState}
+                                {:else if challenge.challengeState === "FINISHED"}
+                                    <i class="fa-solid fa-flag-checkered"></i>
+                                    challenge is {challenge.challengeState}
                                 {/if}
                             </div>
                         </div>
