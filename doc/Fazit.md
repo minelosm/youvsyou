@@ -15,9 +15,9 @@ Hier werden einige Punkte aufgelistet, welche man noch für diese Appliaktion we
 - Einreichung eines Supportticket, falls eine Challenge "Nicht fair" bewertet wurde, da auch Geld im Spiel ist
 - Einbindung von Social Media oder einbauen von Werbungsmöglichkeiten
 - Kostenpflichtige Premium Funktionen
-- Applikation nicht auf ChatGPT verlassen, sondern auch noch selber Description oder Ziele als Fitnesscoach festlegen können
+- Erstellung der Challenges nicht auf ChatGPT verlassen, sondern auch noch selber Description oder Ziele als Fitnesscoach festlegen können (Falls das System von ChatGPT ausfallen würde)
 
 ## Persönliches Fazit
-In dieser 12 wöchigen Phase, bei der Entwicklung des Projekt, gab es immer wieder Höhen und Tiefen. Zu Beginn hatte man das Gefühl, mit den Anforderungen überfordert zu sein. Jedoch wurde das von Woche zu Woche immer besser und klarer. Mir persönlich hat es geholfen, immer die Issues im GitHub festzulegen und sich demtentspreched an diese zu orientieren und Schritt für Schritt abzuarbeiten. So konnte man auch den schönen Verlauf des Projekts, Woche für Woche, miterleben. Am meisten Mühe hatte ich bei den Testeinheiten und bei dem handling der Security und Rollenzuteilung vom User mit Bezug zu MongoDB.
+In dieser 12 wöchigen Phase, bei der Entwicklung des Projekt, gab es immer wieder Höhen und Tiefen. Zu Beginn hatte man das Gefühl, mit den Anforderungen überfordert zu sein. Jedoch wurde das von Woche zu Woche immer besser und klarer. Mir persöhnlich hat es geholfen, immer die Issues im GitHub festzulegen und sich demtentspreched an diese zu orientieren und Schritt für Schritt abzuarbeiten. So konnte man auch den schönen Verlauf des Projekts, Woche für Woche, miterleben. Am meisten Mühe hatte ich bei den Testeinheiten und bei dem handling der Security und Rollenzuteilung vom User mit Bezug zu MongoDB.
 
-Ich konnte meine Coding-Fähigkeiten in diesem Projekt enorm testen und verbesseren. Der Zeitaufwand für eine Tätigkeit mit dem gleichen Umfang wurde von Woche zu Woche immer besser und es war interessant, so ein Projekt relativ praxisnah mitzuerleben mit den ganzen Sachen vom Backend, Frontend, Testing, GitHub, Drittsysteme, etc.
+Ich konnte meine Coding-Fähigkeiten in diesem Projekt enorm testen und zugleich verbesseren. Der Zeitaufwand für eine Tätigkeit mit dem gleichen Umfang wurde von Woche zu Woche immer besser und es war interessant, so ein Projekt relativ praxisnah mitzuerleben mit den ganzen Einheiten im Backend, Frontend, Testing, GitHub, Drittsysteme, etc.

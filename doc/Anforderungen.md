@@ -91,7 +91,7 @@ Beim ER-Modell werden die zwei Fitnessuser und Fitnesscoach mit den Attributen i
 ![BPMN Diagramm](/doc/figures/bpmn.drawio.svg)
 
 ### Erklärungen BPMN
-Dieses BPMN Diagramm stellt den Prozess einer Challenge dar. Dabei sind zwei Lanes aus der Sicht eines Fitnessusers und Fitnesscoaches abgebildet.
+Dieses BPMN Diagramm stellt den Prozess einer Challenge dar. Dabei sind zwei Lanes aus der Sicht eines Fitnessusers und Fitnesscoaches abgebildet. Der Fitnessuser logt sich ein und hat das Bedarf, einer Challenge nachzugehen. Der Fitnesscoach erstellt dabei eine Challenge. Am Schluss wird die Challenge ausgewertet. Wir gehen davon nur aus der Sicht von einem Fitnessuser aus, auch wenn zwei Fitnessuser einer Challenge beitretten können.
 
 ## Skizze des UIs
 

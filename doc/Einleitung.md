@@ -3,10 +3,10 @@
 ## Projektidee
 YOUvsYOU ist eine interaktive Fitnessplattform mit tolle Community-Challenges. Dabei wird ein Fitnesscoach eine Challenge erstellen und mithilfe von ChatGPT die Ziele der Challenge definiert. Anschliessend tretten zwei verschiedene Fitnessuser einer Challenge bei und werden einen gewissen Geldbetrag in einen Pot werfen. Nach Ablauf vom Enddatum treffen sich alle drei User im Fitnesstudio und vereinbaren so den Gewinner. Der Gewinner erhält dann den Inhalt vom Pot mit Abzug von Gebühren an Fitnesscoach und Plattform.
 
-## Problemstellung
+### Problemstellung
 Der Trend steigt, immer mehr Sport zu treiben, weshalb sich viele Menschen sich dazu entscheiden ein Fitnessabo zu lösen. Meistens werden gleich Jahresabonnements gelöst. Und in den besten Fällen werden diese Jahresabonnemets nicht gut ausgenutzt. Diese Plattform soll dabei helfen, solche unmotivierte Menschen wieder zu motivieren, sei es mit Geld oder mit coolen Challenges.
 
-## Benutzergruppe
+### Benutzergruppe
 Fitnessuser: Die Fitnessuser tretten eine Challenge bei und zahlen einen Betrag in den Pot. Nach der Auswertung erhaltet dann der Gewinner einen gewissen Geldbetrag zurück (aufjedenfall mehr als sein Einsatz). Fitnessuser können beliebig viel Challenges mitmachen, solange das Portmonaire reicht.
 
 Fitnesscoaches: Erstellen die Community-Challenges und werten diese Fair und Anständig in seinem Fitnesstudio aus. Erhält als Entschädigung ebenfalls einen gewissen Geldbetrag.
