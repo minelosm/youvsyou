@@ -1,3 +1,10 @@
 # Testing
 
 ## Modul- und Integrationstests
+Das Testing wurde mit allen Endpoints durchgeführt. Da bei den meisten Tests, ein Jwt Token notwendig ist, so wurde die Testklasse "SecurityConfigTest.java" erstellt und je nach Bearer token im Header, für die verschiedenen Rollen eingesetzt. Dabei wird einfach die Testklasse beim Test Importiert und anschliessend je nach Benutzerwunch das dementsprechende Bearer token / token_two / token_three eingesetzt.
+
+Zusätzlich wurde bei den Tests häufig die BeforeEach Annotation benutzt und die Repositories jeweils gelöscht und anschliessend wieder je nach Testklasse neu angelegt. So konnte man alle Test auf einmal laufen lassen und ein User oder eine Challenge wurde nicht ausversehen zweimal erfasst zwischen dem Übergang der Testklasse.
+
+Beim ServiceControllerTest wurde die Lifecycle innerhalb der Klasse getestet. Hier wurde das wie ein ganzer Prozess in Betracht gezogen. Zwei User tretten einer Challenge bei, die richtige ChallengeState wurde geprüft, ein User kann die Challenge nicht als "abgeschlossen / FINISHED" markieren, nut der Fitnesscoach, der die Challege erstellt hat, kann die Challenge auch wirklich beenden und einen Sieger auswählen.
+
+Beim ChallengeServiceTest wurden die Funktionen "CompeteInAndFinanceChallenge" und "finishChallenge" getestet. Bei diesen zwei Funktionen wird das Eintretten einer Challenge getätigt. Der Balance Account wird geprüft und angepasst. Die ChallengeState wird je nach Anzahl Teilnehmer angepasst. Eine Mail wird verschickt beim Beitritt einer Challenge und beim Beenden einer Challenge. Dabei wurde Mockito verwendet und die jeweiligen Klassen gemockt. Und nur die benötigten Attributen wurden bei thenReturn festgelegt. Mockito kann hierfür nützlich sein, da bei den anderen verüfgbaren Attributen (oder falls noch weitere Attributen später hinzugefügt werden) nicht immer neu definiert werden müssen.

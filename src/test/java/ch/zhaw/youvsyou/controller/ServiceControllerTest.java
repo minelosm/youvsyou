@@ -123,6 +123,7 @@ public class ServiceControllerTest {
                                 .andDo(print())
                                 .andExpect(status().isOk())
                                 .andExpect(jsonPath("$.name").value(TEST_NAME))
+                                .andExpect(jsonPath("$.challengeState").value("WAITING"))
                                 .andExpect(jsonPath("$.fitnessuserEmail1").value("user@test.ch"));
         }
 
@@ -136,6 +137,7 @@ public class ServiceControllerTest {
                                 .andDo(print())
                                 .andExpect(status().isOk())
                                 .andExpect(jsonPath("$.name").value(TEST_NAME))
+                                .andExpect(jsonPath("$.challengeState").value("RUNNING"))
                                 .andExpect(jsonPath("$.fitnessuserEmail2").value("user2@test.ch"));
         }
 
