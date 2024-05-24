@@ -25,11 +25,13 @@ public class ChallengeService {
     public ChallengeService(ChallengeRepository challengeRepository, 
                             FitnessuserRepository fitnessuserRepository, 
                             BalanceAccountRepository balanceAccountRepository,
-                            FitnesscoachRepository fitnesscoachRepository) {
+                            FitnesscoachRepository fitnesscoachRepository,
+                            MailService mailService) {
         this.challengeRepository = challengeRepository;
         this.fitnessuserRepository = fitnessuserRepository;
         this.balanceAccountRepository = balanceAccountRepository;
         this.fitnesscoachRepository = fitnesscoachRepository;
+        this.mailService = mailService;
     }
 
     @Autowired

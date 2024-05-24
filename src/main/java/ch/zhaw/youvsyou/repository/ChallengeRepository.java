@@ -19,11 +19,4 @@ public interface ChallengeRepository extends MongoRepository<Challenge, String> 
 
     List<Challenge> findByFitnessuserId1(String fitnessuserId1);
     List<Challenge> findByFitnessuserId2(String fitnessuserId2);
-
-    /*
-    List<Challenge> findByWagerGreaterThan(Double wager);
-    List<Challenge> findByChallengeType(ChallengeType type);
-    @Aggregation("{'$group':{'_id':'$challengeState','challengeIds':{'$push':'$_id'},'count':{'$count':{}}}}")
-    List<ChallengeStateAggregation> getChallengeStateAggregation();
-    */
 }

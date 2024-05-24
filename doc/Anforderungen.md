@@ -1,9 +1,9 @@
 # Anforderungen
 
-# Use Case Diagram
+## Use Case Diagram
 ![Use case diagram](/doc/figures/uc-diagram.drawio.svg)
 
-# Use Case Beschreibung(en)
+## Use Case Beschreibung(en)
 
 | Use Case Description UC1 ||
 | -------- | ------- |
@@ -71,11 +71,11 @@
 |Ausnahmen|-|
 |Besondere Anforderungen|Balance Account wird für den Fitnessoach und Gewinner automatisch angepasst.|
 
-# ER-Modell
+## ER-Modell
 
 ![Use case diagram](/doc/figures/er_model.drawio.svg)
 
-## Erklärung ER-Modell
+### Erklärung ER-Modell
 Beim ER-Modell werden die zwei Fitnessuser und Fitnesscoach mit den Attributen in der Datenbank abgespeichert. Der Fitnesscoach kann mehrere Challenges erstellen, und eine Challenge wird nur von einem Fitnesscoach erstellt. Diese (oder auch mehrere) Challenge(s) kann der Fitnessuser beitretten. Jeder User hat einen Balance Account mit einer aufladbaren Balance und einer Transaction History.
 
 <b>Challenge:</b> Wird mit den sichtbaren Attributen erstellt. Bei der Neuerstellung erhält die Challenge als ChallengeState "OPEN". Nach ein User dieser Challenge beigetretten ist, wechselt der State zu "WAITING". Wenn der zweite User beigetretten ist gilt die Challenge als "RUNNING" und der Fitnesscoach kann diese dann beenden (nach Vereinbarung / Verabredung).
@@ -86,14 +86,25 @@ Beim ER-Modell werden die zwei Fitnessuser und Fitnesscoach mit den Attributen i
 
 <b>Balance Account:</b> Jeder User besitzt ein Balance Account mit seine E-Mail. Er kann sein Balance (noch) beliebig aufstocken. Bei jeder Transaktion wird ein Eintrag in das Transaction History erstellt.
 
-# BPMN-Diagramm
+## BPMN-Diagramm
 
 ![BPMN Diagramm](/doc/figures/bpmn.drawio.svg)
 
-## Erklärungen BPMN
-Dieses BPMN Diagramm stellt den Prozess einer Challenge dar. Dabei sind zwei Lanes aus der Sicht eines Fitnessusers oder Fitnesscoaches abgebildet.
+### Erklärungen BPMN
+Dieses BPMN Diagramm stellt den Prozess einer Challenge dar. Dabei sind zwei Lanes aus der Sicht eines Fitnessusers und Fitnesscoaches abgebildet.
 
-# Skizze des UIs
+## Skizze des UIs
 
-![Skizze](/doc/figures/mockup_01.png)
+Die Skizze des UI wurden für die vier Hauptpages, "All Challenges", "My Created Challenges", "Account Page" und "Balance Account" gezeichnet und unten abgebildet. Eine weitere kleine Beschreibung ist immer jeweils unter der Skizze zu sehen.
 
+![Skizze All Challenges](/doc/figures/Skizze_AllChallenges.png)
+Hier haben die Fitnessuser eine Übersicht von den erstellen Challenges. Das Wichtigste zu sehen, ist die Wages und das Datum der jeweiligen Challenge. Hier kann der Fitnessuser auch gleich der Challenge beitretten.
+
+![Skizze My Created Challenges](/doc/figures/Skizze_MyCreatedChallenges.png)
+Hier sieht der Fitnesscoach seine erstellen Challenges und kann diese auch gleich managen. Hier kann der Gewinner der Challenge bestummen werden und die Challenge auch gleich abschliessen. Je nach Zustand der Challenge (falls noch keine User in einer Challenge beigetretten ist), so kann der Fitnesscoach bei einem Fehler diese auch wieder löschen.
+
+![Skizze Account Page](/doc/figures/Skizze_AccountPage.png)
+Hier sieht der eingeloggte User seinen Account.
+
+![Skizze Account Balance](/doc/figures/Skizze_BalanceAccount.png)
+Alle User besitzen einen Balance Account, wodurch die Finanzierung der Challenges stattfindet. Hier kann der User seinen Balance Account aufstocken, und sieht auch gleich alle Transaktionen, die bei seinem Account getätigt wurden.

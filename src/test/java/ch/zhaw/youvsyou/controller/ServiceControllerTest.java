@@ -16,7 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import ch.zhaw.youvsyou.model.BalanceAccount;
@@ -69,6 +68,7 @@ public class ServiceControllerTest {
                 challengeRepository.deleteAll();
                 fitnessuserRepository.deleteAll();
                 balanceAccountRepository.deleteAll();
+                fitnesscoachRepository.deleteAll();
 
                 // Challenge 1
                 Challenge challenge = new Challenge(TEST_NAME, TEST_DESCRIPTION, TEST_STARTDATE, TEST_ENDDATE,
@@ -115,7 +115,6 @@ public class ServiceControllerTest {
 
         @Test
         @Order(1)
-        @WithMockUser
         void testassignToMe() throws Exception {
                 mvc.perform(put("/api/service/me/competechallenge")
                                 .param("challengeId", "12345")
@@ -129,7 +128,6 @@ public class ServiceControllerTest {
 
         @Test
         @Order(2)
-        @WithMockUser
         void testassignToMe_Two() throws Exception {
                 mvc.perform(put("/api/service/me/competechallenge")
                                 .param("challengeId", "12345")
@@ -143,29 +141,30 @@ public class ServiceControllerTest {
 
         @Test
         @Order(3)
-        @WithMockUser
         void tesfinishChallenge_NotAllowed() throws Exception {
-                mvc.perform(put("/api/service/me/finishchallenge")
+                mvc.perform(put("/api/service/finishchallenge")
+                                .param("challengeId", "123456")
+                                .param("winnerEmail", "user@test.ch")
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer token")
                                 .contentType(MediaType.APPLICATION_JSON))
                                 .andDo(print())
-                                .andExpect(status().isMethodNotAllowed());
+                                .andExpect(status().isForbidden());
         }
 
         @Test
         @Order(5)
-        @WithMockUser
         void tesfinishChallenge_NotAllowed_Two() throws Exception {
-                mvc.perform(put("/api/service/me/finishchallenge")
+                mvc.perform(put("/api/service/finishchallenge")
+                                .param("challengeId", "123456")
+                                .param("winnerEmail", "user@test.ch")
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer token_two")
                                 .contentType(MediaType.APPLICATION_JSON))
                                 .andDo(print())
-                                .andExpect(status().isMethodNotAllowed());
+                                .andExpect(status().isForbidden());
         }
 
         @Test
         @Order(6)
-        @WithMockUser
         void testgetMyInfo() throws Exception {
                 mvc.perform(get("/api/service/me/myinfo")
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer token")
@@ -176,7 +175,6 @@ public class ServiceControllerTest {
 
         @Test
         @Order(7)
-        @WithMockUser
         void testgetMyInfo_Two() throws Exception {
                 mvc.perform(get("/api/service/me/myinfo")
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer token_two")
@@ -187,8 +185,7 @@ public class ServiceControllerTest {
 
         @Test
         @Order(8)
-        @WithMockUser
-        void testgetMyInfo_Three() throws Exception {
+        void testMyInfo_Three() throws Exception {
                 mvc.perform(get("/api/service/me/myinfo")
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer token_three")
                                 .contentType(MediaType.APPLICATION_JSON))
@@ -198,7 +195,6 @@ public class ServiceControllerTest {
 
         @Test
         @Order(9)
-        @WithMockUser
         void testfinishChallenge() throws Exception {
                 mvc.perform(put("/api/service/finishchallenge")
                                 .param("challengeId", "12345")
@@ -206,12 +202,13 @@ public class ServiceControllerTest {
                                 .header(HttpHeaders.AUTHORIZATION, "Bearer token_three")
                                 .contentType(MediaType.APPLICATION_JSON))
                                 .andDo(print())
-                                .andExpect(status().isOk());
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$.challengeState").value("FINISHED"));
+
         }
 
         @Test
         @Order(10)
-        @WithMockUser
         void testfinishChallenge_notFound() throws Exception {
                 mvc.perform(put("/api/service/finishchallenge")
                                 .param("challengeId", "123456")

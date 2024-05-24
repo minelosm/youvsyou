@@ -28,6 +28,7 @@ public class ChallengeServiceTest {
     private FitnessuserRepository fitnessuserRepository;
     private BalanceAccountRepository balanceAccountRepository;
     private FitnesscoachRepository fitnesscoachRepository;
+    private MailService mailService;
 
     @BeforeEach
     void setUp() {
@@ -35,7 +36,8 @@ public class ChallengeServiceTest {
         fitnessuserRepository = mock(FitnessuserRepository.class);
         fitnesscoachRepository = mock(FitnesscoachRepository.class);
         balanceAccountRepository = mock(BalanceAccountRepository.class);
-        challengeService = new ChallengeService(challengeRepository, fitnessuserRepository, balanceAccountRepository, fitnesscoachRepository);
+        mailService = mock(MailService.class);
+        challengeService = new ChallengeService(challengeRepository, fitnessuserRepository, balanceAccountRepository, fitnesscoachRepository, mailService);
     }
 
     @Test
@@ -108,6 +110,8 @@ public class ChallengeServiceTest {
         challenge.setId(challengeId);
         challenge.setName(challengeName);
         challenge.setFitnesscoachId(coachId);
+        challenge.setFitnessuserEmail1(winnerEmail);
+        challenge.setFitnessuserEmail2("bla@test.ch");
         challenge.setWager(100.0);
         challenge.setChallengeState(ChallengeState.RUNNING);
         challenge.setBalance(100.0);
