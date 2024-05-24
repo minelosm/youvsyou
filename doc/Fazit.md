@@ -10,6 +10,7 @@ Hier werden einige Punkte aufgelistet, welche man noch für diese Appliaktion we
 - Echtes Abbuchen vom Balance Account mithilfe von Hinterlegung des Bankkonto oder PayPal oder ähnliches
 - Management von fairen Challenges mit den Angaben von Gewicht, Grösse und Alter mithilfe von einem Foto oder ID
 - Komplexeres aber dennoch simples und visuell cooles Frontend
+- Quality Of Life Changes, wie bessere Farben, noch saubere Darstellung, mehr Notifications, Buttons, ...
 - Gameification einbauen für ein noch besseres Nutzererlebniss
 - Einreichung eines Supportticket, falls eine Challenge "Nicht fair" bewertet wurde, da auch Geld im Spiel ist
 - Einbindung von Social Media oder einbauen von Werbungsmöglichkeiten
