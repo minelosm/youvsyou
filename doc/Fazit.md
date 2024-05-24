@@ -15,6 +15,7 @@ Hier werden einige Punkte aufgelistet, welche man noch für diese Appliaktion we
 - Einreichung eines Supportticket, falls eine Challenge "Nicht fair" bewertet wurde, da auch Geld im Spiel ist
 - Einbindung von Social Media oder einbauen von Werbungsmöglichkeiten
 - Kostenpflichtige Premium Funktionen
+- Applikation nicht auf ChatGPT verlassen, sondern auch noch selber Description oder Ziele als Fitnesscoach festlegen können
 
 ## Persönliches Fazit
 In dieser 12 wöchigen Phase, bei der Entwicklung des Projekt, gab es immer wieder Höhen und Tiefen. Zu Beginn hatte man das Gefühl, mit den Anforderungen überfordert zu sein. Jedoch wurde das von Woche zu Woche immer besser und klarer. Mir persönlich hat es geholfen, immer die Issues im GitHub festzulegen und sich demtentspreched an diese zu orientieren und Schritt für Schritt abzuarbeiten. So konnte man auch den schönen Verlauf des Projekts, Woche für Woche, miterleben. Am meisten Mühe hatte ich bei den Testeinheiten und bei dem handling der Security und Rollenzuteilung vom User mit Bezug zu MongoDB.
