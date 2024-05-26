@@ -46,7 +46,6 @@ public class ChallengeController {
         if (!authService.isFitnesscoach()) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-        // ChatGPT Service zum Generieren der Beschreibung aufrufen
         MessageResponse chatGptResponse = chatGptService.chatWithChatGpt(
                 "Create me a small detailed description with a maximum of 20 words and in English with the following superordinate term as a help: (" + cDTO.getName() + " and " + cDTO.getChallengeType() + "). And give me 3 small goals that can be measured with it for non-experienced to a little experienced athletes.");
         if (chatGptResponse.getChoices().isEmpty()) {
@@ -55,9 +54,8 @@ public class ChallengeController {
 
 
         String descriptionFromGPT = chatGptResponse.getChoices().get(0).getMessage().getContent();
-        cDTO.setDescription(descriptionFromGPT); // Setzen der von ChatGPT generierten Beschreibung
+        cDTO.setDescription(descriptionFromGPT);
 
-        // Job mit der ChatGPT Beschreibung erstellen
         Challenge challenge = new Challenge(cDTO.getName(), descriptionFromGPT,
                 cDTO.getStartDate(),
                 cDTO.getEndDate(), cDTO.getWager(), cDTO.getChallengeType(), cDTO.getFitnesscoachId(), cDTO.getFitnesscenter());

@@ -1,7 +1,7 @@
 #  EXPLORE BOARD: YOUvsYOU
 
 ## TRENDS & TECHNOLOGIE
-> Der Trend immer mehr Sport zu machen steigt. Viele Menschen wollen fit und gesund bleiben. Jeodch mangelt es in den meisten Fällen an Selbstdisziplin. Der Anstieg des Gesundheitsbewusstseins, steigendes Interesse an personalisiertem Training und Fitnesslösungen beitragen. Bei der aktuellen Technologie können Wearables zur Überwachnung von Fitnessdaten unterstützt werden und eine KI kann für das Erstellen eines Trainingsprogramm eingesetzt werden.
+> Der Trend immer mehr Sport zu machen steigt. Viele Menschen wollen fit und gesund bleiben. Jeodch mangelt es in den meisten Fällen an Selbstdisziplin. Der Anstieg des Gesundheitsbewusstseins, steigendes Interesse an personalisiertem Training und Fitnesslösungen beitragen, ist vorhanden. Bei der aktuellen Technologie können Wearables zur Überwachnung von Fitnessdaten unterstützt werden und eine KI kann für das Erstellen eines Trainingsprogramm eingesetzt werden.
 
 ## POTENTIELLE PARTNER & WETTBEWERB
 > Als potentielle Partner können hier weitere Fitnessstudios miteinbezogen werden. Eine zusammenarbeit mit Fitnessgeräteanbieter wäre ebenfalls sehr realistisch. Zusätzlich könnte man mit Nahrungsergänzungsmittel oder Fitnesssupplement-Unternehmen Kontakt aufnehmen, für eine gemeinsame Kooperation. Als Wettbewerber sind bestehende Fitness-Apps oder bestehende Fitnessstudios.
@@ -13,7 +13,7 @@
 > Benutzer die bereits ein Fitnessabo besitzen finden oft nicht die Motivation dazu, sich für Ihr gesetztes Ziel zu engagieren. Die Plattform soll helfen diese Sache zu überwinden. Als Sachen sind Gewichtsmanagement, Ausdauersteigerung, Stressbewältigung oder Motivation durch soziales Training gemeint.
 
 ## USER
-> Fitnessuser: Registrieren sich auf der Plattform und geben Ihre erste Daten ein. Nehmen an von Fitnesscoaches erstellen Challenges mit.
+> Fitnessuser: Registrieren sich auf der Plattform und geben Ihre erste Daten ein. Nehmen an die von Fitnesscoaches erstellen Challenges teil.
 Fitnesscoach: Erstellen Challenges für die Fitnessuser, um so die Motivation für Sie beibehalten zu können.
 
 ## BEDÜRFNISSE
@@ -24,7 +24,7 @@ Fitnesscoach: Erstellen Challenges für die Fitnessuser, um so die Motivation f�
 Emotional: Bedürfnis nach Belohnung und Anerkennung, Angst vor dem Versagen oder mangelnder Motivation.
 
 ## TOUCHPOINTS
-> Die Benutzer können Ihre absolvierten Challenges einsehen, sowie Fortschritt und Ihre definierten Ziele. Sie geben einen Geldbetrag mit der Plattform in einem Pot auf.
+> Die Benutzer können Ihre absolvierten Challenges einsehen, sowie ihr Fortschritt und ihr Kundenkonto. Sie geben einen Geldbetrag mit der Plattform in einem Pot auf.
 
 ## WIE KÖNNEN WIR?
 > Wie können wir Fitnessbesucher dazu motivieren, ihre gesetzen Ziele, wirklich zu erreichen?

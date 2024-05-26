@@ -23,8 +23,7 @@ import reactor.core.publisher.Mono;
 public class ChatGPTService {
         private static final String CHAT_GPT_API_KEY = "sk-proj-fqVZFDRjdJeb7Iuu6ENRT3BlbkFJ9LYICq2efCCMXpijXy4z";
         private static final String CHAT_GPT_BASE_URL = "https://api.openai.com";
-        // Timeout was set to 10 seconds, because chat-gpt tends to take a few seconds
-        // to respond.
+
         private static final Duration REQUEST_TIMEOUT = Duration.ofSeconds(15);
         private static final String USER_AGENT = "Spring 5 WebClient";
         private static final Logger logger = LoggerFactory.getLogger(ChatGPTService.class);

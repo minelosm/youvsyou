@@ -161,40 +161,6 @@
 </form>
 {/if}
 
-<!--
-    <h2>Fullfillment Account Details</h2>
-
-    <div class="mb-3">
-        <label for="email" class="form-label">Email address</label>
-        <input
-            type="email"
-            class="form-control"
-            placeholder={$user.email}
-            readonly
-        />
-    </div>
-    <div class="mb-3">
-        <label for="birthDate" class="form-label">Birth Date</label>
-        <input
-            type="text"
-            name="birthDate"
-            class="form-control"
-            id="birthDate"
-            bind:value={newFitnessuser.birthDate}
-        />
-    </div>
-    <div class="mb-3">
-        <label for="height" class="form-label">Height</label>
-        <input type="text" name="height" class="form-control" id="height" bind:value={newFitnessuser.height} />
-    </div>
-    <div class="mb-3">
-        <label for="weight" class="form-label">Weight</label>
-        <input type="text" name="weight" class="form-control" id="weight" bind:value={newFitnessuser.weight} />
-    </div>
-    <button type="button" class="btn btn-primary" on:click={editUser}
-        >Edit Changes
-    </button>
--->
 {#if oldFitnessuser.birthDate != null || oldFitnesscoach.fitnesscenter != null} 
 <h1 class="title is-1">Can't edit account</h1>
 <p class="subtitle is-3">Account was already edited</p>

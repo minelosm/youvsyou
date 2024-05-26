@@ -1,4 +1,4 @@
-#  EVALUATE BOARD: MyApp
+#  EVALUATE BOARD: YOUvsYOU
 
 ## KANÄLE
 > Soziale-Medien: Nutzung von Plattformen wie Instagram, Twitter und TikTok, um auf die Plattform aufmerksam zu machen und Benutzer zu erreichen.
@@ -18,6 +18,7 @@ Gamification-Elemente: Die Integration von spielerischen Elementen und Belohnung
 - Umsatz aus Wetten, allgemeine Einnahmequellen und Coach-Gebühren
 
 ## EINNAHMEQUELLEN
+- Wetten: Einen Wettgebühr für die Plattform, beim Wettbetrag der Challenge
 > - Abonnementgebühren: Einnahmen aus monatlichen oder jährlichen Abonnementgebühren für Premium-Funktionen und erweiterete Mitgliegschaften.
 - Einnahme aus Gebühren für die Bereitstellung von Coaching-Diensten durch qualifizierte Fitnesscoaches auf der Plattform.
 - Werbepartner: Einnahmen aus Werbung von Fitnessprodukten, -dienstleistungen oder -geräten auf der Plattform.

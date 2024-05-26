@@ -1,7 +1,7 @@
 # Testing
 
 ## Modul- und Integrationstests
-Insgesammt wurden 41 Tests (+1 Test von der Base-Applikation) erfolgreich durchgeführt. Die Tests wurden dann mit der Dependency JaCoCo gemessen und ein Report wurde erstellt. Insgesammt wurde ein Test Coverage von 78% erfüllt. Die drei meist nicht betroffen Klasse bei den Tests waren:
+Insgesammt wurden 41 Tests (+1 Test von der Base-Applikation) erfolgreich durchgeführt. Die Tests wurden dann mit der Dependency JaCoCo gemessen und ein Report wurde erstellt. Insgesammt wurde ein Test Coverage von 78% erfüllt. Die drei meist nicht betroffen Klassen bei den Tests waren:
 - Challenge Klasse (wobei nur die Setter- & RequiredArgs-Methoden von Lombok, trotz lombok.config, nicht getestet wurden)
 - Fitnessuser & Fitnesscoach Klasse (gleicher Fall wie oben)
 - UserValidator Klasse
